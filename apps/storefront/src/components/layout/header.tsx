@@ -1,7 +1,5 @@
 import Link from "next/link"
-import { Suspense } from "react"
-import { retrieveCart } from "@/lib/data/cart"
-import { getCustomer } from "@/lib/data/auth"
+import { HeaderActions } from "./header-actions"
 
 const NAV = [
   { href: "/products", label: "Products" },
@@ -11,23 +9,9 @@ const NAV = [
   { href: "/resources", label: "Resources" },
 ]
 
-async function HeaderActions() {
-  const [cart, customer] = await Promise.all([retrieveCart(), getCustomer()])
-  const itemCount =
-    cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0
-
-  return (
-    <div className="flex items-center gap-6 text-sm">
-      <Link href="/account" className="hover:text-[var(--color-accent)]">
-        {customer ? customer.first_name || "Account" : "Sign In"}
-      </Link>
-      <Link href="/cart" className="hover:text-[var(--color-accent)]">
-        Cart{itemCount > 0 ? ` (${itemCount})` : ""}
-      </Link>
-    </div>
-  )
-}
-
+// Pure static chrome. Cart/account personalization lives in the client
+// <HeaderActions /> (fetched after load) so every page that renders the Header
+// can be statically pre-rendered for SEO.
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[var(--color-surface)]">
@@ -52,11 +36,7 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Suspense
-          fallback={<div className="text-sm text-[var(--color-ink-faint)]">…</div>}
-        >
-          <HeaderActions />
-        </Suspense>
+        <HeaderActions />
       </div>
     </header>
   )
