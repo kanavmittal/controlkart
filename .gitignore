@@ -1,0 +1,18 @@
+node_modules/
+dist/
+build/
+.next/
+.medusa/
+.env
+.env.local
+.env.production
+*.log
+.DS_Store
+.turbo/
+coverage/
+
+# local tooling — not part of the deployable app (claude.ai/design sync, etc.)
+.ds-sync/
+ds-bundle/
+.design-sync/
+apps/storefront/.ds-compile-css.mjs
