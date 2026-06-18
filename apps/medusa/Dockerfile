@@ -10,7 +10,9 @@ RUN corepack enable
 WORKDIR /repo
 
 # Install deps for the medusa workspace (+ its workspace deps) using the root lockfile.
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# .npmrc carries `shamefully-hoist=true` — required so the admin (Rollup) build can
+# resolve @medusajs/dashboard; without it the build fails.
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc ./
 COPY apps/medusa/package.json apps/medusa/package.json
 RUN pnpm install --filter "@controlkart/medusa..." --frozen-lockfile
 

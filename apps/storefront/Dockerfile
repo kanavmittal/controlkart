@@ -12,7 +12,7 @@ FROM node:20-slim AS build
 RUN corepack enable
 WORKDIR /repo
 
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc ./
 COPY apps/storefront/package.json apps/storefront/package.json
 RUN pnpm install --filter "@controlkart/storefront..." --frozen-lockfile
 
