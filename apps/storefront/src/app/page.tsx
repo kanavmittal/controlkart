@@ -5,6 +5,9 @@ import { listPosts } from "@/lib/data/content"
 import { ProductCard } from "@/components/products/product-card"
 import { formatDate } from "@/lib/format"
 
+// ISR: pre-rendered static HTML, revalidated for fresh data (strong SEO + CWV).
+export const revalidate = 300
+
 const TRUST_ITEMS = [
   { title: "Authorized Distribution", body: "Genuine Selec products sourced directly, with full manufacturer warranty." },
   { title: "Stock Transparency", body: "Live inventory on every product. What you see is what ships." },

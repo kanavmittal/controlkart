@@ -4,6 +4,9 @@ import { retrieveCart } from "@/lib/data/cart"
 import { formatINR } from "@/lib/format"
 import { CartLineControls } from "./cart-line-controls"
 
+// User-specific, noindex — always rendered fresh per request.
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Cart",
   robots: { index: false },

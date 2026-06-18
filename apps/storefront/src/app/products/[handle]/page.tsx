@@ -15,9 +15,18 @@ import { BASE_URL, STORE_NAME } from "@/lib/config"
 
 type Props = { params: Promise<{ handle: string }> }
 
+// ISR: pre-rendered per product, revalidated for fresh price/stock.
+export const revalidate = 600
+
 export async function generateStaticParams() {
-  const { products } = await listProducts({ limit: 100 })
-  return products.map((p) => ({ handle: p.handle }))
+  // Resilient: if the backend is unreachable at build time (e.g. CI/Docker),
+  // skip prebuilding params — pages render on-demand at runtime instead.
+  try {
+    const { products } = await listProducts({ limit: 100 })
+    return products.map((p) => ({ handle: p.handle }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

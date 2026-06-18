@@ -3,6 +3,8 @@ import Link from "next/link"
 import { listPosts } from "@/lib/data/content"
 import { formatDate } from "@/lib/format"
 
+export const revalidate = 1800
+
 export const metadata: Metadata = {
   title: "Resources - Industrial Automation News, Guides & Case Studies",
   description:

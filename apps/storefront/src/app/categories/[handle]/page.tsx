@@ -4,11 +4,18 @@ import { getCategoryByHandle, listCategories } from "@/lib/data/categories"
 import { listProducts } from "@/lib/data/products"
 import { ProductCard } from "@/components/products/product-card"
 
+export const revalidate = 300
+
 type Props = { params: Promise<{ handle: string }> }
 
 export async function generateStaticParams() {
-  const categories = await listCategories()
-  return categories.map((c) => ({ handle: c.handle }))
+  // Resilient: skip prebuilding params if the backend is unreachable at build time.
+  try {
+    const categories = await listCategories()
+    return categories.map((c) => ({ handle: c.handle }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

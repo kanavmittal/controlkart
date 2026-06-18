@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { listProducts } from "@/lib/data/products"
 import { ProductCard } from "@/components/products/product-card"
 
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: "All Products - Selec Industrial Automation Components",
   description:

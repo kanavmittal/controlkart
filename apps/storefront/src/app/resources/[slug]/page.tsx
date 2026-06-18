@@ -4,11 +4,18 @@ import { getPostBySlug, listPosts } from "@/lib/data/content"
 import { formatDate } from "@/lib/format"
 import { BASE_URL, STORE_NAME } from "@/lib/config"
 
+export const revalidate = 1800
+
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
-  const { posts } = await listPosts({ limit: 100 })
-  return posts.map((p) => ({ slug: p.slug }))
+  // Resilient: skip prebuilding params if the backend is unreachable at build time.
+  try {
+    const { posts } = await listPosts({ limit: 100 })
+    return posts.map((p) => ({ slug: p.slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
