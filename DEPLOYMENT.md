@@ -139,16 +139,28 @@ app or a Git URL + branch):
   Admin dashboard: `https://api.yourdomain.in/app`.
 
 ### 6. Deploy the storefront
+> **⚠️ Deploy order matters for SEO.** The storefront uses **SSG/ISR** — product,
+> category, and article pages are **pre-rendered at build by fetching the API**. So the
+> backend must be **deployed and healthy FIRST**, and the storefront build must be able to
+> reach `https://api.yourdomain.in`. If the API is unreachable at build, the pages fall back
+> to on-demand rendering (the build won't fail — there's a safety net — but you lose the
+> build-time pre-render). Rebuild the storefront once the API is live.
+
 In Dokploy → same Project → **Create Service → Application** → same repo:
 - **Build Type: Dockerfile.** Dockerfile Path `apps/storefront/Dockerfile` (context = repo root).
-- **Build args** (NEXT_PUBLIC_* are inlined at build time — add these under the build/args
-  section, not just runtime env):
-  - `NEXT_PUBLIC_MEDUSA_BACKEND_URL=https://api.yourdomain.in`
+- **Build args** (NEXT_PUBLIC_* are inlined at build time AND used by the build to fetch the
+  API for pre-rendering — add these under the build/args section, not just runtime env):
+  - `NEXT_PUBLIC_MEDUSA_BACKEND_URL=https://api.yourdomain.in`  ← must be reachable at build
   - `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_...` (from Admin → Settings → Publishable API Keys;
     the key migrated from `acme_medusa` works, or make a fresh one)
   - `NEXT_PUBLIC_BASE_URL=https://yourdomain.in`
 - **Domains** tab: add `yourdomain.in` → **container port 3000**, enable HTTPS.
 - Deploy.
+
+> **Rendering map (for reference):** home + `/products` + `/resources` are **static (ISR)**;
+> product/category/article pages are **ISR** (revalidate 5–30 min); cart/checkout/account are
+> **dynamic** (user-specific, noindex). The header's cart/login state hydrates client-side via
+> `/api/account/summary`, which keeps the pages static.
 
 ### 7. DNS
 Point `A`/`AAAA` records for `yourdomain.in`, `api.yourdomain.in` (and `media.yourdomain.in`
