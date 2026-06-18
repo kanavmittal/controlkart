@@ -29,8 +29,8 @@ ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL=$NEXT_PUBLIC_MEDUSA_BACKEND_URL \
 WORKDIR /repo/apps/storefront
 RUN pnpm run build
 
-# ---------- runtime stage ----------
-FROM node:20-slim AS runtime
+# ---------- production (runtime) stage ----------
+FROM node:20-slim AS production
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 

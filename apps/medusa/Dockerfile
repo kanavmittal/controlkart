@@ -19,8 +19,8 @@ COPY apps/medusa apps/medusa
 WORKDIR /repo/apps/medusa
 RUN pnpm run build
 
-# ---------- runtime stage ----------
-FROM node:20-slim AS runtime
+# ---------- production (runtime) stage ----------
+FROM node:20-slim AS production
 RUN corepack enable
 ENV NODE_ENV=production
 WORKDIR /app
