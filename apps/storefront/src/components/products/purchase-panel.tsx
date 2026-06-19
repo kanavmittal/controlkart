@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { HttpTypes } from "@medusajs/types"
 import { formatINR } from "@/lib/format"
 import { StockBadge } from "./stock-badge"
-import { addToCart } from "@/lib/data/cart"
+import { useCart } from "@/lib/hooks/use-cart"
 import { useProductLive } from "@/lib/hooks/use-product-live"
 import Link from "next/link"
 
@@ -30,6 +30,7 @@ export function PurchasePanel({
   const [added, setAdded] = useState(false)
   const router = useRouter()
   const queryClient = useQueryClient()
+  const { addItem } = useCart()
 
   // Live price + stock (browser fetch, uncached).
   const live = useProductLive(product.id)
@@ -54,10 +55,11 @@ export function PurchasePanel({
 
   const onAdd = () => {
     if (!variant) return
-    // Phase 2 seam: this server action will become
-    // sdk.store.cart.createLineItem + optimistic update + cart invalidation.
     startTransition(async () => {
-      await addToCart(variant.id, Math.min(quantity, maxQty))
+      await addItem.mutateAsync({
+        variantId: variant.id,
+        quantity: Math.min(quantity, maxQty),
+      })
       setAdded(true)
       queryClient.invalidateQueries({ queryKey: ["product-live", product.id] })
       setTimeout(() => setAdded(false), 2500)
@@ -67,7 +69,10 @@ export function PurchasePanel({
   const onBuyNow = () => {
     if (!variant) return
     startBuyNow(async () => {
-      await addToCart(variant.id, Math.min(quantity, maxQty))
+      await addItem.mutateAsync({
+        variantId: variant.id,
+        quantity: Math.min(quantity, maxQty),
+      })
       router.push("/checkout")
     })
   }

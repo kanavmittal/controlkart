@@ -3,10 +3,10 @@ import Medusa from "@medusajs/js-sdk"
 /**
  * Browser-side Medusa SDK singleton.
  *
- * Phase 1 uses this for PUBLIC product data only (price/stock, recommendations,
- * region) with the publishable key — no auth token, no cart id. Auth and cart
- * stay server-side (httpOnly cookies + server actions) until Phase 2, which will
- * add `auth: { type: "jwt" }` here for client-side cart/customer.
+ * Phase 2: `auth: { type: "jwt", jwtTokenStorageMethod: "local" }` makes the SDK
+ * store the customer JWT in localStorage and auto-attach it to authenticated
+ * calls (customer, orders, addresses). Cart is public (publishable key only);
+ * the cart id is kept in localStorage (see cart-store.ts).
  *
  * Reference NEXT_PUBLIC_* directly (inlined at build) so nothing server-only
  * leaks into the client bundle.
@@ -15,7 +15,12 @@ export const sdk = new Medusa({
   baseUrl:
     process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000",
   publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "",
+  auth: { type: "jwt", jwtTokenStorageMethod: "local" },
 })
+
+/** Cart fields for the client cart query (mirrors the old server CART_FIELDS). */
+export const CART_FIELDS =
+  "*items,*items.variant,*items.variant.product,*shipping_methods,*shipping_address,*billing_address,*payment_collection,*payment_collection.payment_sessions"
 
 /**
  * Card fields for the home featured grid — mirrors the server `PRODUCT_FIELDS`

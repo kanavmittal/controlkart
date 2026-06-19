@@ -17,5 +17,10 @@ export const queryKeys = {
   homeFeatured: (regionId?: string) => ["home", "featured", regionId] as const,
   homeCategories: ["home", "categories"] as const,
   homePosts: ["home", "posts"] as const,
-  // Reserved for Phase 2: cart, customer.
+  // Phase 2 (CSR cart/auth):
+  cart: (cartId: string | null) => ["cart", cartId] as const,
+  customer: ["customer"] as const,
+  customerAddresses: ["customer", "addresses"] as const,
+  orders: ["orders"] as const,
+  order: (id: string) => ["order", id] as const,
 }

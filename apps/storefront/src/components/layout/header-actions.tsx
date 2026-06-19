@@ -2,23 +2,27 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-
-type Summary = { itemCount: number; firstName: string | null; signedIn: boolean }
+import { useCart } from "@/lib/hooks/use-cart"
 
 /**
- * Client-side cart/account state. Fetched after load so the Header (and every
- * page that renders it) can be statically pre-rendered for SEO. Shows the
- * signed-out default until the summary resolves.
+ * Cart/account state for the header. Cart count comes from the client cart
+ * (useCart). Account state still comes from /api/account/summary in 2a; 2b
+ * switches it to useCustomer() and retires the endpoint.
  */
 export function HeaderActions() {
-  const [summary, setSummary] = useState<Summary | null>(null)
+  const { itemCount } = useCart()
+  const [account, setAccount] = useState<{
+    firstName: string | null
+    signedIn: boolean
+  } | null>(null)
 
   useEffect(() => {
     let active = true
     fetch("/api/account/summary", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
-      .then((d: Summary | null) => {
-        if (active && d) setSummary(d)
+      .then((d) => {
+        if (active && d)
+          setAccount({ firstName: d.firstName, signedIn: d.signedIn })
       })
       .catch(() => {})
     return () => {
@@ -26,12 +30,10 @@ export function HeaderActions() {
     }
   }, [])
 
-  const itemCount = summary?.itemCount ?? 0
-
   return (
     <div className="flex items-center gap-6 text-sm">
       <Link href="/account" className="hover:text-[var(--color-accent)]">
-        {summary?.signedIn ? summary.firstName || "Account" : "Sign In"}
+        {account?.signedIn ? account.firstName || "Account" : "Sign In"}
       </Link>
       <Link href="/cart" className="hover:text-[var(--color-accent)]">
         Cart{itemCount > 0 ? ` (${itemCount})` : ""}

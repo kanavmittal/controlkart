@@ -1,7 +1,6 @@
 "use client"
 
-import { useTransition } from "react"
-import { updateLineItem } from "@/lib/data/cart"
+import { useCart } from "@/lib/hooks/use-cart"
 
 export function CartLineControls({
   lineId,
@@ -10,12 +9,9 @@ export function CartLineControls({
   lineId: string
   quantity: number
 }) {
-  const [pending, startTransition] = useTransition()
-
-  const set = (qty: number) =>
-    startTransition(async () => {
-      await updateLineItem(lineId, qty)
-    })
+  const { updateItem } = useCart()
+  const pending = updateItem.isPending
+  const set = (qty: number) => updateItem.mutate({ lineId, quantity: qty })
 
   return (
     <div className={`flex items-center gap-2 ${pending ? "opacity-50" : ""}`}>
