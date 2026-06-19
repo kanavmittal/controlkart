@@ -1,19 +1,21 @@
 "use client"
 
-import { useActionState } from "react"
-import { resendVerificationEmail } from "@/lib/data/auth"
+import { useAuthMutations } from "@/lib/hooks/use-customer"
+
+function errorMessageOf(error: unknown): string {
+  if (error instanceof Error) return error.message
+  return "Could not send the verification email. Please try again."
+}
 
 export function VerificationBanner({
   devVerifyUrl,
 }: {
   devVerifyUrl?: string
 }) {
-  const [state, action, pending] = useActionState(
-    resendVerificationEmail,
-    undefined
-  )
+  const { resendVerification } = useAuthMutations()
+  const data = resendVerification.data
 
-  if (state?.already_verified) return null
+  if (data?.already_verified) return null
 
   return (
     <div className="mt-6 border border-[var(--color-warn)] bg-[var(--color-surface-alt)] p-4">
@@ -32,32 +34,40 @@ export function VerificationBanner({
           </a>
         </p>
       )}
-      {state?.verify_url && (
+      {data?.verify_url && (
         <p className="mt-2 break-all font-mono text-xs text-[var(--color-ink-muted)]">
           Dev link:{" "}
           <a
-            href={state.verify_url}
+            href={data.verify_url}
             className="text-[var(--color-accent)] underline"
           >
-            {state.verify_url}
+            {data.verify_url}
           </a>
         </p>
       )}
-      {state?.error && (
-        <p className="mt-2 text-sm text-[var(--color-bad)]">{state.error}</p>
+      {resendVerification.error && (
+        <p className="mt-2 text-sm text-[var(--color-bad)]">
+          {errorMessageOf(resendVerification.error)}
+        </p>
       )}
-      {state?.sent && !state.error && (
+      {data?.sent && !resendVerification.error && (
         <p className="mt-2 text-sm text-[var(--color-ok)]">
           Verification email sent.
         </p>
       )}
-      <form action={action} className="mt-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          resendVerification.mutate()
+        }}
+        className="mt-3"
+      >
         <button
           type="submit"
-          disabled={pending}
+          disabled={resendVerification.isPending}
           className="btn-secondary px-4 py-2 text-sm"
         >
-          {pending ? "Sending…" : "Resend verification email"}
+          {resendVerification.isPending ? "Sending…" : "Resend verification email"}
         </button>
       </form>
     </div>
