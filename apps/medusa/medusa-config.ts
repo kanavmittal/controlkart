@@ -27,7 +27,15 @@ module.exports = defineConfig({
   },
   admin: {
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    backendUrl: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
+    // Omit backendUrl unless explicitly set, so the admin talks to its OWN
+    // origin (it's served from the backend domain). The old
+    // "http://localhost:9000" fallback got baked into the production admin
+    // bundle at build time → "failed to fetch" on login. Only set
+    // MEDUSA_BACKEND_URL **at build time** if the admin is hosted on a
+    // different domain than the API.
+    ...(process.env.MEDUSA_BACKEND_URL
+      ? { backendUrl: process.env.MEDUSA_BACKEND_URL }
+      : {}),
   },
   modules: [
     // Production Redis infrastructure (cache, event bus, workflow engine, locking).
