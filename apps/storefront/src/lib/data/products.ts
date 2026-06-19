@@ -76,21 +76,3 @@ export async function getRegionId(): Promise<string | undefined> {
   )?.id ?? regions[0]?.id
   return cachedRegionId
 }
-
-export async function quickOrderLookup(skus: string[]) {
-  return storeFetch<{
-    results: {
-      sku: string
-      found: boolean
-      variant: {
-        id: string
-        sku: string
-        title: string
-        product: { id: string; title: string; handle: string; thumbnail: string | null }
-      } | null
-    }[]
-  }>("/store/quick-order", {
-    query: { skus: skus.join(",") },
-    revalidate: false,
-  })
-}
