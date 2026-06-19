@@ -29,7 +29,10 @@ WORKDIR /app
 
 # The build output is a standalone Medusa app with its own package.json.
 COPY --from=build /repo/apps/medusa/.medusa/server ./
-RUN npm install --omit=dev
+# --legacy-peer-deps: medusa-plugin-razorpay-v2 declares a stale peer
+# (@medusajs/admin-sdk@2.12.3) vs our 2.15.3. pnpm allows this locally via
+# strict-peer-dependencies=false; npm needs this flag to match.
+RUN npm install --omit=dev --legacy-peer-deps
 
 EXPOSE 9000
 # Run DB migrations, then boot. (Single-instance safe. For multi-instance, move
