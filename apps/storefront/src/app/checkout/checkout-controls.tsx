@@ -1,22 +1,26 @@
 "use client"
 
-import { useState, useTransition } from "react"
-import {
-  setShippingMethod,
-  initiatePayment,
-  placeOrder,
-} from "@/lib/data/cart"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { formatINR } from "@/lib/format"
+import { useCheckout } from "./use-checkout"
 
-export function ShippingSelector({
-  options,
-  selectedId,
-}: {
-  options: { id: string; name: string; amount: number }[]
-  selectedId?: string
-}) {
-  const [pending, startTransition] = useTransition()
+function errorMessageOf(e: unknown, fallback: string): string {
+  return e instanceof Error ? e.message : fallback
+}
 
+export function ShippingSelector() {
+  const { cart, shippingOptions, setShipping } = useCheckout()
+  const selectedId = cart?.shipping_methods?.[0]?.shipping_option_id ?? undefined
+  const options = shippingOptions.data ?? []
+
+  if (shippingOptions.isLoading) {
+    return (
+      <p className="text-sm text-[var(--color-ink-muted)]">
+        Loading shipping options…
+      </p>
+    )
+  }
   if (!options.length) {
     return (
       <p className="text-sm text-[var(--color-ink-muted)]">
@@ -26,16 +30,12 @@ export function ShippingSelector({
   }
 
   return (
-    <div className={`grid gap-2 ${pending ? "opacity-50" : ""}`}>
+    <div className={`grid gap-2 ${setShipping.isPending ? "opacity-50" : ""}`}>
       {options.map((option) => (
         <button
           key={option.id}
-          disabled={pending}
-          onClick={() =>
-            startTransition(async () => {
-              await setShippingMethod(option.id)
-            })
-          }
+          disabled={setShipping.isPending}
+          onClick={() => setShipping.mutate(option.id)}
           className={`flex items-center justify-between border px-4 py-3 text-left text-sm transition-colors ${
             option.id === selectedId
               ? "border-[var(--color-line-strong)] bg-[var(--color-surface-alt)] font-medium"
@@ -43,9 +43,14 @@ export function ShippingSelector({
           }`}
         >
           <span>{option.name}</span>
-          <span className="font-semibold">{formatINR(option.amount)}</span>
+          <span className="font-semibold">{formatINR(option.amount ?? 0)}</span>
         </button>
       ))}
+      {setShipping.error && (
+        <p className="text-sm text-[var(--color-bad)]">
+          {errorMessageOf(setShipping.error, "Could not set shipping method.")}
+        </p>
+      )}
     </div>
   )
 }
@@ -68,57 +73,67 @@ function loadRazorpayScript(): Promise<boolean> {
 }
 
 export function PlaceOrderButton() {
-  const [pending, startTransition] = useTransition()
+  const router = useRouter()
+  const { cart, customer, initiatePayment, complete } = useCheckout()
+  const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const completeOrder = async () => {
-    try {
-      await placeOrder()
-    } catch (e) {
-      // redirect() throws internally; only surface real errors
-      if (e instanceof Error && !e.message.includes("NEXT_REDIRECT")) {
-        setError(e.message)
-      } else {
-        throw e
-      }
-    }
+  async function finalize() {
+    const order = await complete()
+    router.push(`/order-confirmed/${order.id}`)
   }
 
-  const onPlaceOrder = () =>
-    startTransition(async () => {
-      setError(null)
-      const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY
-      try {
-        const { provider_id, session_data } = await initiatePayment()
+  async function onPlaceOrder() {
+    setError(null)
+    setPending(true)
+    const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY
+    try {
+      const { providerId, sessionData } = await initiatePayment()
 
-        if (provider_id.startsWith("pp_razorpay") && razorpayKey) {
-          const loaded = await loadRazorpayScript()
-          if (!loaded || !window.Razorpay) {
-            setError("Failed to load payment gateway. Please retry.")
-            return
-          }
-          const razorpay = new window.Razorpay({
-            key: razorpayKey,
-            order_id: (session_data.id as string) ?? undefined,
-            name: "ControlKart",
-            description: "Order payment",
-            handler: () => startTransition(completeOrder),
-            modal: { ondismiss: () => setError("Payment was cancelled.") },
-          })
-          razorpay.open()
+      if (providerId.startsWith("pp_razorpay") && razorpayKey) {
+        const loaded = await loadRazorpayScript()
+        if (!loaded || !window.Razorpay) {
+          setError("Failed to load the payment gateway. Please retry.")
+          setPending(false)
           return
         }
-
-        // Dev / manual payment providers complete immediately
-        await completeOrder()
-      } catch (e) {
-        if (e instanceof Error && !e.message.includes("NEXT_REDIRECT")) {
-          setError(e.message)
-        } else {
-          throw e
-        }
+        const ship = cart?.shipping_address
+        const razorpay = new window.Razorpay({
+          key: razorpayKey,
+          order_id: (sessionData.id as string) ?? undefined,
+          name: "ControlKart",
+          description: "Order payment",
+          prefill: {
+            name: [ship?.first_name, ship?.last_name].filter(Boolean).join(" "),
+            email: customer?.email ?? undefined,
+            contact: ship?.phone ?? undefined,
+          },
+          handler: async () => {
+            try {
+              await finalize()
+            } catch (e) {
+              setError(errorMessageOf(e, "Payment succeeded but the order could not be completed. Contact support."))
+              setPending(false)
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              setError("Payment was cancelled.")
+              setPending(false)
+            },
+          },
+        })
+        razorpay.open()
+        return // stay pending until the handler or dismiss fires
       }
-    })
+
+      // Dev / manual payment providers complete immediately
+      await finalize()
+    } catch (e) {
+      setError(errorMessageOf(e, "Could not place the order. Please retry."))
+      setPending(false)
+    }
+  }
 
   return (
     <div>

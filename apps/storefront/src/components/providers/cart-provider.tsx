@@ -6,11 +6,14 @@ import { getCartId, setCartId as persistCartId } from "@/lib/cart-store"
 type CartIdContextValue = {
   cartId: string | null
   setCartId: (id: string) => void
+  /** True once the id has been read from localStorage after mount. */
+  hydrated: boolean
 }
 
 const CartIdContext = createContext<CartIdContextValue>({
   cartId: null,
   setCartId: () => {},
+  hydrated: false,
 })
 
 /**
@@ -21,9 +24,11 @@ const CartIdContext = createContext<CartIdContextValue>({
  */
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartId, setCartIdState] = useState<string | null>(null)
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
     setCartIdState(getCartId())
+    setHydrated(true)
   }, [])
 
   const setCartId = (id: string) => {
@@ -32,7 +37,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <CartIdContext.Provider value={{ cartId, setCartId }}>
+    <CartIdContext.Provider value={{ cartId, setCartId, hydrated }}>
       {children}
     </CartIdContext.Provider>
   )

@@ -1,10 +1,32 @@
 "use client"
 
 import { useState } from "react"
-import { setCheckoutDetails } from "@/lib/data/cart"
-import type { CustomerAddress } from "@/lib/address-utils"
-import { formatAddressLabel } from "@/lib/address-utils"
+import type { HttpTypes } from "@medusajs/types"
+import {
+  type CartAddressInput,
+  type CustomerAddress,
+  customerAddressToCart,
+  formatAddressLabel,
+} from "@/lib/address-utils"
 import { AddressFields, inputClass } from "@/components/address/address-fields"
+import { useAddresses } from "@/lib/hooks/use-addresses"
+import { useCheckout } from "./use-checkout"
+
+function parseAddr(form: FormData, prefix: "" | "billing_"): CartAddressInput {
+  const s = (n: string) => String(form.get(`${prefix}${n}`) ?? "")
+  return {
+    first_name: s("first_name"),
+    last_name: s("last_name"),
+    company: s("company") || undefined,
+    address_1: s("address_1"),
+    address_2: s("address_2") || undefined,
+    city: s("city"),
+    province: s("province"),
+    postal_code: s("postal_code"),
+    country_code: "in",
+    phone: s("phone"),
+  }
+}
 
 function addressesDiffer(
   a: { postal_code?: string | null; address_1?: string | null },
@@ -25,21 +47,8 @@ export function CheckoutAddressForm({
   hasAddress,
 }: {
   savedAddresses: CustomerAddress[]
-  cartShipping?: {
-    first_name?: string | null
-    last_name?: string | null
-    company?: string | null
-    address_1?: string | null
-    address_2?: string | null
-    city?: string | null
-    province?: string | null
-    postal_code?: string | null
-    phone?: string | null
-  } | null
-  cartBilling?: {
-    postal_code?: string | null
-    address_1?: string | null
-  } | null
+  cartShipping?: HttpTypes.StoreCartAddress | null
+  cartBilling?: HttpTypes.StoreCartAddress | null
   customerDefaults: {
     first_name?: string | null
     last_name?: string | null
@@ -48,6 +57,9 @@ export function CheckoutAddressForm({
   gstin?: string
   hasAddress: boolean
 }) {
+  const { setCheckout } = useCheckout()
+  const { save } = useAddresses()
+
   const defaultShipping =
     savedAddresses.find((a) => a.is_default_shipping) ?? savedAddresses[0]
 
@@ -83,8 +95,70 @@ export function CheckoutAddressForm({
       ? savedAddresses.find((a) => a.id === billingMode)
       : customerDefaults
 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const form = new FormData(e.currentTarget)
+
+    const shipping =
+      shippingMode !== "new"
+        ? customerAddressToCart(
+            savedAddresses.find((a) => a.id === shippingMode)!
+          )
+        : parseAddr(form, "")
+    const billing = billingSame
+      ? shipping
+      : billingMode !== "new"
+        ? customerAddressToCart(savedAddresses.find((a) => a.id === billingMode)!)
+        : parseAddr(form, "billing_")
+
+    try {
+      await setCheckout.mutateAsync({
+        shipping,
+        billing,
+        gstin: String(form.get("gstin") ?? "") || undefined,
+      })
+
+      // Persist new addresses to the customer (non-fatal — cart is already set)
+      if (form.get("save_shipping") === "on" && shippingMode === "new") {
+        await save
+          .mutateAsync({
+            body: {
+              ...shipping,
+              address_name: "Shipping",
+              is_default_shipping: !savedAddresses.some(
+                (a) => a.is_default_shipping
+              ),
+              is_default_billing:
+                billingSame &&
+                !savedAddresses.some((a) => a.is_default_billing),
+            },
+          })
+          .catch(() => {})
+      }
+      if (
+        form.get("save_billing") === "on" &&
+        !billingSame &&
+        billingMode === "new"
+      ) {
+        await save
+          .mutateAsync({
+            body: {
+              ...billing,
+              address_name: "Billing",
+              is_default_billing: !savedAddresses.some(
+                (a) => a.is_default_billing
+              ),
+            },
+          })
+          .catch(() => {})
+      }
+    } catch {
+      /* surfaced via setCheckout.error */
+    }
+  }
+
   return (
-    <form action={setCheckoutDetails} className="grid gap-4 p-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="grid gap-4 p-4 sm:grid-cols-2">
       {savedAddresses.length > 0 && (
         <div className="space-y-2 sm:col-span-2">
           <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
@@ -142,9 +216,6 @@ export function CheckoutAddressForm({
               <span className="font-medium">Use a new address</span>
             </label>
           </div>
-          {useSavedShipping && (
-            <input type="hidden" name="shipping_address_id" value={shippingMode} />
-          )}
         </div>
       )}
 
@@ -218,13 +289,6 @@ export function CheckoutAddressForm({
                   <span className="font-medium">New billing address</span>
                 </label>
               </div>
-              {useSavedBilling && (
-                <input
-                  type="hidden"
-                  name="billing_address_id"
-                  value={billingMode}
-                />
-              )}
             </div>
           )}
 
@@ -253,9 +317,25 @@ export function CheckoutAddressForm({
         />
       </label>
 
+      {setCheckout.error && (
+        <p className="text-sm text-[var(--color-bad)] sm:col-span-2">
+          {setCheckout.error instanceof Error
+            ? setCheckout.error.message
+            : "Could not save the address. Please check the fields and retry."}
+        </p>
+      )}
+
       <div className="sm:col-span-2">
-        <button type="submit" className="btn-primary px-6 py-2.5">
-          {hasAddress ? "Update Address" : "Save & Continue"}
+        <button
+          type="submit"
+          disabled={setCheckout.isPending}
+          className="btn-primary px-6 py-2.5"
+        >
+          {setCheckout.isPending
+            ? "Saving…"
+            : hasAddress
+              ? "Update Address"
+              : "Save & Continue"}
         </button>
       </div>
     </form>
