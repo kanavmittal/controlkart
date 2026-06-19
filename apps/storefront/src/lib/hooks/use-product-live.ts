@@ -8,6 +8,8 @@ import { useRegion } from "./use-region"
 export type LiveProduct = {
   priceByVariant: Record<string, number | null>
   stockByVariant: Record<string, number>
+  /** Whether each variant can be purchased now (managed stock, non-tracked, or backorder). */
+  purchasableByVariant: Record<string, boolean>
   isLoading: boolean
   isError: boolean
 }
@@ -30,11 +32,16 @@ export function useProductLive(productId: string): LiveProduct {
       })
       const priceByVariant: Record<string, number | null> = {}
       const stockByVariant: Record<string, number> = {}
+      const purchasableByVariant: Record<string, boolean> = {}
       for (const v of product.variants ?? []) {
         priceByVariant[v.id] = v.calculated_price?.calculated_amount ?? null
-        stockByVariant[v.id] = v.inventory_quantity ?? 0
+        const qty = v.inventory_quantity ?? 0
+        stockByVariant[v.id] = qty
+        // Purchasable if inventory isn't tracked, backorders are allowed, or in stock.
+        purchasableByVariant[v.id] =
+          v.manage_inventory === false || v.allow_backorder === true || qty > 0
       }
-      return { priceByVariant, stockByVariant }
+      return { priceByVariant, stockByVariant, purchasableByVariant }
     },
     ...DYNAMIC_QUERY_OPTIONS,
   })
@@ -42,6 +49,7 @@ export function useProductLive(productId: string): LiveProduct {
   return {
     priceByVariant: data?.priceByVariant ?? {},
     stockByVariant: data?.stockByVariant ?? {},
+    purchasableByVariant: data?.purchasableByVariant ?? {},
     // "waiting for region" counts as loading
     isLoading: isLoading || !regionId,
     isError,

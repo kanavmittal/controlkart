@@ -40,8 +40,12 @@ export function PurchasePanel({
   )
   const stock = variant ? live.stockByVariant[variant.id] ?? 0 : 0
   const price = variant ? live.priceByVariant[variant.id] ?? null : null
-  const maxQty = Math.max(0, stock)
-  const controlsDisabled = live.isLoading || live.isError || stock <= 0
+  const purchasable = variant
+    ? live.purchasableByVariant[variant.id] ?? false
+    : false
+  // Managed in-stock caps at the count; non-tracked/backorder caps at a sane max.
+  const maxQty = purchasable ? (stock > 0 ? stock : 99) : 0
+  const controlsDisabled = live.isLoading || live.isError || !purchasable
 
   // If a live refetch lowers stock below the current selection, clamp it down.
   useEffect(() => {
@@ -124,8 +128,15 @@ export function PurchasePanel({
             <span className="text-xs text-[var(--color-bad)]">
               Live data unavailable
             </span>
-          ) : (
+          ) : !purchasable ? (
+            <StockBadge quantity={0} />
+          ) : stock > 0 ? (
             <StockBadge quantity={stock} />
+          ) : (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--color-ok)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-ok)]" />
+              In stock
+            </span>
           )}
         </div>
 
@@ -174,7 +185,7 @@ export function PurchasePanel({
                   ? "Loading…"
                   : live.isError
                     ? "Unavailable"
-                    : stock <= 0
+                    : !purchasable
                       ? "Out of Stock"
                       : "Add to Cart"}
           </button>

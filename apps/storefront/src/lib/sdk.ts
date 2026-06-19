@@ -24,6 +24,11 @@ export const sdk = new Medusa({
 export const PRODUCT_FIELDS_CLIENT =
   "id,title,subtitle,handle,thumbnail,metadata,*variants,+variants.inventory_quantity,*variants.calculated_price"
 
-/** Minimal fields for the live PDP price/stock query (staleTime 0). */
+/**
+ * Fields for the live PDP price/stock query (staleTime 0).
+ * NOTE: must EXPAND `*variants` — restricting to `variants.id,variants.sku`
+ * prunes the data Medusa needs to compute `inventory_quantity`, which then
+ * comes back null. `*variants` also brings manage_inventory + allow_backorder.
+ */
 export const PRODUCT_LIVE_FIELDS =
-  "id,variants.id,variants.sku,+variants.inventory_quantity,*variants.calculated_price"
+  "id,*variants,+variants.inventory_quantity,*variants.calculated_price"
