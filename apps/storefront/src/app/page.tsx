@@ -1,12 +1,11 @@
 import Link from "next/link"
-import { listProducts } from "@/lib/data/products"
-import { listCategories } from "@/lib/data/categories"
-import { listPosts } from "@/lib/data/content"
-import { ProductCard } from "@/components/products/product-card"
-import { formatDate } from "@/lib/format"
+import { HomeCategories } from "@/components/home/home-categories"
+import { HomeFeaturedProducts } from "@/components/home/home-featured-products"
+import { HomeResources } from "@/components/home/home-resources"
 
-// ISR: pre-rendered static HTML, revalidated for fresh data (strong SEO + CWV).
-export const revalidate = 300
+// Static shell (SSG): the hero/trust/shortcuts (above the fold) have no backend
+// dependency. Categories / featured products / posts render client-side (CSR)
+// below the fold — per Medusa's production rendering guide.
 
 const TRUST_ITEMS = [
   { title: "Authorized Distribution", body: "Genuine Selec products sourced directly, with full manufacturer warranty." },
@@ -21,16 +20,10 @@ const SHORTCUTS = [
   { href: "/categories/plcs", title: "Browse PLCs", body: "Modular PLCs with flexible IO, Modbus RTU and Ethernet options." },
 ]
 
-export default async function HomePage() {
-  const [{ products }, categories, { posts }] = await Promise.all([
-    listProducts({ limit: 8 }),
-    listCategories(),
-    listPosts({ limit: 3 }),
-  ])
-
+export default function HomePage() {
   return (
     <div>
-      {/* Hero */}
+      {/* Hero (SSG, above the fold) */}
       <section className="border-b border-[var(--color-line)]">
         <div className="shell grid gap-12 py-20 md:grid-cols-2 md:py-28">
           <div>
@@ -70,7 +63,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Procurement shortcuts */}
+      {/* Procurement shortcuts (SSG) */}
       <section className="border-b border-[var(--color-line)] bg-[var(--color-surface-alt)]">
         <div className="shell grid gap-px py-0 md:grid-cols-3">
           {SHORTCUTS.map((s) => (
@@ -90,7 +83,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Categories */}
+      {/* Categories (CSR grid; static heading) */}
       <section className="shell py-20">
         <div className="flex items-end justify-between">
           <h2 className="text-2xl font-bold tracking-tight">
@@ -103,72 +96,17 @@ export default async function HomePage() {
             View all products →
           </Link>
         </div>
-        <div className="mt-8 grid grid-cols-2 gap-px border border-[var(--color-line)] bg-[var(--color-line)] md:grid-cols-4">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/categories/${cat.handle}`}
-              className="group bg-[var(--color-surface)] p-6 hover:bg-[var(--color-surface-alt)]"
-            >
-              <h3 className="text-sm font-semibold group-hover:text-[var(--color-accent)]">
-                {cat.name}
-              </h3>
-              <p className="mt-1 line-clamp-2 text-xs text-[var(--color-ink-muted)]">
-                {cat.description || "Browse range"}
-              </p>
-            </Link>
-          ))}
-        </div>
+        <HomeCategories />
       </section>
 
-      {/* Featured products */}
+      {/* Featured products (CSR grid; static heading) */}
       <section className="shell pb-20">
         <h2 className="text-2xl font-bold tracking-tight">Featured Products</h2>
-        <div className="mt-8 grid grid-cols-1 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <HomeFeaturedProducts />
       </section>
 
-      {/* Resources */}
-      {posts.length > 0 && (
-        <section className="border-t border-[var(--color-line)] bg-[var(--color-surface-alt)]">
-          <div className="shell py-20">
-            <div className="flex items-end justify-between">
-              <h2 className="text-2xl font-bold tracking-tight">
-                News & Guides
-              </h2>
-              <Link
-                href="/resources"
-                className="text-sm font-medium text-[var(--color-accent)] hover:underline"
-              >
-                All resources →
-              </Link>
-            </div>
-            <div className="mt-8 grid gap-px border border-[var(--color-line)] bg-[var(--color-line)] md:grid-cols-3">
-              {posts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/resources/${post.slug}`}
-                  className="group bg-[var(--color-surface)] p-6"
-                >
-                  <div className="text-xs uppercase tracking-wide text-[var(--color-ink-faint)]">
-                    {post.type.replace("_", " ")} ·{" "}
-                    {formatDate(post.published_at)}
-                  </div>
-                  <h3 className="mt-3 text-base font-semibold leading-snug group-hover:text-[var(--color-accent)]">
-                    {post.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                    {post.excerpt}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Resources (CSR; renders its own section, hidden when empty) */}
+      <HomeResources />
     </div>
   )
 }

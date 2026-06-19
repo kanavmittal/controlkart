@@ -83,6 +83,9 @@ export default async function ProductPage({ params }: Props) {
       "@type": "Brand",
       name: (product.metadata?.brand as string) || "Selec",
     },
+    // JSON-LD price/availability is intentionally the server (ISR-fresh) value so
+    // crawlers get it in the initial HTML. The UI price/stock is live (CSR) via
+    // PurchasePanel — do NOT switch this to client data or SSG/SEO breaks.
     offers: prices.length
       ? {
           "@type": "AggregateOffer",
