@@ -1,7 +1,3 @@
 packages:
   - "apps/*"
   - "packages/*"
-  # Strapi (apps/cms) manages its own deps independently — keep it OUT of the
-  # pnpm workspace to avoid hoisting conflicts with Medusa/Next. It installs +
-  # runs on its own (its Dockerfile does `npm install`).
-  - "!apps/cms"

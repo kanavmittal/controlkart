@@ -77,6 +77,7 @@ module.exports = defineConfig({
     { resolve: "./src/modules/specs" },
     { resolve: "./src/modules/documents" },
     { resolve: "./src/modules/quotes" },
+    { resolve: "./src/modules/content" },
     // S3-compatible file storage (Cloudflare R2 etc.) when configured; local storage otherwise
     ...(isS3Configured
       ? [
