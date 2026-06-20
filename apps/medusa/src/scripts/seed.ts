@@ -30,8 +30,6 @@ import { SPECS_MODULE } from "../modules/specs"
 import type SpecsModuleService from "../modules/specs/service"
 import { DOCUMENTS_MODULE } from "../modules/documents"
 import type DocumentsModuleService from "../modules/documents/service"
-import { CONTENT_MODULE } from "../modules/content"
-import type ContentModuleService from "../modules/content/service"
 
 const updateStoreCurrencies = createWorkflow(
   "update-store-currencies",
@@ -536,34 +534,6 @@ export default async function seedControlKartData({ container }: ExecArgs) {
     },
   ])
 
-  logger.info("Seeding sample content posts...")
-  const contentService: ContentModuleService = container.resolve(CONTENT_MODULE)
-  await contentService.createContentPosts([
-    {
-      type: "news" as const,
-      title: "ControlKart Becomes an Authorized Distributor of Selec Controls",
-      slug: "controlkart-authorized-selec-distributor",
-      excerpt:
-        "ControlKart now stocks the full Selec MiBRX modular PLC range with pan-India shipping, GST invoicing and technical support.",
-      body: "ControlKart is now an authorized distributor of Selec Controls, one of India's leading manufacturers of industrial automation products.\n\nWe are starting with the complete MiBRX modular PLC range - including the 6M sized base modules, display modules and IO cards - all held in stock at our Mumbai warehouse for fast pan-India dispatch.\n\nEvery order ships with a GST invoice, and our engineering team can help you select the right configuration for your application.",
-      seo_title: "ControlKart - Authorized Selec Controls Distributor in India",
-      seo_description:
-        "ControlKart stocks Selec MiBRX modular PLCs with pan-India shipping, GST invoicing and engineering support.",
-      published_at: new Date(),
-    },
-    {
-      type: "guide" as const,
-      title: "How to Choose a Modular PLC for Panel Automation",
-      slug: "how-to-choose-modular-plc-panel-automation",
-      excerpt:
-        "IO count, supply voltage, communication protocols and expansion - the four decisions that matter when selecting a modular PLC.",
-      body: "Selecting the right PLC starts with four questions:\n\n1. How many IO points do you need today, and in 2 years? The Selec MiBRX 6M offers 6 flexible IO card slots plus Modbus RTU expansion.\n\n2. What supply voltage does your panel run on? The MiBRX 6M is available in 230VAC and isolated 24VDC variants.\n\n3. Which protocols does your plant use? Look for RS485 Modbus RTU master/slave as a baseline, with Ethernet Modbus TCP for SCADA integration.\n\n4. Do you need an operator display? Pluggable LED/LCD display options avoid the cost of a separate HMI for simple machines.",
-      seo_title: "Modular PLC Selection Guide for Panel Builders | ControlKart",
-      seo_description:
-        "A practical guide to choosing a modular PLC: IO sizing, supply voltage, communication protocols and display options.",
-      published_at: new Date(),
-    },
-  ])
 
   logger.info("Finished seeding ControlKart data.")
   logger.info(

@@ -3,7 +3,6 @@ import { Modules } from "@medusajs/framework/utils"
 import {
   buildVerifyUrl,
   issueVerificationToken,
-  sendVerificationEmail,
 } from "../../../../utils/email-verification"
 
 /** POST /store/auth/send-verification */
@@ -28,7 +27,16 @@ export const POST = async (
   )
 
   const verifyUrl = buildVerifyUrl(token)
-  await sendVerificationEmail(customer.email, verifyUrl)
+
+  const notificationService = req.scope.resolve(Modules.NOTIFICATION)
+  await notificationService.createNotifications([
+    {
+      to: customer.email,
+      channel: "email",
+      template: "verify-email",
+      data: { url: verifyUrl },
+    },
+  ])
 
   res.json({
     sent: true,

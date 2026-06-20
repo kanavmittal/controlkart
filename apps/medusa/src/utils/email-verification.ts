@@ -11,27 +11,6 @@ export function buildVerifyUrl(token: string): string {
   return `${base}/verify-email?token=${token}`
 }
 
-export async function sendVerificationEmail(email: string, url: string) {
-  const resendKey = process.env.RESEND_API_KEY
-  if (resendKey) {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.EMAIL_FROM || "ControlKart <onboarding@resend.dev>",
-        to: email,
-        subject: "Verify your ControlKart account",
-        html: `<p>Please verify your email to complete registration.</p><p><a href="${url}">Verify email</a></p><p>This link expires in 24 hours.</p>`,
-      }),
-    })
-    return
-  }
-  console.log(`[ControlKart] Email verification for ${email}: ${url}`)
-}
-
 type CustomerService = {
   updateCustomers: (
     id: string,

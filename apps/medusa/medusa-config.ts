@@ -77,7 +77,6 @@ module.exports = defineConfig({
     { resolve: "./src/modules/specs" },
     { resolve: "./src/modules/documents" },
     { resolve: "./src/modules/quotes" },
-    { resolve: "./src/modules/content" },
     // S3-compatible file storage (Cloudflare R2 etc.) when configured; local storage otherwise
     ...(isS3Configured
       ? [
@@ -103,6 +102,32 @@ module.exports = defineConfig({
           },
         ]
       : []),
+    // Email via the official Notification module: Resend in prod (RESEND_API_KEY
+    // set), the built-in Local provider (logs to console) in dev.
+    {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          process.env.RESEND_API_KEY
+            ? {
+                resolve: "./src/modules/resend",
+                id: "resend",
+                options: {
+                  channels: ["email"],
+                  api_key: process.env.RESEND_API_KEY,
+                  from:
+                    process.env.EMAIL_FROM ||
+                    "ControlKart <onboarding@resend.dev>",
+                },
+              }
+            : {
+                resolve: "@medusajs/medusa/notification-local",
+                id: "local",
+                options: { channels: ["email"] },
+              },
+        ],
+      },
+    },
     // Razorpay payments (UPI, cards, net banking) when keys are configured
     ...(process.env.RAZORPAY_ID
       ? [
@@ -129,7 +154,9 @@ module.exports = defineConfig({
           },
         ]
       : []),
-    // Shiprocket fulfillment when credentials are configured (manual otherwise)
+    // Shiprocket fulfillment via the community plugin
+    // (@sam-ael/medusa-plugin-shiprocket) when credentials are configured;
+    // manual fulfillment otherwise.
     ...(process.env.SHIPROCKET_EMAIL
       ? [
           {
@@ -141,7 +168,7 @@ module.exports = defineConfig({
                   id: "manual",
                 },
                 {
-                  resolve: "./src/modules/shiprocket-fulfillment",
+                  resolve: "@sam-ael/medusa-plugin-shiprocket",
                   id: "shiprocket",
                   options: {
                     email: process.env.SHIPROCKET_EMAIL,
@@ -181,4 +208,10 @@ module.exports = defineConfig({
         ]
       : []),
   ],
+  // The Shiprocket plugin's admin UI, API routes and webhook handlers (the
+  // fulfillment provider above is registered separately). Same credential gate
+  // so local dev without Shiprocket creds is unaffected.
+  plugins: process.env.SHIPROCKET_EMAIL
+    ? [{ resolve: "@sam-ael/medusa-plugin-shiprocket", options: {} }]
+    : [],
 })

@@ -10,7 +10,7 @@ import {
   toast,
 } from "@medusajs/ui"
 import { useCallback, useEffect, useState } from "react"
-import { adminFetch } from "../lib/client"
+import { adminFetch, adminUpload } from "../lib/client"
 
 type ProductDocument = {
   id: string
@@ -26,7 +26,8 @@ const ProductDocumentsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
   const [documents, setDocuments] = useState<ProductDocument[]>([])
   const [title, setTitle] = useState("")
   const [type, setType] = useState("datasheet")
-  const [fileUrl, setFileUrl] = useState("")
+  const [file, setFile] = useState<File | null>(null)
+  const [busy, setBusy] = useState(false)
 
   const refresh = useCallback(() => {
     adminFetch<{ documents: ProductDocument[] }>(
@@ -41,26 +42,35 @@ const ProductDocumentsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
   }, [refresh])
 
   const add = async () => {
-    if (!title || !fileUrl) {
-      toast.error("Title and file URL are required")
+    if (!title || !file) {
+      toast.error("Title and a file are required")
       return
     }
+    setBusy(true)
     try {
+      // Upload through the official File module (→ Cloudflare R2 in prod).
+      const { files } = await adminUpload([file])
+      const uploaded = files[0]
+      if (!uploaded?.url) throw new Error("Upload returned no URL")
+
       await adminFetch(`/admin/products/${data.id}/documents`, {
         method: "POST",
         body: JSON.stringify({
           title,
           type,
-          file_url: fileUrl,
+          file_url: uploaded.url,
+          file_size: file.size,
           display_order: documents.length,
         }),
       })
       setTitle("")
-      setFileUrl("")
+      setFile(null)
       toast.success("Document added")
       refresh()
-    } catch {
-      toast.error("Failed to add document")
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to add document")
+    } finally {
+      setBusy(false)
     }
   }
 
@@ -130,14 +140,12 @@ const ProductDocumentsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
               ))}
             </Select.Content>
           </Select>
-          <Input
-            size="small"
-            placeholder="File URL"
-            value={fileUrl}
-            onChange={(e) => setFileUrl(e.target.value)}
-            className="min-w-72 flex-1"
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            className="min-w-72 flex-1 text-sm text-ui-fg-subtle"
           />
-          <Button size="small" onClick={add}>
+          <Button size="small" onClick={add} disabled={busy} isLoading={busy}>
             Add Document
           </Button>
         </div>
