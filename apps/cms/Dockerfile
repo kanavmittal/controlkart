@@ -1,5 +1,6 @@
 # Strapi v5 (ControlKart CMS) — self-hosted on the same VPS via Dokploy.
-# Build context: apps/cms
+# Build context is the REPO ROOT (Dokploy dockerContextPath "."), so COPY paths
+# are repo-root-relative (apps/cms/...). node_modules + .env are .dockerignore'd.
 FROM node:20-alpine
 
 # Native build deps for Strapi (sharp/vips image processing, better-sqlite3).
@@ -7,10 +8,10 @@ RUN apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips
 
 WORKDIR /app
 
-COPY package.json ./
+COPY apps/cms/package.json ./
 RUN npm install
 
-COPY . .
+COPY apps/cms/ ./
 
 ENV NODE_ENV=production
 RUN npm run build
