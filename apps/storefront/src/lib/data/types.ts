@@ -11,6 +11,20 @@ export type SpecValueDTO = {
   is_comparable: boolean
 }
 
+export type SpecFacetDTO = {
+  attribute_code: string
+  name: string
+  unit: string | null
+  group: string
+  values: { value: string; count: number }[]
+}
+
+export type SpecFacetsResponse = {
+  facets: SpecFacetDTO[]
+  /** ids of products in the category that match the selected filters */
+  product_ids: string[]
+}
+
 export type ProductDocumentDTO = {
   id: string
   title: string
