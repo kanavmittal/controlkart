@@ -8,30 +8,13 @@ import {
 import { listProducts } from "@/lib/data/products"
 import { ProductCard } from "@/components/products/product-card"
 import { SpecFilterSidebar } from "@/components/products/spec-filter-sidebar"
+import { parseSpecParam } from "@/lib/specs"
 
 export const revalidate = 300
 
 type Props = {
   params: Promise<{ handle: string }>
   searchParams: Promise<{ specs?: string }>
-}
-
-/** Safely parses the `specs` URL param (JSON: { attribute_code: [values] }). */
-function parseSelected(raw?: string): Record<string, string[]> {
-  if (!raw) return {}
-  try {
-    const parsed = JSON.parse(raw)
-    if (!parsed || typeof parsed !== "object") return {}
-    const out: Record<string, string[]> = {}
-    for (const [code, vals] of Object.entries(parsed)) {
-      if (Array.isArray(vals)) {
-        out[code] = vals.filter((v): v is string => typeof v === "string")
-      }
-    }
-    return out
-  } catch {
-    return {}
-  }
 }
 
 export async function generateStaticParams() {
@@ -62,7 +45,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const category = await getCategoryByHandle(handle)
   if (!category) notFound()
 
-  const selected = parseSelected((await searchParams).specs)
+  const selected = parseSpecParam((await searchParams).specs)
   const hasFilters = Object.values(selected).some((v) => v.length > 0)
 
   const [{ products }, { facets, product_ids }] = await Promise.all([

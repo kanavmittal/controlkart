@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { useCallback } from "react"
 import type { SpecFacetDTO } from "@/lib/data/types"
 
@@ -16,20 +16,24 @@ type Props = {
 export function SpecFilterSidebar({ facets, selected }: Props) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const apply = useCallback(
     (next: Record<string, string[]>) => {
       const cleaned = Object.fromEntries(
         Object.entries(next).filter(([, vals]) => vals.length > 0)
       )
-      const params = new URLSearchParams()
+      // Preserve any other params (e.g. ?category=) already on the URL.
+      const params = new URLSearchParams(searchParams.toString())
       if (Object.keys(cleaned).length) {
         params.set("specs", JSON.stringify(cleaned))
+      } else {
+        params.delete("specs")
       }
       const qs = params.toString()
       router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
     },
-    [router, pathname]
+    [router, pathname, searchParams]
   )
 
   const toggle = (code: string, value: string) => {
