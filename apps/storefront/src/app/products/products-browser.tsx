@@ -5,15 +5,17 @@ import Link from "next/link"
 import { HttpTypes } from "@medusajs/types"
 import { ProductCard } from "@/components/products/product-card"
 import { SpecFilterSidebar } from "@/components/products/spec-filter-sidebar"
-import type { SpecFacetDTO } from "@/lib/data/types"
+import { SpecSortDropdown } from "@/components/products/spec-sort-dropdown"
+import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
 
-type Category = { id: string; name: string; handle: string }
+type Cat = { id: string; name: string; handle: string }
+type CategoryTree = Cat & { children: Cat[] }
 
 /**
- * Client-side catalogue browser. Category and spec-facet filtering are URL-driven
- * (server-rendered, shareable); free-text search runs in-memory on top of the
- * already-filtered set. Spec facets only appear once a category is selected,
- * because filterable specs differ per category.
+ * Client-side catalogue browser. Category (hierarchical), spec-facet filtering
+ * and spec sort are URL-driven (server-rendered, shareable); free-text search
+ * runs in-memory on top of the already-filtered set. Selecting a parent
+ * category aggregates its sub-categories' products.
  */
 export function ProductsBrowser({
   products,
@@ -21,12 +23,16 @@ export function ProductsBrowser({
   activeCategoryHandle,
   facets,
   selected,
+  sortable,
+  sort,
 }: {
   products: HttpTypes.StoreProduct[]
-  categories: Category[]
+  categories: CategoryTree[]
   activeCategoryHandle: string | null
   facets: SpecFacetDTO[]
   selected: Record<string, string[]>
+  sortable: SpecSortOption[]
+  sort?: string
 }) {
   const [q, setQ] = useState("")
   const query = q.trim().toLowerCase()
@@ -40,8 +46,8 @@ export function ProductsBrowser({
       })
     : products
 
-  const categoryLinkClass = (active: boolean) =>
-    `block px-2 py-1 text-sm ${
+  const linkClass = (active: boolean, indent = false) =>
+    `block px-2 py-1 text-sm ${indent ? "pl-5" : ""} ${
       active
         ? "font-medium text-[var(--color-ink)]"
         : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
@@ -56,22 +62,36 @@ export function ProductsBrowser({
           </h2>
           <ul className="mt-2 flex flex-col gap-0.5">
             <li>
-              {/* Changing category drops ?specs= since facets differ per category. */}
-              <Link
-                href="/products"
-                className={categoryLinkClass(!activeCategoryHandle)}
-              >
+              {/* Changing category drops ?specs=/?sort= since they differ per category. */}
+              <Link href="/products" className={linkClass(!activeCategoryHandle)}>
                 All products
               </Link>
             </li>
-            {categories.map((c) => (
-              <li key={c.id}>
+            {categories.map((top) => (
+              <li key={top.id}>
                 <Link
-                  href={`/products?category=${c.handle}`}
-                  className={categoryLinkClass(activeCategoryHandle === c.handle)}
+                  href={`/products?category=${top.handle}`}
+                  className={linkClass(activeCategoryHandle === top.handle)}
                 >
-                  {c.name}
+                  {top.name}
                 </Link>
+                {top.children.length > 0 && (
+                  <ul className="flex flex-col gap-0.5">
+                    {top.children.map((child) => (
+                      <li key={child.id}>
+                        <Link
+                          href={`/products?category=${child.handle}`}
+                          className={linkClass(
+                            activeCategoryHandle === child.handle,
+                            true
+                          )}
+                        >
+                          {child.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -85,19 +105,24 @@ export function ProductsBrowser({
       </div>
 
       <div className="flex-1">
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="flex max-w-md gap-2"
-        >
-          <input
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by name, SKU or model…"
-            aria-label="Search products"
-            className="flex-1 border border-[var(--color-line)] px-3 py-2 text-sm outline-none focus:border-[var(--color-line-strong)]"
-          />
-        </form>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex max-w-md flex-1 gap-2"
+          >
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search by name, SKU or model…"
+              aria-label="Search products"
+              className="flex-1 border border-[var(--color-line)] px-3 py-2 text-sm outline-none focus:border-[var(--color-line-strong)]"
+            />
+          </form>
+          {sortable.length > 0 && (
+            <SpecSortDropdown sortable={sortable} value={sort} />
+          )}
+        </div>
 
         <p className="mt-4 text-sm text-[var(--color-ink-muted)]">
           {filtered.length} product{filtered.length === 1 ? "" : "s"}

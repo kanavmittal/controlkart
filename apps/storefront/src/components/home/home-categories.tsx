@@ -11,10 +11,11 @@ export function HomeCategories() {
     queryKey: queryKeys.homeCategories,
     queryFn: async () => {
       const { product_categories } = await sdk.store.category.list({
-        fields: "id,name,handle,description",
-        limit: 50,
+        fields: "id,name,handle,description,parent_category_id",
+        limit: 200,
       })
-      return product_categories
+      // Top-level only — sub-categories surface inside their parent's page.
+      return product_categories.filter((c) => !c.parent_category_id)
     },
     staleTime: 5 * 60_000,
   })

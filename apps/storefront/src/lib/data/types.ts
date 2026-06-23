@@ -19,10 +19,21 @@ export type SpecFacetDTO = {
   values: { value: string; count: number }[]
 }
 
+export type SpecSortOption = {
+  attribute_code: string
+  name: string
+  unit: string | null
+}
+
 export type SpecFacetsResponse = {
   facets: SpecFacetDTO[]
-  /** ids of products in the category that match the selected filters */
+  /**
+   * ids of products in the category (and its descendants) matching the
+   * selected filters, ordered by the requested spec sort when one is given.
+   */
   product_ids: string[]
+  /** comparable attributes in the category's resolved template (sort options) */
+  sortable: SpecSortOption[]
 }
 
 export type ProductDocumentDTO = {

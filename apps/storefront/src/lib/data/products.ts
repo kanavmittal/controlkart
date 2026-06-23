@@ -28,6 +28,55 @@ export async function listProducts(params: {
   return { products, count }
 }
 
+/** All products in one category, paginating so nothing is dropped by a page cap. */
+async function listAllProductsInCategory(
+  category_id: string,
+  pageSize = 100
+): Promise<HttpTypes.StoreProduct[]> {
+  const all: HttpTypes.StoreProduct[] = []
+  let offset = 0
+  // Hard stop guards against an unexpected count/loop (catalogue is small).
+  for (let page = 0; page < 50; page++) {
+    const { products, count } = await listProducts({
+      category_id,
+      limit: pageSize,
+      offset,
+    })
+    all.push(...products)
+    offset += pageSize
+    if (products.length < pageSize || all.length >= count) {
+      break
+    }
+  }
+  return all
+}
+
+/**
+ * Products across several categories (e.g. a parent category plus all its
+ * sub-categories), merged and de-duplicated. Products live in leaf categories,
+ * so a parent listing aggregates its descendants. A fetch per category avoids
+ * array-query-param ambiguity; each is fully paginated so the rendered set is
+ * authoritative relative to the backend's facet/sort product ids.
+ */
+export async function listProductsInCategories(
+  categoryIds: string[]
+): Promise<HttpTypes.StoreProduct[]> {
+  const ids = [...new Set(categoryIds.filter(Boolean))]
+  if (!ids.length) {
+    return []
+  }
+  const results = await Promise.all(
+    ids.map((category_id) => listAllProductsInCategory(category_id))
+  )
+  const byId = new Map<string, HttpTypes.StoreProduct>()
+  for (const products of results) {
+    for (const p of products) {
+      byId.set(p.id, p)
+    }
+  }
+  return [...byId.values()]
+}
+
 export async function getProductByHandle(handle: string) {
   const { products } = await storeFetch<{
     products: HttpTypes.StoreProduct[]

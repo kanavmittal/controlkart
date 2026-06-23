@@ -223,6 +223,54 @@ class SpecsModuleService extends MedusaService({
 
     return { facets, product_ids: matchedIds }
   }
+
+  /**
+   * Orders the given product ids by a single spec attribute, numerically
+   * (normalized_value, falling back to a parsed value). Products without a
+   * usable value for that attribute are pushed to the end, preserving the
+   * incoming order among themselves.
+   */
+  async sortProductIdsBySpec(
+    productIds: string[],
+    attributeCode: string,
+    direction: "asc" | "desc"
+  ): Promise<string[]> {
+    if (!productIds.length) {
+      return productIds
+    }
+
+    const values = await this.listSpecValues({
+      product_id: productIds,
+      attribute_code: attributeCode,
+    })
+    const byProduct = new Map<string, number>()
+    for (const v of values) {
+      if (v.variant_id) {
+        continue
+      }
+      const n = v.normalized_value ?? parseFloat(v.value)
+      if (typeof n === "number" && !Number.isNaN(n)) {
+        byProduct.set(v.product_id, n)
+      }
+    }
+
+    const sign = direction === "desc" ? -1 : 1
+    const order = new Map(productIds.map((id, i) => [id, i]))
+    return [...productIds].sort((a, b) => {
+      const av = byProduct.get(a)
+      const bv = byProduct.get(b)
+      if (av === undefined && bv === undefined) {
+        return (order.get(a) ?? 0) - (order.get(b) ?? 0)
+      }
+      if (av === undefined) {
+        return 1
+      }
+      if (bv === undefined) {
+        return -1
+      }
+      return (av - bv) * sign
+    })
+  }
 }
 
 export default SpecsModuleService

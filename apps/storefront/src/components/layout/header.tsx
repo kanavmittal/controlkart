@@ -1,9 +1,8 @@
 import Link from "next/link"
 import { HeaderActions } from "./header-actions"
+import { CategoryNav } from "./category-nav"
 
 const NAV = [
-  { href: "/products", label: "Products" },
-  { href: "/categories/plcs", label: "PLCs" },
   { href: "/quick-order", label: "Quick Order" },
   { href: "/request-quote", label: "Request Quote" },
   { href: "/resources", label: "Resources" },
@@ -26,6 +25,7 @@ export function Header() {
           ControlKart
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
+          <CategoryNav />
           {NAV.map((item) => (
             <Link
               key={item.href}
