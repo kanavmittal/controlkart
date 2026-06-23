@@ -21,6 +21,8 @@ type TemplateAttribute = {
   group: string
   unit: string | null
   is_required: boolean
+  inherited: boolean
+  source_category: string | null
 }
 
 type CatalogAttribute = {
@@ -46,6 +48,9 @@ type Row = {
   is_required: boolean
   /** false when the field comes from the category template, true for one-off additions */
   custom: boolean
+  /** true when the spec is inherited only from an ancestor category */
+  inherited: boolean
+  source_category: string | null
 }
 
 /**
@@ -80,6 +85,8 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
           unit: a.unit,
           is_required: a.is_required,
           custom: false,
+          inherited: a.inherited,
+          source_category: a.source_category,
         }))
 
         // Surface any saved value whose attribute isn't in the template as a
@@ -97,6 +104,8 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
               unit: attr?.unit ?? null,
               is_required: false,
               custom: true,
+              inherited: false,
+              source_category: null,
             }
           })
 
@@ -137,6 +146,8 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
         unit: attr.unit,
         is_required: false,
         custom: true,
+        inherited: false,
+        source_category: null,
       },
     ])
     setPendingAttr("")
@@ -223,6 +234,13 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
                     {row.is_required ? (
                       <Badge size="2xsmall" color="orange">
                         Required
+                      </Badge>
+                    ) : null}
+                    {row.inherited ? (
+                      <Badge size="2xsmall" color="grey">
+                        {row.source_category
+                          ? `Inherited · ${row.source_category}`
+                          : "Inherited"}
                       </Badge>
                     ) : null}
                   </Label>

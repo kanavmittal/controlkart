@@ -1,13 +1,22 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { SPECS_MODULE } from "../../../../../modules/specs"
 import type SpecsModuleService from "../../../../../modules/specs/service"
+import {
+  getQuery,
+  resolveCategoryLineage,
+} from "../../../../../utils/category-hierarchy"
 
-/** Returns the category's spec template rows joined with attribute metadata. */
+/**
+ * Returns the category's own spec template rows (editable) plus the specs it
+ * inherits from ancestor categories (read-only context, so merchants don't
+ * redefine common specs that already cascade down from the parent).
+ */
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   const specsService: SpecsModuleService = req.scope.resolve(SPECS_MODULE)
+  const categoryId = req.params.id
 
   const templates = await specsService.listCategorySpecTemplates(
-    { category_id: req.params.id },
+    { category_id: categoryId },
     { order: { display_order: "ASC" } }
   )
 
@@ -30,7 +39,38 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
     }
   })
 
-  res.json({ templates: rows })
+  // Specs inherited from ancestor categories (excluding any this category
+  // already defines itself).
+  const query = getQuery(req.scope)
+  const lineage = await resolveCategoryLineage(query, [categoryId])
+  const ownCodes = new Set(codes)
+  let inherited: {
+    attribute_code: string
+    name: string
+    unit: string | null
+    group: string
+    is_required: boolean
+    source_category: string | null
+  }[] = []
+
+  if (lineage.ancestorIds.length) {
+    const ancestorAttrs = await specsService.getTemplateForCategories(
+      lineage.ancestorIds
+    )
+    inherited = ancestorAttrs
+      .filter((a) => !ownCodes.has(a.attribute_code))
+      .map((a) => ({
+        attribute_code: a.attribute_code,
+        name: a.name,
+        unit: a.unit,
+        group: a.group,
+        is_required: a.is_required,
+        source_category:
+          lineage.names.get(a.source_category_ids[0]) ?? null,
+      }))
+  }
+
+  res.json({ templates: rows, inherited })
 }
 
 type UpsertTemplateBody = {

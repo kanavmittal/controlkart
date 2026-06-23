@@ -74,7 +74,7 @@ class SpecsModuleService extends MedusaService({
 
     const tmplByCode = new Map<
       string,
-      { display_order: number; is_required: boolean }
+      { display_order: number; is_required: boolean; source: Set<string> }
     >()
     for (const t of templates) {
       const existing = tmplByCode.get(t.attribute_code)
@@ -82,10 +82,12 @@ class SpecsModuleService extends MedusaService({
         tmplByCode.set(t.attribute_code, {
           display_order: t.display_order,
           is_required: t.is_required,
+          source: new Set([t.category_id]),
         })
       } else {
         existing.display_order = Math.min(existing.display_order, t.display_order)
         existing.is_required = existing.is_required || t.is_required
+        existing.source.add(t.category_id)
       }
     }
 
@@ -115,6 +117,8 @@ class SpecsModuleService extends MedusaService({
           is_required: tmpl.is_required,
           is_filterable: attr.is_filterable,
           is_comparable: attr.is_comparable,
+          /** category ids whose template contributed this attribute */
+          source_category_ids: [...tmpl.source],
         }
       })
       .filter((x): x is NonNullable<typeof x> => x !== null)

@@ -12,6 +12,7 @@ import {
   Label,
   Text,
   IconButton,
+  Badge,
   toast,
 } from "@medusajs/ui"
 import { ArrowUpMini, ArrowDownMini, Trash } from "@medusajs/icons"
@@ -33,6 +34,15 @@ type TemplateRow = {
   is_required: boolean
 }
 
+type InheritedRow = {
+  attribute_code: string
+  name: string
+  unit: string | null
+  group: string
+  is_required: boolean
+  source_category: string | null
+}
+
 /**
  * Lets merchants define which spec fields (and in what order) products in this
  * category display — this is what drives the per-category spec table instead of
@@ -42,6 +52,7 @@ const CategorySpecTemplateWidget = ({
   data,
 }: DetailWidgetProps<AdminProductCategory>) => {
   const [rows, setRows] = useState<TemplateRow[]>([])
+  const [inherited, setInherited] = useState<InheritedRow[]>([])
   const [catalog, setCatalog] = useState<CatalogAttribute[]>([])
   const [pendingAttr, setPendingAttr] = useState<string>("")
   const [loading, setLoading] = useState(true)
@@ -49,9 +60,10 @@ const CategorySpecTemplateWidget = ({
 
   useEffect(() => {
     Promise.all([
-      adminFetch<{ templates: (TemplateRow & { id: string })[] }>(
-        `/admin/categories/${data.id}/spec-template`
-      ),
+      adminFetch<{
+        templates: (TemplateRow & { id: string })[]
+        inherited: InheritedRow[]
+      }>(`/admin/categories/${data.id}/spec-template`),
       adminFetch<{ attributes: CatalogAttribute[] }>("/admin/specs/attributes"),
     ])
       .then(([tmplRes, catRes]) => {
@@ -63,6 +75,7 @@ const CategorySpecTemplateWidget = ({
             is_required: t.is_required,
           }))
         )
+        setInherited(tmplRes.inherited ?? [])
         setCatalog(catRes.attributes)
       })
       .catch(() => toast.error("Failed to load spec template"))
@@ -148,6 +161,41 @@ const CategorySpecTemplateWidget = ({
           Save Template
         </Button>
       </div>
+
+      {inherited.length > 0 ? (
+        <div className="flex flex-col gap-2 px-6 py-4">
+          <Text
+            size="small"
+            leading="compact"
+            weight="plus"
+            className="text-ui-fg-muted uppercase"
+          >
+            Inherited from parent categories
+          </Text>
+          <Text size="small" className="text-ui-fg-subtle">
+            These cascade down from parent categories and apply automatically —
+            no need to re-add them.
+          </Text>
+          <div className="flex flex-col gap-2 pt-1">
+            {inherited.map((row) => (
+              <div
+                key={row.attribute_code}
+                className="flex items-center justify-between gap-3 border-b border-ui-border-base pb-2 last:border-b-0"
+              >
+                <Text size="small" leading="compact">
+                  {row.name}
+                  {row.unit ? ` (${row.unit})` : ""}
+                </Text>
+                {row.source_category ? (
+                  <Badge size="2xsmall" color="grey">
+                    {row.source_category}
+                  </Badge>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="px-6 py-4">
         {rows.length === 0 ? (

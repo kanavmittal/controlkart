@@ -305,6 +305,39 @@ export default async function seedControlKartData({ container }: ExecArgs) {
     (c) => c.name === "PLC Accessories"
   )!
 
+  // Sub-categories under PLCs. These demonstrate spec inheritance: the parent
+  // "PLCs" holds the common/filterable specs, each child adds its own specifics.
+  const { result: plcChildren } = await createProductCategoriesWorkflow(
+    container
+  ).run({
+    input: {
+      product_categories: [
+        {
+          name: "Panel-mounted PLCs",
+          handle: "panel-mounted-plcs",
+          parent_category_id: plcCategory.id,
+          is_active: true,
+          description:
+            "Modular panel / DIN-rail mounted PLCs with expandable IO slots for cabinet installation.",
+        },
+        {
+          name: "Wall-mounted PLCs",
+          handle: "wall-mounted-plcs",
+          parent_category_id: plcCategory.id,
+          is_active: true,
+          description:
+            "Compact wall-mounted PLCs for distributed control and standalone machines.",
+        },
+      ],
+    },
+  })
+  const panelPlcCategory = plcChildren.find(
+    (c) => c.name === "Panel-mounted PLCs"
+  )!
+  const wallPlcCategory = plcChildren.find(
+    (c) => c.name === "Wall-mounted PLCs"
+  )!
+
   logger.info("Seeding Selec PLC products...")
   const { result: productResult } = await createProductsWorkflow(
     container
@@ -315,7 +348,8 @@ export default async function seedControlKartData({ container }: ExecArgs) {
           title: "Selec MiBRX 6M Sized Modular PLC",
           subtitle: "Rail Mount Modular PLC with 6 IO Slots",
           handle: "selec-mibrx-6m-modular-plc",
-          category_ids: [plcCategory.id],
+          // Tagged to the leaf sub-category; it inherits the PLCs parent specs.
+          category_ids: [panelPlcCategory.id],
           description:
             "The Selec MiBRX 6M is a rail-mount modular PLC with 6 flexible IO card slots, RTC with time switch functions, and expansion via Modbus RTU. Multiple pluggable LED/LCD display options make it suitable for OEM machine builders, panel builders and process automation. Programmed via Windows-based SELPRO ladder software.",
           weight: 450,
@@ -467,13 +501,48 @@ export default async function seedControlKartData({ container }: ExecArgs) {
   ]
   await specsService.createSpecAttributes(attributeDefs)
 
-  await specsService.createCategorySpecTemplates(
-    attributeDefs.map((attr, i) => ({
-      category_id: plcCategory.id,
-      attribute_code: attr.code,
+  // Common specs live on the parent "PLCs" (these are the filterable/sortable
+  // platform attributes shared by every PLC); each sub-category adds its own
+  // mechanical/IO specifics. A product in a sub-category resolves to the union.
+  const commonCodes = [
+    "supply_voltage",
+    "communication_interface",
+    "expansion",
+    "code_memory",
+    "data_memory",
+    "rtc",
+    "certification",
+  ]
+  const panelCodes = [
+    "slots",
+    "digital_inputs",
+    "analog_inputs",
+    "digital_outputs",
+    "analog_outputs",
+    "counting_frequency",
+    "display_type",
+    "mounting_type",
+    "dimensions",
+  ]
+  const wallCodes = [
+    "digital_inputs",
+    "digital_outputs",
+    "display_type",
+    "mounting_type",
+    "dimensions",
+  ]
+  const templateRows = (categoryId: string, codes: string[]) =>
+    codes.map((code, i) => ({
+      category_id: categoryId,
+      attribute_code: code,
       display_order: i,
     }))
-  )
+
+  await specsService.createCategorySpecTemplates([
+    ...templateRows(plcCategory.id, commonCodes),
+    ...templateRows(panelPlcCategory.id, panelCodes),
+    ...templateRows(wallPlcCategory.id, wallCodes),
+  ])
 
   const plcSpecs: { code: string; value: string; normalized?: number }[] = [
     { code: "supply_voltage", value: "230VAC / 24VDC" },
