@@ -62,10 +62,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ...flattenDescendants(category).map((c) => c.id),
   ]
 
-  const [products, { facets, product_ids, sortable }] = await Promise.all([
+  const [products, facetsRes] = await Promise.all([
     listProductsInCategories(descendantIds),
     getCategorySpecFacets(category.id, selected, sort),
   ])
+  // Tolerate an older backend that doesn't yet return these (deploy window).
+  const facets = facetsRes.facets ?? []
+  const product_ids = facetsRes.product_ids ?? []
+  const sortable = facetsRes.sortable ?? []
 
   // When a filter or sort is active, `product_ids` is the authoritative
   // (filtered + ordered) list; otherwise show everything in default order.

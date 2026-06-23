@@ -51,10 +51,11 @@ export default async function ProductsPage({ searchParams }: Props) {
       listProductsInCategories(subtreeIds),
       getCategorySpecFacets(active.id, selected, sort),
     ])
+    // `?? []` tolerates an older backend during the deploy window.
     products = prods
-    facets = fres.facets
-    sortable = fres.sortable
-    productIds = fres.product_ids
+    facets = fres.facets ?? []
+    sortable = fres.sortable ?? []
+    productIds = fres.product_ids ?? []
   } else {
     products = (await listProducts({ limit: 100 })).products
   }
