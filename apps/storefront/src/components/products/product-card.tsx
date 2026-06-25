@@ -15,6 +15,10 @@ export function ProductCard({ product }: { product: HttpTypes.StoreProduct }) {
     0
   )
   const mpn = (product.metadata?.mpn as string) || variants[0]?.sku
+  // Second distinct image (if any) fades in on hover — pure CSS, no JS.
+  const hoverImage = product.images?.find(
+    (i) => i.url && i.url !== product.thumbnail
+  )?.url
 
   return (
     <Link
@@ -23,13 +27,27 @@ export function ProductCard({ product }: { product: HttpTypes.StoreProduct }) {
     >
       <div className="relative flex aspect-square items-center justify-center border-b border-[var(--color-line)] bg-[var(--color-surface-alt)] p-6">
         {product.thumbnail ? (
-          <Image
-            src={product.thumbnail}
-            alt={product.title}
-            fill
-            className="object-contain p-6"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
+          <>
+            <Image
+              src={product.thumbnail}
+              alt={product.title}
+              fill
+              className={`object-contain p-6 transition-opacity duration-200 ${
+                hoverImage ? "group-hover:opacity-0" : ""
+              }`}
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
+            {hoverImage && (
+              <Image
+                src={hoverImage}
+                alt=""
+                aria-hidden
+                fill
+                className="object-contain p-6 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            )}
+          </>
         ) : (
           <span className="font-mono text-xs text-[var(--color-ink-faint)]">
             {mpn}

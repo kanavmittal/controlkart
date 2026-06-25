@@ -8,6 +8,7 @@ import { formatINR } from "@/lib/format"
 import { StockBadge } from "./stock-badge"
 import { useCart } from "@/lib/hooks/use-cart"
 import { useProductLive } from "@/lib/hooks/use-product-live"
+import { useProductSelection } from "@/components/providers/product-selection-provider"
 import Link from "next/link"
 
 /**
@@ -23,7 +24,10 @@ export function PurchasePanel({
   product: HttpTypes.StoreProduct
 }) {
   const variants = product.variants ?? []
-  const [variantId, setVariantId] = useState(variants[0]?.id)
+  // Selected variant lives in shared PDP context so the image gallery reacts to
+  // it too (it's rendered in a separate column / subtree).
+  const { selectedVariantId: variantId, setSelectedVariantId: setVariantId } =
+    useProductSelection()
   const [quantity, setQuantity] = useState(1)
   const [pending, startTransition] = useTransition()
   const [buyNowPending, startBuyNow] = useTransition()
@@ -47,6 +51,11 @@ export function PurchasePanel({
   // Managed in-stock caps at the count; non-tracked/backorder caps at a sane max.
   const maxQty = purchasable ? (stock > 0 ? stock : 99) : 0
   const controlsDisabled = live.isLoading || live.isError || !purchasable
+
+  // Reset quantity to 1 whenever the selected variant changes (from any source).
+  useEffect(() => {
+    setQuantity(1)
+  }, [variantId])
 
   // If a live refetch lowers stock below the current selection, clamp it down.
   useEffect(() => {
@@ -94,10 +103,7 @@ export function PurchasePanel({
                 <button
                   key={v.id}
                   type="button"
-                  onClick={() => {
-                    setVariantId(v.id)
-                    setQuantity(1)
-                  }}
+                  onClick={() => setVariantId(v.id)}
                   className={`border px-3 py-2.5 text-left text-sm transition-colors ${
                     selected
                       ? "model-selected font-semibold"

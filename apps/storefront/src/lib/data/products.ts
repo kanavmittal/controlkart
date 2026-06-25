@@ -3,7 +3,7 @@ import { storeFetch } from "../medusa"
 import type { SpecValueDTO, ProductDocumentDTO } from "./types"
 
 const PRODUCT_FIELDS =
-  "id,title,subtitle,handle,description,thumbnail,metadata,*images,*options,*options.values,*variants,*variants.options,*variants.calculated_price,+variants.inventory_quantity,*categories"
+  "id,title,subtitle,handle,description,thumbnail,metadata,*images,*options,*options.values,*variants,*variants.options,*variants.images,*variants.calculated_price,+variants.inventory_quantity,*categories"
 
 export async function listProducts(params: {
   category_id?: string

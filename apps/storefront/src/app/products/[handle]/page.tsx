@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 import {
   getProductByHandle,
@@ -10,10 +9,30 @@ import {
 import { SpecTable } from "@/components/products/spec-table"
 import { DownloadsList } from "@/components/products/downloads-list"
 import { PurchasePanel } from "@/components/products/purchase-panel"
+import { ProductGallery } from "@/components/products/product-gallery"
+import { ProductSelectionProvider } from "@/components/providers/product-selection-provider"
 import { ProductCard } from "@/components/products/product-card"
 import { BASE_URL, STORE_NAME } from "@/lib/config"
+import { HttpTypes } from "@medusajs/types"
 
 type Props = { params: Promise<{ handle: string }> }
+
+/**
+ * Canonical (variant-agnostic) product image URLs for SEO: product thumbnail
+ * first, then all product images rank-sorted, deduped by URL and capped. Used
+ * for JSON-LD `image` and OpenGraph `images`.
+ */
+function productImageUrls(product: HttpTypes.StoreProduct): string[] {
+  const ranked = [...(product.images ?? [])]
+    .sort(
+      (a, b) =>
+        (a.rank ?? 0) - (b.rank ?? 0) || a.id.localeCompare(b.id)
+    )
+    .map((i) => i.url)
+  return [...(product.thumbnail ? [product.thumbnail] : []), ...ranked]
+    .filter((url, idx, arr) => arr.indexOf(url) === idx)
+    .slice(0, 6)
+}
 
 // ISR: pre-rendered per product, revalidated for fresh price/stock.
 export const revalidate = 600
@@ -44,7 +63,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical: `/products/${handle}` },
     openGraph: {
       title: product.title,
-      images: product.thumbnail ? [product.thumbnail] : [],
+      images: productImageUrls(product).map((url) => ({ url, alt: product.title })),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      images: productImageUrls(product),
     },
   }
 }
@@ -70,13 +94,14 @@ export default async function ProductPage({ params }: Props) {
     .map((v) => v.calculated_price?.calculated_amount)
     .filter((p): p is number => typeof p === "number")
   const inStock = variants.some((v) => (v.inventory_quantity ?? 0) > 0)
+  const imageUrls = productImageUrls(product)
 
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
     description: product.description,
-    image: product.thumbnail ? [product.thumbnail] : undefined,
+    image: imageUrls.length ? imageUrls : undefined,
     sku: variants[0]?.sku,
     mpn: (product.metadata?.mpn as string) || undefined,
     brand: {
@@ -113,6 +138,7 @@ export default async function ProductPage({ params }: Props) {
         <span className="text-[var(--color-ink)]">{product.title}</span>
       </nav>
 
+      <ProductSelectionProvider initialVariantId={variants[0]?.id}>
       <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_minmax(360px,420px)]">
         <div>
           <header>
@@ -130,21 +156,8 @@ export default async function ProductPage({ params }: Props) {
             )}
           </header>
 
-          <div className="relative mt-8 flex aspect-[4/3] items-center justify-center border border-[var(--color-line)] bg-[var(--color-surface-alt)]">
-            {product.thumbnail ? (
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                className="object-contain p-12"
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                priority
-              />
-            ) : (
-              <span className="font-mono text-sm text-[var(--color-ink-faint)]">
-                Product image coming soon
-              </span>
-            )}
+          <div className="mt-8">
+            <ProductGallery product={product} />
           </div>
 
           {product.description && (
@@ -181,6 +194,7 @@ export default async function ProductPage({ params }: Props) {
           <PurchasePanel product={product} />
         </aside>
       </div>
+      </ProductSelectionProvider>
 
       {relatedProducts.length > 0 && (
         <section className="mt-20 border-t border-[var(--color-line)] pt-10">
