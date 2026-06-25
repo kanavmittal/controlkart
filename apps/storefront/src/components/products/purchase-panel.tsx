@@ -77,7 +77,10 @@ export function PurchasePanel({
     })
   }
 
+  const footnote = (product.metadata?.footnote as string | undefined)?.trim()
+
   return (
+    <>
     <div className="border border-[var(--color-line)]">
       {variants.length > 1 && (
         <div className="border-b border-[var(--color-line)] p-4">
@@ -219,5 +222,12 @@ export function PurchasePanel({
         </ul>
       </div>
     </div>
+
+      {footnote && (
+        <p className="mt-3 whitespace-pre-line border-l-2 border-[var(--color-line-strong)] bg-[var(--color-surface-alt)] px-3 py-2.5 text-xs leading-relaxed text-[var(--color-ink-muted)]">
+          {footnote}
+        </p>
+      )}
+    </>
   )
 }

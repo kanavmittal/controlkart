@@ -6,11 +6,14 @@ import {
   Button,
   Input,
   Label,
-  Select,
   Text,
   Badge,
+  IconButton,
+  Checkbox,
+  FocusModal,
   toast,
 } from "@medusajs/ui"
+import { Trash } from "@medusajs/icons"
 import { useEffect, useMemo, useState } from "react"
 import { adminFetch } from "../lib/client"
 
@@ -53,18 +56,24 @@ type Row = {
   source_category: string | null
 }
 
+/** Shared column template so every row reads like a native Medusa detail sheet. */
+const ROW =
+  "grid grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_40px] items-center gap-3 px-6"
+
 /**
- * Technical specifications editor on the product detail page. Shows only the
- * spec fields defined by the product's category template (grouped), with an
- * "add another spec" escape hatch for one-off attributes from the catalog.
+ * Technical specifications editor on the product detail page. Shows the spec
+ * fields defined by the product's category template (grouped), with an "Add
+ * spec" escape hatch for one-off attributes from the catalog.
  */
 const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
   const [rows, setRows] = useState<Row[]>([])
   const [values, setValues] = useState<Record<string, string>>({})
   const [catalog, setCatalog] = useState<CatalogAttribute[]>([])
-  const [pendingAttr, setPendingAttr] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
+  const [addOpen, setAddOpen] = useState(false)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     Promise.all([
@@ -132,25 +141,39 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
     return catalog.filter((a) => !used.has(a.code))
   }, [catalog, rows])
 
-  const addRow = () => {
-    const attr = catalog.find((a) => a.code === pendingAttr)
-    if (!attr) {
-      return
-    }
+  const openAdd = () => {
+    setSelected(new Set())
+    setAddOpen(true)
+  }
+
+  const toggleSelected = (code: string, checked: boolean) =>
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (checked) {
+        next.add(code)
+      } else {
+        next.delete(code)
+      }
+      return next
+    })
+
+  const confirmAdd = () => {
+    const toAdd = catalog.filter((a) => selected.has(a.code))
     setRows((prev) => [
       ...prev,
-      {
-        attribute_code: attr.code,
-        name: attr.name,
+      ...toAdd.map((a) => ({
+        attribute_code: a.code,
+        name: a.name,
         group: "Additional",
-        unit: attr.unit,
+        unit: a.unit,
         is_required: false,
         custom: true,
         inherited: false,
         source_category: null,
-      },
+      })),
     ])
-    setPendingAttr("")
+    setSelected(new Set())
+    setAddOpen(false)
   }
 
   const removeRow = (code: string) => {
@@ -198,110 +221,145 @@ const ProductSpecsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => {
   return (
     <Container className="divide-y p-0">
       <div className="flex items-center justify-between px-6 py-4">
-        <Heading level="h2">Technical Specifications</Heading>
-        <Button size="small" onClick={save} isLoading={saving}>
-          Save Specs
-        </Button>
+        <div>
+          <Heading level="h2">Technical Specifications</Heading>
+          <Text size="small" className="text-ui-fg-subtle">
+            Values for this product&rsquo;s category spec fields. Inherited
+            fields cascade automatically.
+          </Text>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={openAdd}
+            disabled={availableToAdd.length === 0}
+          >
+            Add spec
+          </Button>
+          <Button size="small" onClick={save} isLoading={saving}>
+            Save Specs
+          </Button>
+        </div>
       </div>
 
       {rows.length === 0 ? (
         <div className="px-6 py-6">
           <Text size="small" className="text-ui-fg-subtle">
             No spec fields are defined for this product&rsquo;s category. Set up
-            the category&rsquo;s spec template, or add an individual spec below.
+            the category&rsquo;s spec template, or use &ldquo;Add spec&rdquo;.
           </Text>
         </div>
       ) : (
-        <div className="flex flex-col gap-6 px-6 py-4">
-          {grouped.map(([group, groupRows]) => (
-            <div key={group} className="flex flex-col gap-2">
-              <Text
-                size="small"
-                leading="compact"
-                weight="plus"
-                className="text-ui-fg-muted uppercase"
+        grouped.map(([group, groupRows]) => (
+          <div key={group} className="py-4">
+            <Text
+              size="xsmall"
+              leading="compact"
+              weight="plus"
+              className="px-6 pb-2 text-ui-fg-muted uppercase"
+            >
+              {group}
+            </Text>
+            {groupRows.map((row) => (
+              <div
+                key={row.attribute_code}
+                className={`${ROW} border-b border-ui-border-base py-2.5 last:border-b-0 ${
+                  row.inherited ? "opacity-70" : ""
+                }`}
               >
-                {group}
-              </Text>
-              {groupRows.map((row) => (
-                <div
-                  key={row.attribute_code}
-                  className="grid grid-cols-[1fr_2fr_auto] items-center gap-3"
+                <Label
+                  size="small"
+                  className="flex items-center gap-1.5 text-ui-fg-subtle"
                 >
-                  <Label size="small" className="flex items-center gap-2">
+                  <span className="text-ui-fg-base">
                     {row.name}
                     {row.unit ? ` (${row.unit})` : ""}
-                    {row.is_required ? (
-                      <Badge size="2xsmall" color="orange">
-                        Required
-                      </Badge>
-                    ) : null}
-                    {row.inherited ? (
-                      <Badge size="2xsmall" color="grey">
-                        {row.source_category
-                          ? `Inherited · ${row.source_category}`
-                          : "Inherited"}
-                      </Badge>
-                    ) : null}
-                  </Label>
-                  <Input
+                  </span>
+                  {row.is_required ? (
+                    <span className="text-ui-fg-error" aria-hidden>
+                      *
+                    </span>
+                  ) : null}
+                  {row.inherited ? (
+                    <Badge size="2xsmall" color="grey">
+                      {row.source_category
+                        ? `Inherited · ${row.source_category}`
+                        : "Inherited"}
+                    </Badge>
+                  ) : null}
+                </Label>
+                <Input
+                  size="small"
+                  value={values[row.attribute_code] ?? ""}
+                  onChange={(e) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      [row.attribute_code]: e.target.value,
+                    }))
+                  }
+                  placeholder="-"
+                />
+                {row.custom ? (
+                  <IconButton
                     size="small"
-                    value={values[row.attribute_code] ?? ""}
-                    onChange={(e) =>
-                      setValues((prev) => ({
-                        ...prev,
-                        [row.attribute_code]: e.target.value,
-                      }))
-                    }
-                    placeholder="-"
-                  />
-                  {row.custom ? (
-                    <Button
-                      size="small"
-                      variant="transparent"
-                      onClick={() => removeRow(row.attribute_code)}
-                    >
-                      Remove
-                    </Button>
-                  ) : (
-                    <span />
-                  )}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+                    variant="transparent"
+                    onClick={() => removeRow(row.attribute_code)}
+                  >
+                    <Trash />
+                  </IconButton>
+                ) : (
+                  <span />
+                )}
+              </div>
+            ))}
+          </div>
+        ))
       )}
 
-      {availableToAdd.length > 0 ? (
-        <div className="flex items-end gap-3 px-6 py-4">
-          <div className="flex flex-col gap-1">
-            <Label size="small" className="text-ui-fg-subtle">
-              Add another spec
-            </Label>
-            <Select value={pendingAttr} onValueChange={setPendingAttr}>
-              <Select.Trigger className="w-72">
-                <Select.Value placeholder="Select an attribute…" />
-              </Select.Trigger>
-              <Select.Content>
-                {availableToAdd.map((a) => (
-                  <Select.Item key={a.code} value={a.code}>
-                    {a.name}
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select>
-          </div>
-          <Button
-            size="small"
-            variant="secondary"
-            onClick={addRow}
-            disabled={!pendingAttr}
-          >
-            Add
-          </Button>
-        </div>
-      ) : null}
+      {/* Add spec modal — multi-select from the catalog */}
+      <FocusModal open={addOpen} onOpenChange={setAddOpen}>
+        <FocusModal.Content>
+          <FocusModal.Header>
+            <Button
+              size="small"
+              onClick={confirmAdd}
+              disabled={selected.size === 0}
+            >
+              Add {selected.size || ""} spec{selected.size === 1 ? "" : "s"}
+            </Button>
+          </FocusModal.Header>
+          <FocusModal.Body className="flex flex-col items-center py-8">
+            <div className="flex w-full max-w-lg flex-col gap-3">
+              <Heading level="h2">Add spec</Heading>
+              {availableToAdd.length === 0 ? (
+                <Text size="small" className="text-ui-fg-subtle">
+                  Every catalog attribute is already in this spec sheet.
+                </Text>
+              ) : (
+                availableToAdd.map((a) => (
+                  <Label
+                    key={a.code}
+                    size="small"
+                    className="flex items-center gap-3 rounded-md border border-ui-border-base px-3 py-2 hover:bg-ui-bg-base-hover"
+                  >
+                    <Checkbox
+                      checked={selected.has(a.code)}
+                      onCheckedChange={(v) => toggleSelected(a.code, !!v)}
+                    />
+                    <span className="text-ui-fg-base">
+                      {a.name}
+                      {a.unit ? (
+                        <span className="text-ui-fg-subtle"> ({a.unit})</span>
+                      ) : null}
+                    </span>
+                  </Label>
+                ))
+              )}
+            </div>
+          </FocusModal.Body>
+        </FocusModal.Content>
+      </FocusModal>
     </Container>
   )
 }
