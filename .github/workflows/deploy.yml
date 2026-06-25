@@ -80,12 +80,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Trigger Dokploy deploy (medusa)
-        continue-on-error: true # no-op until DOKPLOY_* secrets + registry source are wired
         run: |
-          curl -fsSL -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
             -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"applicationId\":\"${MEDUSA_APP_ID}\"}"
+            -d "{\"applicationId\":\"${MEDUSA_APP_ID}\"}")
+          echo "Dokploy deploy (medusa) -> HTTP $code"
+          [ "$code" -ge 200 ] && [ "$code" -lt 300 ]
 
   storefront:
     needs: changes
@@ -118,9 +119,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Trigger Dokploy deploy (storefront)
-        continue-on-error: true # no-op until DOKPLOY_* secrets + registry source are wired
         run: |
-          curl -fsSL -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
             -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"applicationId\":\"${STOREFRONT_APP_ID}\"}"
+            -d "{\"applicationId\":\"${STOREFRONT_APP_ID}\"}")
+          echo "Dokploy deploy (storefront) -> HTTP $code"
+          [ "$code" -ge 200 ] && [ "$code" -lt 300 ]
