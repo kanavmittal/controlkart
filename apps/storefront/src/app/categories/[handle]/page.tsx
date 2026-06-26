@@ -9,6 +9,7 @@ import {
 } from "@/lib/data/categories"
 import { listProductsInCategories } from "@/lib/data/products"
 import { ProductCard } from "@/components/products/product-card"
+import { ProductGrid } from "@/components/products/product-grid"
 import { SpecFilterSidebar } from "@/components/products/spec-filter-sidebar"
 import { SpecSortDropdown } from "@/components/products/spec-sort-dropdown"
 import { parseSpecParam } from "@/lib/specs"
@@ -146,7 +147,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
             Shop by sub-category
           </h2>
-          <div className="mt-3 grid grid-cols-2 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-3 grid grid-cols-2 border-l border-t border-[var(--color-line)] [&>*]:border-r [&>*]:border-b [&>*]:border-[var(--color-line)] sm:grid-cols-3 lg:grid-cols-4">
             {children.map((child) => (
               <Link
                 key={child.id}
@@ -175,14 +176,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           )}
 
           {visibleProducts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-2 lg:grid-cols-3">
+            <ProductGrid cols={3}>
               {visibleProducts.map(
                 (product) =>
                   product && (
                     <ProductCard key={product.id} product={product} />
                   )
               )}
-            </div>
+            </ProductGrid>
           ) : hasFilters ? (
             <p className="text-sm text-[var(--color-ink-muted)]">
               No products match the selected filters. Try removing some.

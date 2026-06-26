@@ -9,7 +9,7 @@ const TYPE_LABELS: Record<ProductDocumentDTO["type"], string> = {
   other: "Document",
 }
 
-function resolveDownloadUrl(url: string): string {
+export function resolveDownloadUrl(url: string): string {
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return url
   }

@@ -5,6 +5,7 @@ import { sdk, PRODUCT_FIELDS_CLIENT } from "@/lib/sdk"
 import { queryKeys } from "@/lib/query-keys"
 import { useRegion } from "@/lib/hooks/use-region"
 import { ProductCard } from "@/components/products/product-card"
+import { ProductGrid } from "@/components/products/product-grid"
 
 /** Below-the-fold CSR: featured products grid (fresh price/stock). */
 export function HomeFeaturedProducts() {
@@ -25,7 +26,7 @@ export function HomeFeaturedProducts() {
   const loading = isLoading || !regionId
 
   return (
-    <div className="mt-8 grid grid-cols-1 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-2 lg:grid-cols-4">
+    <ProductGrid cols={4} className="mt-8">
       {loading
         ? Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="flex flex-col bg-[var(--color-surface)]">
@@ -40,6 +41,6 @@ export function HomeFeaturedProducts() {
         : products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-    </div>
+    </ProductGrid>
   )
 }
