@@ -22,7 +22,7 @@ export function HomeCategories() {
 
   if (isLoading) {
     return (
-      <div className="mt-8 grid grid-cols-2 gap-px border border-[var(--color-line)] bg-[var(--color-line)] md:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 border-l border-t border-[var(--color-line)] [&>*]:border-r [&>*]:border-b [&>*]:border-[var(--color-line)] md:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="bg-[var(--color-surface)] p-6">
             <div className="h-4 w-24 animate-pulse rounded bg-[var(--color-surface-alt)]" />

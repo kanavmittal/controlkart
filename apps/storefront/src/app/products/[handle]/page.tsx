@@ -12,6 +12,7 @@ import { PurchasePanel } from "@/components/products/purchase-panel"
 import { ProductGallery } from "@/components/products/product-gallery"
 import { ProductSelectionProvider } from "@/components/providers/product-selection-provider"
 import { ProductCard } from "@/components/products/product-card"
+import { ProductGrid } from "@/components/products/product-grid"
 import { BASE_URL, STORE_NAME } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 
@@ -201,11 +202,11 @@ export default async function ProductPage({ params }: Props) {
           <h2 className="text-xl font-bold tracking-tight">
             Related Products & Accessories
           </h2>
-          <div className="mt-6 grid grid-cols-1 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-2 lg:grid-cols-4">
+          <ProductGrid cols={4} className="mt-6">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
-          </div>
+          </ProductGrid>
         </section>
       )}
     </div>

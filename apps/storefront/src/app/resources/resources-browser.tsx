@@ -40,7 +40,7 @@ export function ResourcesBrowser({ posts }: { posts: ContentPostDTO[] }) {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-px border border-[var(--color-line)] bg-[var(--color-line)] md:grid-cols-3">
+      <div className="mt-8 grid border-l border-t border-[var(--color-line)] [&>*]:border-r [&>*]:border-b [&>*]:border-[var(--color-line)] md:grid-cols-3">
         {filtered.map((post) => (
           <Link
             key={post.id}

@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { HttpTypes } from "@medusajs/types"
 import { ProductCard } from "@/components/products/product-card"
+import { ProductGrid } from "@/components/products/product-grid"
 import { SpecFilterSidebar } from "@/components/products/spec-filter-sidebar"
 import { SpecSortDropdown } from "@/components/products/spec-sort-dropdown"
 import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
@@ -130,11 +131,11 @@ export function ProductsBrowser({
         </p>
 
         {filtered.length > 0 ? (
-          <div className="mt-4 grid grid-cols-1 gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-2 lg:grid-cols-3">
+          <ProductGrid cols={3} className="mt-4">
             {filtered.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
+          </ProductGrid>
         ) : (
           <p className="mt-8 text-sm text-[var(--color-ink-muted)]">
             No products matched your filters.

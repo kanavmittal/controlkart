@@ -14,6 +14,10 @@ export const queryKeys = {
   region: ["region"] as const,
   productLive: (productId: string, regionId?: string) =>
     ["product-live", productId, regionId] as const,
+  productSpecs: (productId: string, variantId?: string) =>
+    ["product-specs", productId, variantId] as const,
+  productDocuments: (productId: string) =>
+    ["product-documents", productId] as const,
   homeFeatured: (regionId?: string) => ["home", "featured", regionId] as const,
   homeCategories: ["home", "categories"] as const,
   homePosts: ["home", "posts"] as const,
