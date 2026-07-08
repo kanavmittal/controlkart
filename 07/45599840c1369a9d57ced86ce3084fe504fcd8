@@ -1,0 +1,29 @@
+apps/storefront/src/config/types.ts
+  s_a5ab152597b3b1::t_0da07e4ebe85ef 107-222
+  s_a5ab152597b3b1::t_2e02661e47cdf4 1-106
+apps/storefront/src/config/site.ts
+  s_a5ab152597b3b1::t_a34f3d78cf846f 116-119,122
+  s_a5ab152597b3b1::t_d0634a8c1af2a6 1-115,120-121,123-165
+apps/storefront/src/config/home.ts
+  s_a5ab152597b3b1::t_7c70e6ad725333 1-506
+apps/storefront/src/config/brands.ts
+  s_a5ab152597b3b1::t_63ad2f135703ab 1-62
+apps/storefront/src/config/info-pages.ts
+  s_a5ab152597b3b1::t_a1ec1b755d75e6 1-158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "0745599840c1369a9d57ced86ce3084fe504fcd8",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
