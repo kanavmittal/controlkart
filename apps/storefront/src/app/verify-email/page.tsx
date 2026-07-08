@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { revalidatePath } from "next/cache"
+import { CheckCircle2, MailQuestion, XCircle } from "lucide-react"
 import { MEDUSA_BACKEND_URL, PUBLISHABLE_KEY } from "@/lib/config"
+import { Card, CardContent } from "@/components/ui/card"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -19,17 +23,27 @@ export default async function VerifyEmailPage({
 
   if (!token) {
     return (
-      <div className="shell py-12">
-        <div className="mx-auto max-w-md border border-[var(--color-line)] p-6">
-          <h1 className="text-xl font-bold">Invalid verification link</h1>
-          <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-            This link is missing a verification token. Request a new one from
-            your account page.
-          </p>
-          <Link href="/account" className="btn-primary mt-4 inline-block px-4 py-2.5">
-            Go to Account
-          </Link>
-        </div>
+      <div className="athens-container flex min-h-[60vh] flex-col items-center justify-center py-16">
+        <Card className="w-full max-w-md">
+          <CardContent className="flex flex-col items-center gap-4 text-center">
+            <MailQuestion className="size-10 text-athens-body" aria-hidden />
+            <div>
+              <h1 className="text-xl font-bold text-athens-dark">
+                Invalid verification link
+              </h1>
+              <p className="mt-2 text-sm text-athens-body">
+                This link is missing a verification token. Request a new one
+                from your account page.
+              </p>
+            </div>
+            <Link
+              href="/account"
+              className={cn(buttonVariants({ variant: "default" }))}
+            >
+              Go to Account
+            </Link>
+          </CardContent>
+        </Card>
       </div>
     )
   }
@@ -61,49 +75,73 @@ export default async function VerifyEmailPage({
   }
 
   return (
-    <div className="shell py-12">
-      <div className="mx-auto max-w-md border border-[var(--color-line)] p-6">
-        {verified ? (
-          <>
-            <h1 className="text-xl font-bold text-[var(--color-ok)]">
-              Email verified
-            </h1>
-            <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-              {email ? (
-                <>
-                  <span className="font-medium text-[var(--color-ink)]">
-                    {email}
-                  </span>{" "}
-                  is now verified. You can place orders.
-                </>
-              ) : (
-                "Your email is verified. You can place orders."
-              )}
-            </p>
-            <Link
-              href="/account"
-              className="btn-primary mt-4 inline-block px-4 py-2.5"
-            >
-              Continue to Account
-            </Link>
-          </>
-        ) : (
-          <>
-            <h1 className="text-xl font-bold text-[var(--color-bad)]">
-              Verification failed
-            </h1>
-            <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-              {error}
-            </p>
-            <Link
-              href="/account"
-              className="btn-primary mt-4 inline-block px-4 py-2.5"
-            >
-              Go to Account
-            </Link>
-          </>
+    <div className="athens-container flex min-h-[60vh] flex-col items-center justify-center py-16">
+      <Card
+        className={cn(
+          "w-full max-w-md",
+          verified
+            ? "border-athens-success/40 bg-athens-success-bg"
+            : "border-destructive/40 bg-destructive/10"
         )}
-      </div>
+      >
+        <CardContent className="flex flex-col items-center gap-4 text-center">
+          {verified ? (
+            <>
+              <CheckCircle2
+                className="size-10 text-athens-success"
+                aria-hidden
+              />
+              <div>
+                <h1 className="text-xl font-bold text-athens-success">
+                  Email verified
+                </h1>
+                <p className="mt-2 text-sm text-athens-body">
+                  {email ? (
+                    <>
+                      <span className="font-medium text-athens-dark">
+                        {email}
+                      </span>{" "}
+                      is now verified. You can place orders.
+                    </>
+                  ) : (
+                    "Your email is verified. You can place orders."
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/account"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                >
+                  Go to your account
+                </Link>
+                <Link
+                  href="/products"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                >
+                  Continue shopping
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <XCircle className="size-10 text-destructive" aria-hidden />
+              <div>
+                <h1 className="text-xl font-bold text-destructive">
+                  Verification failed
+                </h1>
+                <p className="mt-2 text-sm text-athens-body">{error}</p>
+              </div>
+              <Link
+                href="/account"
+                className={cn(buttonVariants({ variant: "default" }))}
+              >
+                Resend from your account
+              </Link>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

@@ -9,6 +9,7 @@ import {
 } from "@/lib/data/categories"
 import { parseSpecParam } from "@/lib/specs"
 import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { ProductsBrowser } from "./products-browser"
 
 export const revalidate = 300
@@ -21,7 +22,16 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams: Promise<{ category?: string; specs?: string; sort?: string }>
+  searchParams: Promise<{
+    category?: string
+    specs?: string
+    sort?: string
+    /** NEW (T21) — seeds the client-side free-text search; not part of any
+     *  preserved contract. The header search submits a full-page `?q=`
+     *  navigation, so this is read server-side for a correct first paint
+     *  instead of only via `useSearchParams` in the browser component. */
+    q?: string
+  }>
 }
 
 export default async function ProductsPage({ searchParams }: Props) {
@@ -69,14 +79,8 @@ export default async function ProductsPage({ searchParams }: Props) {
       : products
 
   return (
-    <div className="shell py-12">
-      <header className="border-b border-[var(--color-line)] pb-6">
-        <h1 className="text-3xl font-bold tracking-tight">All Products</h1>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-          Selec PLCs, HMIs, timers, meters and accessories — live stock,
-          GST-inclusive pricing, pan-India shipping.
-        </p>
-      </header>
+    <>
+      <Breadcrumbs crumbs={[{ label: "Products" }]} />
       <ProductsBrowser
         products={visibleProducts}
         categories={tree.map((t) => ({
@@ -91,10 +95,9 @@ export default async function ProductsPage({ searchParams }: Props) {
         }))}
         activeCategoryHandle={active?.handle ?? null}
         facets={facets}
-        selected={selected}
         sortable={sortable}
-        sort={sort}
+        initialQuery={sp.q}
       />
-    </div>
+    </>
   )
 }

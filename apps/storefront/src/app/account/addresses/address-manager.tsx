@@ -1,10 +1,51 @@
 "use client"
 
-import { useState } from "react"
+import { AlertCircle, Loader2, MapPin, Pencil, Trash2 } from "lucide-react"
+
 import { useAddresses, type AddressBody } from "@/lib/hooks/use-addresses"
 import type { CustomerAddress } from "@/lib/address-utils"
 import { formatAddressLabel } from "@/lib/address-utils"
-import { AddressFields, inputClass } from "@/components/address/address-fields"
+import { AddressFields } from "@/components/address/address-fields"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldLabel } from "@/components/ui/field"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 function errorMessageOf(error: unknown): string {
   if (error instanceof Error) return error.message
@@ -33,12 +74,24 @@ function buildAddressBody(form: FormData): AddressBody {
   }
 }
 
+/**
+ * Athens restyle of the saved-addresses CRUD UI. `useAddresses()` usage
+ * (list/save/remove mutations, `AddressBody` shape/`buildAddressBody`) is
+ * unchanged. Add/Edit now lives in a shadcn `Dialog` wrapping the same
+ * hand-rolled `<form>` + `FormData` submission (no react-hook-form) and the
+ * untouched `<AddressFields />` (its own restyle lands separately — this
+ * dialog just hosts it). Delete now confirms via `AlertDialog` instead of an
+ * inline submit button.
+ */
 export function AddressManager({
   addresses,
+  editing,
+  onEditingChange,
 }: {
   addresses: CustomerAddress[]
+  editing: CustomerAddress | "new" | null
+  onEditingChange: (value: CustomerAddress | "new" | null) => void
 }) {
-  const [editing, setEditing] = useState<CustomerAddress | "new" | null>(null)
   const { save, remove } = useAddresses()
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
@@ -47,131 +100,259 @@ export function AddressManager({
     const id = editing && editing !== "new" ? editing.id : undefined
     try {
       await save.mutateAsync({ id, body: buildAddressBody(form) })
-      setEditing(null)
+      onEditingChange(null)
     } catch {
-      /* surfaced via save.error */
+      /* surfaced via save.error below */
     }
   }
 
   return (
     <div className="space-y-8">
-      {save.error && (
-        <p className="text-sm text-[var(--color-bad)]">
-          {errorMessageOf(save.error)}
-        </p>
-      )}
-
-      {addresses.length > 0 && (
-        <div className="border border-[var(--color-line)]">
+      {addresses.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {addresses.map((addr) => (
-            <div
+            <AddressCard
               key={addr.id}
-              className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--color-line)] px-4 py-4 last:border-b-0"
-            >
-              <div className="text-sm">
-                <div className="font-medium">{formatAddressLabel(addr)}</div>
-                <div className="mt-1 text-xs text-[var(--color-ink-muted)]">
-                  {addr.phone}
-                  {addr.is_default_shipping && " · Default shipping"}
-                  {addr.is_default_billing && " · Default billing"}
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setEditing(addr)}
-                  className="btn-secondary px-3 py-1.5 text-xs"
-                >
-                  Edit
-                </button>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    remove.mutate(addr.id)
-                  }}
-                >
-                  <button
-                    type="submit"
-                    disabled={remove.isPending}
-                    className="border border-[var(--color-line)] px-3 py-1.5 text-xs text-[var(--color-bad)] hover:bg-[var(--color-surface-alt)] disabled:opacity-40"
-                  >
-                    Delete
-                  </button>
-                </form>
-              </div>
-            </div>
+              address={addr}
+              onEdit={() => onEditingChange(addr)}
+              remove={remove}
+            />
           ))}
         </div>
+      ) : (
+        <Empty className="border border-dashed border-athens-line">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <MapPin aria-hidden />
+            </EmptyMedia>
+            <EmptyTitle>No saved addresses</EmptyTitle>
+            <EmptyDescription>
+              Add a delivery or billing address to speed up checkout.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button type="button" onClick={() => onEditingChange("new")}>
+              Add address
+            </Button>
+          </EmptyContent>
+        </Empty>
       )}
 
-      {editing ? (
-        <div className="border border-[var(--color-line)] p-4">
-          <h3 className="text-sm font-semibold">
-            {editing === "new" ? "Add address" : "Edit address"}
-          </h3>
-          <form
-            onSubmit={handleSave}
-            className="mt-4 grid gap-4 sm:grid-cols-2"
-          >
-            <label className="grid gap-1 text-sm font-medium sm:col-span-2">
-              Label (e.g. Office, Warehouse)
-              <input
-                name="address_name"
-                defaultValue={
-                  editing === "new" ? "" : (editing.address_name ?? "")
-                }
-                placeholder="Home"
-                className={inputClass}
+      <Dialog
+        open={editing !== null}
+        onOpenChange={(open) => {
+          if (!open) onEditingChange(null)
+        }}
+      >
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
+          <form onSubmit={handleSave} className="contents">
+            <DialogHeader>
+              <DialogTitle>
+                {editing === "new" ? "Add address" : "Edit address"}
+              </DialogTitle>
+            </DialogHeader>
+
+            {save.error && (
+              <Alert variant="destructive">
+                <AlertCircle aria-hidden />
+                <AlertTitle>Couldn&apos;t save address</AlertTitle>
+                <AlertDescription>
+                  {errorMessageOf(save.error)}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field className="sm:col-span-2">
+                <FieldLabel htmlFor="address_name">
+                  Label (e.g. Office, Warehouse)
+                </FieldLabel>
+                <Input
+                  id="address_name"
+                  name="address_name"
+                  defaultValue={
+                    editing === "new" || !editing
+                      ? ""
+                      : (editing.address_name ?? "")
+                  }
+                  placeholder="Home"
+                />
+              </Field>
+
+              <AddressFields
+                values={editing === "new" || !editing ? undefined : editing}
               />
-            </label>
-            <AddressFields
-              values={editing === "new" ? undefined : editing}
-            />
-            <label className="flex items-center gap-2 text-sm sm:col-span-2">
-              <input
-                type="checkbox"
-                name="is_default_shipping"
-                defaultChecked={
-                  editing !== "new" && editing.is_default_shipping
-                }
-              />
-              Default shipping address
-            </label>
-            <label className="flex items-center gap-2 text-sm sm:col-span-2">
-              <input
-                type="checkbox"
-                name="is_default_billing"
-                defaultChecked={editing !== "new" && editing.is_default_billing}
-              />
-              Default billing address
-            </label>
-            <div className="flex gap-2 sm:col-span-2">
-              <button
-                type="submit"
-                disabled={save.isPending}
-                className="btn-primary px-4 py-2"
-              >
-                {save.isPending ? "Saving…" : "Save address"}
-              </button>
-              <button
-                type="button"
-                onClick={() => setEditing(null)}
-                className="btn-secondary px-4 py-2"
-              >
-                Cancel
-              </button>
+
+              <Field orientation="horizontal" className="sm:col-span-2">
+                <Checkbox
+                  id="is_default_shipping"
+                  name="is_default_shipping"
+                  defaultChecked={
+                    !!editing &&
+                    editing !== "new" &&
+                    editing.is_default_shipping
+                  }
+                />
+                <FieldLabel
+                  htmlFor="is_default_shipping"
+                  className="font-normal"
+                >
+                  Default shipping address
+                </FieldLabel>
+              </Field>
+              <Field orientation="horizontal" className="sm:col-span-2">
+                <Checkbox
+                  id="is_default_billing"
+                  name="is_default_billing"
+                  defaultChecked={
+                    !!editing &&
+                    editing !== "new" &&
+                    editing.is_default_billing
+                  }
+                />
+                <FieldLabel
+                  htmlFor="is_default_billing"
+                  className="font-normal"
+                >
+                  Default billing address
+                </FieldLabel>
+              </Field>
             </div>
+
+            <DialogFooter>
+              <DialogClose render={<Button type="button" variant="outline" />}>
+                Cancel
+              </DialogClose>
+              <Button type="submit" disabled={save.isPending}>
+                {save.isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" aria-hidden />
+                    Saving…
+                  </>
+                ) : (
+                  "Save address"
+                )}
+              </Button>
+            </DialogFooter>
           </form>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setEditing("new")}
-          className="btn-primary px-4 py-2.5"
-        >
-          Add new address
-        </button>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
+  )
+}
+
+function AddressCard({
+  address,
+  onEdit,
+  remove,
+}: {
+  address: CustomerAddress
+  onEdit: () => void
+  remove: ReturnType<typeof useAddresses>["remove"]
+}) {
+  const isDeleting = remove.isPending && remove.variables === address.id
+  const deleteFailed = !!remove.error && remove.variables === address.id
+
+  async function handleDelete() {
+    try {
+      await remove.mutateAsync(address.id)
+    } catch {
+      /* surfaced via deleteFailed below; AlertDialog stays open */
+    }
+  }
+
+  return (
+    <Card className="border-athens-line">
+      <CardHeader className="gap-1.5">
+        <CardTitle className="text-sm">
+          {formatAddressLabel(address)}
+        </CardTitle>
+        {(address.is_default_shipping || address.is_default_billing) && (
+          <div className="flex flex-wrap gap-1.5">
+            {address.is_default_shipping && (
+              <Badge className="border-transparent bg-athens-success-bg text-athens-success">
+                Default shipping
+              </Badge>
+            )}
+            {address.is_default_billing && (
+              <Badge className="border-transparent bg-athens-band text-athens-blue">
+                Default billing
+              </Badge>
+            )}
+          </div>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-1 text-sm text-athens-body">
+        <p>{address.address_1}</p>
+        {address.address_2 && <p>{address.address_2}</p>}
+        <p>
+          {[address.city, address.province, address.postal_code]
+            .filter(Boolean)
+            .join(", ")}
+        </p>
+        {address.phone && <p>{address.phone}</p>}
+      </CardContent>
+      <CardFooter className="gap-2">
+        <Button type="button" variant="outline" size="sm" onClick={onEdit}>
+          <Pencil aria-hidden />
+          Edit
+        </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger
+            render={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="text-destructive hover:border-destructive"
+              />
+            }
+          >
+            <Trash2 aria-hidden />
+            Delete
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete this address?</AlertDialogTitle>
+              <AlertDialogDescription>
+                {formatAddressLabel(address)} will be permanently removed.
+                This can&apos;t be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            {deleteFailed && (
+              <Alert variant="destructive">
+                <AlertCircle aria-hidden />
+                <AlertDescription>
+                  {errorMessageOf(remove.error)}
+                </AlertDescription>
+              </Alert>
+            )}
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                render={
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                  />
+                }
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" aria-hidden />
+                    Deleting…
+                  </>
+                ) : (
+                  "Delete"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardFooter>
+    </Card>
   )
 }
