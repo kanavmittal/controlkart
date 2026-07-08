@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { PhoneIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
+import { PhoneIcon } from "lucide-react";
 
 import { headerMast } from "@/config/site";
 import { HeaderSearch } from "./header-search";
+import { HeaderLiveActions } from "./header-live-actions";
 import { MegaMenu, type MegaMenuCategory } from "./mega-menu";
 import { MobileMenu } from "./mobile-menu";
 
@@ -55,16 +56,9 @@ export function SiteHeader({ categoryTree }: SiteHeaderProps) {
           </div>
         </div>
 
-        {/* T11: header-live-actions replaces this */}
-        <div className="ml-auto flex shrink-0 items-center gap-4">
-          <Link href="/account" aria-label="Account">
-            <UserIcon className="h-[26px] w-[26px] text-athens-dark" />
-          </Link>
-          <Link href="/cart" aria-label="Cart">
-            <ShoppingCartIcon className="h-[26px] w-[26px] text-athens-dark" />
-          </Link>
+        <div className="ml-auto shrink-0">
+          <HeaderLiveActions />
         </div>
-        {/* end T11 slot */}
       </div>
 
       {/* Row 2 — Nav bar (mega menus) */}

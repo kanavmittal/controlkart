@@ -1,23 +1,19 @@
-import type { ComponentType } from "react"
+import type { ComponentType, SVGProps } from "react"
 import Link from "next/link"
-import { Briefcase, Camera, SquarePlay, Users, X, type LucideProps } from "lucide-react"
 
 import { footer } from "@/config/site"
+import { Facebook, Instagram, Linkedin, XSocial, Youtube } from "@/components/shared/icons"
 import type { SocialIconKey } from "@/config/types"
 
-// lucide-react (installed version) ships no brand/logo icons (Facebook,
-// Instagram, LinkedIn, YouTube, Twitter were all dropped upstream) — see
-// plan note "Social icons: lucide equivalents." Nearest-shape/theme generic
-// icons stand in: X's mark is literally an "X" glyph so the lucide `X`
-// icon matches it directly; the rest are thematic (camera = photo-sharing,
-// briefcase = professional network, play-square = video platform, users =
-// community/social).
-const socialIconMap: Record<SocialIconKey, ComponentType<LucideProps>> = {
-  facebook: Users,
-  instagram: Camera,
-  linkedin: Briefcase,
-  x: X,
-  youtube: SquarePlay,
+// Real social brand marks (src/components/shared/icons.tsx, ported verbatim
+// from the clone) — replaces the earlier lucide-react thematic stand-ins
+// (lucide ships no brand/logo icons upstream).
+const socialIconMap: Record<SocialIconKey, ComponentType<SVGProps<SVGSVGElement>>> = {
+  facebook: Facebook,
+  instagram: Instagram,
+  linkedin: Linkedin,
+  x: XSocial,
+  youtube: Youtube,
 }
 
 // Clone renders imported Visa/Mastercard/Amex/Paypal/DinersClub/Discover SVG
@@ -79,7 +75,7 @@ export function SiteFooter() {
       <div className="athens-container py-[18px]">
         <div className="flex items-center justify-center gap-3">
           {footer.socials.map(({ label, href, icon }) => {
-            const Icon = socialIconMap[icon] ?? Users
+            const Icon = socialIconMap[icon] ?? Facebook
             return (
               <a
                 key={label}
