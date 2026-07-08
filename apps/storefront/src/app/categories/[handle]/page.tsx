@@ -354,7 +354,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         )}
       </div>
 
-      <div className="shell mt-8 flex flex-col gap-8 py-12 lg:flex-row">
+      <div className="athens-container mt-8 flex flex-col gap-8 py-12 lg:flex-row">
         {hasSidebarContent && (
           <div className="hidden shrink-0 lg:block">
             <CollectionSidebar

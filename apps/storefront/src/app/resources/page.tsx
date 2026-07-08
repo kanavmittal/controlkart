@@ -20,7 +20,10 @@ export const metadata: Metadata = {
  */
 export default async function ResourcesPage() {
   // Static list (ISR) — type filtering happens client-side in ResourcesBrowser.
-  const { posts } = await listPosts({ limit: 50 })
+  // Static route: it always prerenders at `next build`, so fall back to an
+  // empty list when the backend is unreachable (same pattern as /categories);
+  // ISR re-fetches once it's back.
+  const { posts } = await listPosts({ limit: 50 }).catch(() => ({ posts: [] }))
 
   return (
     <main>

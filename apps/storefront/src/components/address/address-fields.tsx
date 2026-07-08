@@ -1,13 +1,6 @@
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-// Kept exported for API compatibility (was used directly by
-// checkout-address-form.tsx's GSTIN input before its Athens restyle); no
-// longer referenced internally here since fields now render via shadcn
-// Input, but other callers may still rely on this constant existing.
-export const inputClass =
-  "w-full border border-[var(--color-line)] px-3 py-2 text-sm outline-none focus:border-[var(--color-line-strong)]"
-
 export type AddressFieldValues = {
   first_name?: string | null
   last_name?: string | null
