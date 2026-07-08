@@ -1,0 +1,32 @@
+apps/storefront/src/app/layout.tsx
+  s_a5ab152597b3b1::t_768f21a26ea293 3-8,14,31,34-45,52-59
+apps/storefront/src/app/error.tsx
+  s_a5ab152597b3b1::t_b4f961deb56753 1-45
+apps/storefront/src/app/not-found.tsx
+  s_a5ab152597b3b1::t_3817e9dca061f8 1-37
+apps/storefront/src/components/layout/site-header.tsx
+  s_a5ab152597b3b1::t_6bde1f2edc75ff 59-60
+  s_a5ab152597b3b1::t_35666c226a5b78 2,6
+apps/storefront/src/components/shared/icons.tsx
+  s_a5ab152597b3b1::t_757664f75e7d86 1-126
+apps/storefront/src/components/layout/site-footer.tsx
+  s_a5ab152597b3b1::t_0c0b77162f55e6 78
+  s_a5ab152597b3b1::t_79bb0755db166d 5,8-16
+  s_a5ab152597b3b1::t_4f2040f3add55a 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2429f658c3b4afda3dc285e537596edd10b339f0",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
