@@ -1,0 +1,51 @@
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a5ab152597b3b1::t_d9c3df3a3c5cb0 400
+  s_a5ab152597b3b1::t_d4331c86a044c3 22
+apps/storefront/src/app/products/products-browser.tsx
+  s_a5ab152597b3b1::t_7099013c7fefd1 16
+  s_a5ab152597b3b1::t_d8f452b3a886b4 192
+apps/storefront/src/components/home/product-lists.tsx
+  s_a5ab152597b3b1::t_3748b75fc03c7d 1-145
+apps/storefront/src/app/page.tsx
+  s_a5ab152597b3b1::t_a100c0a1b1a407 53-54
+  s_a5ab152597b3b1::t_58d3ecfd1559f9 27
+  s_a5ab152597b3b1::t_aeb84465a15c61 107-110
+  s_a5ab152597b3b1::t_22bfbf0ce1799e 141
+  s_a5ab152597b3b1::t_6eb0d422f4d1b4 1-2,4-15,17-26,28-32,34-37,39-44,46-52,55-60,63-72,74-76,78-88,90-97,99-106,112-140,142-152
+  s_a5ab152597b3b1::t_0f2177f947b273 61-62
+  s_a5ab152597b3b1::t_dccd90ebfb37f6 16
+  s_a5ab152597b3b1::t_f5c9fbb732fc0c 73
+apps/storefront/src/components/product/product-card.tsx
+  s_a5ab152597b3b1::t_f4421380f578b8 59
+  s_a5ab152597b3b1::t_aef576e64ac4cb 203,211
+  s_a5ab152597b3b1::t_c14e2baf852b49 28-31
+apps/storefront/src/app/compare/page.tsx
+  s_a5ab152597b3b1::t_641b79944bed26 11-15,18-21
+apps/storefront/src/components/product/collection-sidebar.tsx
+  s_a5ab152597b3b1::t_dcbf8caa2b3df2 21-22
+apps/storefront/src/components/home/blog-posts.tsx
+  s_a5ab152597b3b1::t_134e98819e3a33 1-77
+apps/storefront/src/components/product/product-grid.tsx
+  s_a5ab152597b3b1::t_547a60d407a92a 39
+apps/storefront/src/app/layout.tsx
+  s_a5ab152597b3b1::t_7d7f2f0cc264e2 12-13
+  s_a5ab152597b3b1::t_2edab3bfdb3187 54-64
+apps/storefront/src/components/product/quick-view-button.tsx
+  s_a5ab152597b3b1::t_895717928e3ea9 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "148663a3df78784cdc9b19c3aba5489fbb19f781",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
