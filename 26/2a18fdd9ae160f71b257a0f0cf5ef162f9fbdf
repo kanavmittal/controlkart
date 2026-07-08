@@ -1,0 +1,26 @@
+apps/storefront/src/components/layout/header-live-actions.tsx
+  s_a5ab152597b3b1::t_3e5e7fedd0965e 1-91
+apps/storefront/src/components/layout/site-header.tsx
+  s_a5ab152597b3b1::t_f1a0d4c5570b17 70-71
+  s_a5ab152597b3b1::t_87e20c9dff559b 25
+  s_a5ab152597b3b1::t_da9ce0930aab50 6-7,9-13,16-18,21-23,28,33-34
+apps/storefront/src/components/layout/mega-menu.tsx
+  s_a5ab152597b3b1::t_53dc6939b9cc75 184
+  s_a5ab152597b3b1::t_202a91d84f3151 1-183,185-295
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "262a18fdd9ae160f71b257a0f0cf5ef162f9fbdf",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
