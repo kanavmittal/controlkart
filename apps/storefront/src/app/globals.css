@@ -1,9 +1,293 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Athens theme uses the system font stack ("system_ui") for everything */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* ===== Athens design tokens (extracted from athens-theme.myshopify.com) ===== */
+  --color-athens-blue: #004fc7; /* nav bar, buttons, links, newsletter band, marquee */
+  --color-athens-blue-light: #287dff; /* secondary blue (Add to cart on featured product, video band) */
+  --color-athens-dark: #232323; /* accent-3: footer, dark bands, heading/price text */
+  --color-athens-band: #f8f8f8; /* background-2: announcement bar, grey bands */
+  --color-athens-body: #676767; /* body text */
+  --color-athens-line: #dfdfdf; /* card & input borders */
+  --color-athens-sale: #c61c1c; /* discounted final price text */
+  --color-athens-sale-badge: #e21919; /* -N% badge background */
+  --color-athens-sale-bg: #f7b7b7;
+  --color-athens-star: #ffc700; /* rating stars */
+  --color-athens-success: #337239;
+  --color-athens-success-bg: #ddf0df;
+  --color-athens-warning: #bd6b1b;
+  --color-athens-warning-bg: #f8e1cb;
+  --color-athens-black-friday: #ffd51d; /* BLACK FRIDAY badge text on black */
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #676767;
+  --card: #ffffff;
+  --card-foreground: #232323;
+  --popover: #ffffff;
+  --popover-foreground: #232323;
+  --primary: #004fc7;
+  --primary-foreground: #ffffff;
+  --secondary: #f8f8f8;
+  --secondary-foreground: #232323;
+  --muted: #f8f8f8;
+  --muted-foreground: #676767;
+  --accent: #232323;
+  --accent-foreground: #ffffff;
+  --destructive: #c61c1c;
+  --border: #dfdfdf;
+  --input: #dfdfdf;
+  --ring: #004fc7;
+  /* Athens radii: cards/inputs 5px, buttons 2px, badges 24px */
+  --radius: 5px;
+  --radius-button: 2px;
+  --radius-badge: 24px;
+  --page-width: 1460px;
+  --sidebar: #f8f8f8;
+  --sidebar-foreground: #232323;
+  --sidebar-primary: #004fc7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8f8f8;
+  --sidebar-accent-foreground: #232323;
+  --sidebar-border: #dfdfdf;
+  --sidebar-ring: #004fc7;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 15px;
+    line-height: 24px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #232323;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* Site container: --page-width 146rem with 20px gutters (matches .container on target) */
+  .athens-container {
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  /* Section heading: 24px / 31.2px, weight 500, #232323 */
+  .athens-section-heading {
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 500;
+    color: #232323;
+    letter-spacing: -0.01em;
+  }
+  /* Primary solid button (Shop now / Search / Subscribe): #004FC7, radius 2px, 15px/15px w500 */
+  .athens-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #004fc7;
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 15px;
+    font-weight: 500;
+    border-radius: 2px;
+    padding: 14.5px 24px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+  .athens-btn:hover {
+    background-color: #0043a9;
+  }
+  /* Outline button (Add to cart on product cards) */
+  .athens-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #004fc7;
+    font-size: 15px;
+    line-height: 15px;
+    font-weight: 500;
+    border: 1px solid #004fc7;
+    border-radius: 2px;
+    padding: 13.5px 24px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+  }
+  .athens-btn-outline:hover {
+    background-color: #004fc7;
+    color: #ffffff;
+  }
+  /* Ghost bordered button (All categories / Visit our blog) */
+  .athens-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ffffff;
+    color: #232323;
+    font-size: 15px;
+    line-height: 15px;
+    font-weight: 500;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    padding: 12px 20px;
+    transition: border-color 0.15s ease;
+    cursor: pointer;
+  }
+  .athens-btn-ghost:hover {
+    border-color: #232323;
+  }
+}
+
+/* Rich-text content extracted from the live site (info pages, blog articles) */
+.athens-rte {
+  font-size: 15px;
+  line-height: 24px;
+  color: #676767;
+}
+.athens-rte p {
+  margin-bottom: 16px;
+}
+.athens-rte h2,
+.athens-rte h3,
+.athens-rte h4 {
+  margin: 28px 0 12px;
+  color: #232323;
+  font-weight: 500;
+}
+.athens-rte h2 {
+  font-size: 22px;
+}
+.athens-rte h3 {
+  font-size: 18px;
+}
+.athens-rte ul,
+.athens-rte ol {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  list-style: disc;
+}
+.athens-rte ol {
+  list-style: decimal;
+}
+.athens-rte li {
+  margin-bottom: 4px;
+}
+.athens-rte a {
+  color: #004fc7;
+}
+.athens-rte a:hover {
+  text-decoration: underline;
+}
+.athens-rte img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+.athens-rte strong {
+  color: #232323;
+  font-weight: 500;
+}
+.athens-rte table {
+  width: 100%;
+  margin-bottom: 16px;
+  border-collapse: collapse;
+}
+.athens-rte td,
+.athens-rte th {
+  border: 1px solid #ececec;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+/* Scrolling marquee ("Deal of the day" band): group translates -100% in 30s, linear, infinite */
+@keyframes scrolling-elements {
+  0% {
+    transform: translate(0px);
+  }
+  100% {
+    transform: translate(-100%);
+  }
+}
+
+/* Hide scrollbars on carousel scrollers while keeping scrollability */
+.athens-no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.athens-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== LEGACY — delete in T62 ===== */
 /*
- * ControlKart design system.
- * Minimalist, grid-driven, border-based. High information density,
- * large whitespace, no decoration. Light theme only.
+ * ControlKart legacy design system (pre-Athens). Old components still
+ * reference .btn-primary/.btn-secondary/.model-selected/.shell until
+ * their deletion owners land in later tasks.
+ *
+ * NOTE: --font-sans is intentionally NOT redefined here — the Athens
+ * system-ui stack above (in @theme inline) is the single source of truth.
+ * The legacy plain `body { font-family: var(--font-sans); ... }` rule
+ * that used to live here has been dropped: as an un-layered rule it would
+ * silently outrank Tailwind's `@layer base body {}` above regardless of
+ * source order (CSS cascade layers always lose to un-layered rules of
+ * equal specificity), which would have broken the Athens body typography
+ * (15px/24px) and background/text tokens. Nothing else depends on it.
  */
 @theme {
   --color-ink: #16181d;
@@ -18,8 +302,6 @@
   --color-warn: #b45309;
   --color-bad: #b91c1c;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     monospace;
 }
@@ -37,13 +319,6 @@
   --color-ok: #15803d;
   --color-warn: #b45309;
   --color-bad: #b91c1c;
-}
-
-body {
-  background: var(--color-surface);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
 }
 
 /* Medusa-inspired buttons — rounded, subtle depth, premium feel */
@@ -202,3 +477,4 @@ body {
     padding-inline: 2.5rem;
   }
 }
+/* ===== END LEGACY ===== */
