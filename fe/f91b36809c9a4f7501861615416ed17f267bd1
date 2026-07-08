@@ -1,0 +1,72 @@
+apps/storefront/src/components/ui/skeleton.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-13
+apps/storefront/src/app/style-check/page.tsx
+  s_a5ab152597b3b1::t_e610995f27cdd5 1-129
+apps/storefront/src/components/ui/sonner.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-5,8-10,12-48
+  s_a5ab152597b3b1::t_d96a0b67e5a694 6-7,11
+apps/storefront/src/components/ui/table.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-116
+apps/storefront/src/components/ui/button.tsx
+  s_a5ab152597b3b1::t_120a2234567fd4 70-80
+  s_a5ab152597b3b1::t_fe765a0f2c621d 1-26,30-31,38,42-45,47-51,53,55,60-67
+  s_a5ab152597b3b1::t_912ad1de47c456 27-29
+  s_a5ab152597b3b1::t_3cd997e36398c1 32-37,39-41,46,52,54,56-59,68-69,81-103
+apps/storefront/src/components/ui/field.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-238
+apps/storefront/src/components/ui/separator.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-25
+apps/storefront/src/components/ui/navigation-menu.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-168
+apps/storefront/src/components/ui/dialog.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-160
+apps/storefront/package.json
+  s_a5ab152597b3b1::t_3cd997e36398c1 24
+apps/storefront/src/components/ui/label.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-20
+apps/storefront/src/app/layout.tsx
+  s_a5ab152597b3b1::t_bc084f23ff9aee 41
+  s_a5ab152597b3b1::t_a247ddd3b0d3e9 8
+apps/storefront/src/components/ui/accordion.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-72
+apps/storefront/src/components/ui/card.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-103
+apps/storefront/src/components/ui/alert-dialog.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-187
+apps/storefront/src/components/ui/tabs.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-82
+apps/storefront/src/components/ui/carousel.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-242
+apps/storefront/src/components/ui/breadcrumb.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-125
+apps/storefront/src/components/ui/checkbox.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-29
+apps/storefront/src/components/ui/input.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-20
+apps/storefront/src/components/ui/select.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-201
+apps/storefront/src/components/ui/pagination.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-130
+apps/storefront/src/components/ui/badge.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-52
+apps/storefront/src/components/ui/sheet.tsx
+  s_a5ab152597b3b1::t_3cd997e36398c1 1-138
+pnpm-lock.yaml
+  s_a5ab152597b3b1::t_02c28e62b51559 137-139,7761-7766,17940-17944
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "fef91b36809c9a4f7501861615416ed17f267bd1",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
