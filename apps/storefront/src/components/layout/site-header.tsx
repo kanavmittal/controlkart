@@ -1,37 +1,37 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { PhoneIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
 
 import { headerMast } from "@/config/site";
 import { HeaderSearch } from "./header-search";
+import { MegaMenu, type MegaMenuCategory } from "./mega-menu";
+import { MobileMenu } from "./mobile-menu";
 
-// Sticky site header — Row 1 "mast" ONLY (logo, search combo, phone,
-// account/cart icons). Clone ref: my-clone/src/components/SiteHeader.tsx,
-// the `bg-white` mast block at L236-292.
-//
-// The blue mega-menu nav bar (clone L294-307, `<nav className="... bg-
-// [#004FC7] ...">`) is intentionally NOT built here — it's T9's job. A
-// clearly marked slot is left below for it.
+// Sticky site header — Row 1 "mast" (logo, search combo, phone,
+// account/cart icons) plus Row 2, the blue mega-menu nav bar (T9). Clone
+// ref: my-clone/src/components/SiteHeader.tsx, the `bg-white` mast block at
+// L236-292 and the `<nav className="... bg-[#004FC7] ...">` block at
+// L294-307.
 //
 // This is a server component: the mast itself needs no client state. The
-// search combo needs Base UI's `Select`, which is a client component, so
-// it's isolated in the small `header-search.tsx` child (see that file).
+// search combo needs Base UI's `Select`, and the nav bar needs hover/focus
+// state, so both are isolated in small "use client" children
+// (`header-search.tsx`, `mega-menu.tsx`).
 interface SiteHeaderProps {
   /**
-   * T9 will refactor this component to accept a live `categoryTree` prop
-   * (server-fetched via `lib/data/categories.ts`) and render the mega-menu
-   * nav bar itself. Until then, an optional `children` slot renders in the
-   * nav-bar's place so any earlier caller isn't broken — nothing passes
-   * `children` yet (T14 mounts this component, after T9 lands).
+   * Live category tree, server-fetched via `lib/data/categories.ts`
+   * `getCategoryTree()` by the layout (T14) and passed straight through to
+   * both the desktop mega-menu (Row 2) and the mobile Sheet nav (T10).
    */
-  children?: ReactNode;
+  categoryTree: MegaMenuCategory[];
 }
 
-export function SiteHeader({ children }: SiteHeaderProps) {
+export function SiteHeader({ categoryTree }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-40 bg-background">
       {/* Row 1 — Mast */}
       <div className="athens-container flex flex-wrap items-center gap-x-8 gap-y-3 py-3 min-[990px]:h-[95px] min-[990px]:flex-nowrap min-[990px]:py-0">
+        <MobileMenu categories={categoryTree} />
+
         <Link
           href="/"
           className="shrink-0 text-xl font-bold tracking-tight text-athens-dark"
@@ -67,8 +67,8 @@ export function SiteHeader({ children }: SiteHeaderProps) {
         {/* end T11 slot */}
       </div>
 
-      {/* T9: nav bar with mega menus */}
-      {children}
+      {/* Row 2 — Nav bar (mega menus) */}
+      <MegaMenu categoryTree={categoryTree} />
     </header>
   );
 }
