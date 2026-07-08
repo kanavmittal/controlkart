@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer"
 import { QueryProvider } from "@/components/providers/query-provider"
 import { CartProvider } from "@/components/providers/cart-provider"
 import { QuickViewProvider } from "@/components/providers/quick-view-provider"
+import { Toaster } from "@/components/ui/sonner"
 import { BASE_URL, STORE_NAME, STORE_TAGLINE } from "@/lib/config"
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({
             </QuickViewProvider>
           </CartProvider>
         </QueryProvider>
+        <Toaster />
       </body>
     </html>
   )
