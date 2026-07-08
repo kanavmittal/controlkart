@@ -2,7 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { formatINR } from "@/lib/format"
+import { Loader2, Lock, Truck } from "lucide-react"
+import { Price } from "@/components/shared/price"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
+import { cn } from "@/lib/utils"
 import { useCheckout } from "./use-checkout"
 
 function errorMessageOf(e: unknown, fallback: string): string {
@@ -16,40 +21,74 @@ export function ShippingSelector() {
 
   if (shippingOptions.isLoading) {
     return (
-      <p className="text-sm text-[var(--color-ink-muted)]">
-        Loading shipping options…
-      </p>
+      <div className="space-y-2">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+      </div>
     )
   }
   if (!options.length) {
     return (
-      <p className="text-sm text-[var(--color-ink-muted)]">
+      <p className="text-sm text-athens-body">
         No shipping options available for this address.
       </p>
     )
   }
 
   return (
-    <div className={`grid gap-2 ${setShipping.isPending ? "opacity-50" : ""}`}>
-      {options.map((option) => (
-        <button
-          key={option.id}
-          disabled={setShipping.isPending}
-          onClick={() => setShipping.mutate(option.id)}
-          className={`flex items-center justify-between border px-4 py-3 text-left text-sm transition-colors ${
-            option.id === selectedId
-              ? "border-[var(--color-line-strong)] bg-[var(--color-surface-alt)] font-medium"
-              : "border-[var(--color-line)] hover:border-[var(--color-ink-faint)]"
-          }`}
-        >
-          <span>{option.name}</span>
-          <span className="font-semibold">{formatINR(option.amount ?? 0)}</span>
-        </button>
-      ))}
+    <div className={cn("grid gap-2", setShipping.isPending && "opacity-50")}>
+      {options.map((option) => {
+        const selected = option.id === selectedId
+        return (
+          <button
+            key={option.id}
+            disabled={setShipping.isPending}
+            onClick={() => setShipping.mutate(option.id)}
+            className={cn(
+              "flex items-start gap-3 rounded-[var(--radius)] border px-4 py-3 text-left text-sm transition-colors disabled:cursor-not-allowed",
+              selected
+                ? "border-primary bg-primary/5"
+                : "border-athens-line hover:border-athens-dark"
+            )}
+          >
+            <span
+              aria-hidden
+              className={cn(
+                "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border",
+                selected ? "border-primary" : "border-athens-line"
+              )}
+            >
+              {selected && <span className="size-2 rounded-full bg-primary" />}
+            </span>
+            <span className="flex-1">
+              <span
+                className={cn(
+                  "block",
+                  selected ? "font-semibold text-primary" : "font-medium text-athens-dark"
+                )}
+              >
+                {option.name}
+              </span>
+              {option.type?.description && (
+                <span className="mt-0.5 flex items-center gap-1 text-xs text-athens-body">
+                  <Truck className="size-3" aria-hidden />
+                  {option.type.description}
+                </span>
+              )}
+            </span>
+            <Price
+              amount={option.amount ?? 0}
+              className="text-sm font-semibold text-athens-dark"
+            />
+          </button>
+        )
+      })}
       {setShipping.error && (
-        <p className="text-sm text-[var(--color-bad)]">
-          {errorMessageOf(setShipping.error, "Could not set shipping method.")}
-        </p>
+        <Alert variant="destructive">
+          <AlertDescription>
+            {errorMessageOf(setShipping.error, "Could not set shipping method.")}
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   )
@@ -137,14 +176,19 @@ export function PlaceOrderButton() {
 
   return (
     <div>
-      <button
-        onClick={onPlaceOrder}
-        disabled={pending}
-        className="btn-primary w-full px-6 py-2.5"
-      >
+      <Button onClick={onPlaceOrder} disabled={pending} className="w-full">
+        {pending && <Loader2 className="animate-spin" data-icon="inline-start" />}
         {pending ? "Processing…" : "Place Order"}
-      </button>
-      {error && <p className="mt-2 text-sm text-[var(--color-bad)]">{error}</p>}
+      </Button>
+      {error && (
+        <Alert variant="destructive" className="mt-2">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-athens-body">
+        <Lock className="size-3" aria-hidden />
+        Secure checkout
+      </p>
     </div>
   )
 }

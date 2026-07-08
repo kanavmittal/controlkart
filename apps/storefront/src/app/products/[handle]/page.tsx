@@ -6,13 +6,17 @@ import {
   getProductDocuments,
   listProducts,
 } from "@/lib/data/products"
-import { SpecTable } from "@/components/products/spec-table"
-import { DownloadsList } from "@/components/products/downloads-list"
-import { PurchasePanel } from "@/components/products/purchase-panel"
-import { ProductGallery } from "@/components/products/product-gallery"
+import { ProductAccordions } from "@/components/product/product-accordions"
+import { ProductGallery } from "@/components/product/product-gallery"
+import { ProductSummary } from "@/components/product/product-summary"
+import { BuyBox } from "@/components/product/buy-box"
 import { ProductSelectionProvider } from "@/components/providers/product-selection-provider"
-import { ProductCard } from "@/components/products/product-card"
-import { ProductGrid } from "@/components/products/product-grid"
+import { ProductCard } from "@/components/product/product-card"
+import { ProductGrid } from "@/components/product/product-grid"
+import { QuickViewButton } from "@/components/product/quick-view-button"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { SectionHeading } from "@/components/shared/section-heading"
+import { pdpContent } from "@/config/site"
 import { BASE_URL, STORE_NAME } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 
@@ -128,87 +132,59 @@ export default async function ProductPage({ params }: Props) {
       : undefined,
   }
 
+  const category = product.categories?.[0]
+  const crumbs = [
+    ...(category ? [{ label: category.name, href: `/categories/${category.handle}` }] : []),
+    { label: product.title },
+  ]
+
   return (
-    <div className="shell py-12">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <nav className="text-xs text-[var(--color-ink-muted)]">
-        Home / {product.categories?.[0]?.name ?? "Products"} /{" "}
-        <span className="text-[var(--color-ink)]">{product.title}</span>
-      </nav>
 
-      <ProductSelectionProvider initialVariantId={variants[0]?.id}>
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_minmax(360px,420px)]">
-        <div>
-          <header>
-            <div className="font-mono text-sm text-[var(--color-ink-muted)]">
-              {(product.metadata?.brand as string) ?? "Selec"} ·{" "}
-              {(product.metadata?.mpn as string) ?? variants[0]?.sku}
+      <Breadcrumbs crumbs={crumbs} />
+
+      <div className="athens-container py-[50px]">
+        <ProductSelectionProvider initialVariantId={variants[0]?.id}>
+          <div className="grid gap-12 min-[990px]:grid-cols-2">
+            {/* Left: gallery + accordions */}
+            <div>
+              <ProductGallery product={product} />
+              <ProductAccordions
+                description={product.description}
+                specs={specs}
+                documents={documents}
+                shipping={pdpContent.shipping}
+                warranty={pdpContent.warranty}
+              />
             </div>
-            <h1 className="mt-2 text-3xl font-bold leading-tight tracking-tight">
-              {product.title}
-            </h1>
-            {product.subtitle && (
-              <p className="mt-2 text-base text-[var(--color-ink-muted)]">
-                {product.subtitle}
-              </p>
-            )}
-          </header>
 
-          <div className="mt-8">
-            <ProductGallery product={product} />
+            {/* Right: buy column */}
+            <div className="max-w-[640px]">
+              <ProductSummary product={product} />
+              <BuyBox product={product} />
+            </div>
           </div>
-
-          {product.description && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">Overview</h2>
-              <p className="mt-3 max-w-3xl whitespace-pre-line text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                {product.description}
-              </p>
-            </section>
-          )}
-
-          {specs.length > 0 && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">
-                Technical Specifications
-              </h2>
-              <div className="mt-4">
-                <SpecTable specs={specs} />
-              </div>
-            </section>
-          )}
-
-          {documents.length > 0 && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">Downloads</h2>
-              <div className="mt-4">
-                <DownloadsList documents={documents} />
-              </div>
-            </section>
-          )}
-        </div>
-
-        <aside className="lg:sticky lg:top-32 lg:self-start">
-          <PurchasePanel product={product} />
-        </aside>
+        </ProductSelectionProvider>
       </div>
-      </ProductSelectionProvider>
 
       {relatedProducts.length > 0 && (
-        <section className="mt-20 border-t border-[var(--color-line)] pt-10">
-          <h2 className="text-xl font-bold tracking-tight">
-            Related Products & Accessories
-          </h2>
-          <ProductGrid cols={4} className="mt-6">
+        <section className="athens-container mb-[60px]">
+          <SectionHeading title="Related products" />
+          <ProductGrid columns={4}>
             {relatedProducts.map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                quickViewSlot={<QuickViewButton product={p} />}
+              />
             ))}
           </ProductGrid>
         </section>
       )}
-    </div>
+    </>
   )
 }

@@ -39,14 +39,14 @@ export const metadata: Metadata = {
  * without one fall back to an `athens-band` tile with the category's
  * initial.
  *
- * Fetch resilience matches the sibling category pages
- * (`categories/[handle]/page.tsx`, `products/page.tsx`): no try/catch, ISR
- * (`revalidate = 300`) errors bubble to the route's error boundary. The
- * layout-level try/catch around `getCategoryTree()` is a special case for
- * chrome that must render on every route, not the norm for page bodies.
+ * Fetch resilience: unlike the dynamic-param siblings (which simply have
+ * nothing to prerender when the backend is down), this is a STATIC route —
+ * it always prerenders at `next build`, so a bubbled fetch error fails the
+ * whole build. Fall back to an empty list instead; ISR (`revalidate = 300`)
+ * re-fetches and populates the page once the backend is reachable.
  */
 export default async function CategoriesIndexPage() {
-  const categories = await listTopLevelCategories()
+  const categories = await listTopLevelCategories().catch(() => [])
 
   return (
     <>

@@ -9,6 +9,9 @@ import "yet-another-react-lightbox/styles.css"
  * (ssr:false) from the gallery so this whole bundle + its CSS is code-split
  * into a chunk that's only fetched the first time a shopper opens zoom —
  * keeping it off the SSR/LCP path entirely.
+ *
+ * Ported verbatim from `products/product-zoom-lightbox.tsx` — no restyle
+ * needed here, it's a fullscreen overlay outside the Athens card chrome.
  */
 export default function ProductZoomLightbox({
   open,

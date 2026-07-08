@@ -2,14 +2,21 @@
 
 import { useState } from "react"
 import type { HttpTypes } from "@medusajs/types"
+import { Loader2 } from "lucide-react"
 import {
   type CartAddressInput,
   type CustomerAddress,
   customerAddressToCart,
   formatAddressLabel,
 } from "@/lib/address-utils"
-import { AddressFields, inputClass } from "@/components/address/address-fields"
+import { AddressFields } from "@/components/address/address-fields"
 import { useAddresses } from "@/lib/hooks/use-addresses"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { cn } from "@/lib/utils"
 import { useCheckout } from "./use-checkout"
 
 function parseAddr(form: FormData, prefix: "" | "billing_"): CartAddressInput {
@@ -38,6 +45,15 @@ function addressesDiffer(
   )
 }
 
+/**
+ * Athens restyle of the delivery/billing address step. Layout, mutation call
+ * shapes, and state machine are byte-identical to the pre-restyle version —
+ * only the markup changed (native radio inputs are kept for the saved-
+ * address picker since there's no shadcn radio-group in this project;
+ * `.model-selected` is replaced by the same `border-primary bg-primary/5`
+ * selected treatment already established in `quick-view-dialog.tsx`'s
+ * variant picker).
+ */
 export function CheckoutAddressForm({
   savedAddresses,
   cartShipping,
@@ -158,10 +174,10 @@ export function CheckoutAddressForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 p-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
       {savedAddresses.length > 0 && (
         <div className="space-y-2 sm:col-span-2">
-          <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+          <div className="text-xs font-semibold tracking-wide text-athens-body uppercase">
             Saved delivery addresses
           </div>
           <div className="grid gap-2">
@@ -170,25 +186,26 @@ export function CheckoutAddressForm({
               return (
                 <label
                   key={addr.id}
-                  className={`flex cursor-pointer items-start gap-3 border px-3 py-2.5 text-sm transition-colors ${
+                  className={cn(
+                    "flex cursor-pointer items-start gap-3 rounded-[var(--radius)] border px-3 py-2.5 text-sm transition-colors",
                     selected
-                      ? "model-selected"
-                      : "border-[var(--color-line)] hover:border-[var(--color-ink-faint)]"
-                  }`}
+                      ? "border-primary bg-primary/5"
+                      : "border-athens-line hover:border-athens-dark"
+                  )}
                 >
                   <input
                     type="radio"
                     name="_shipping_pick"
                     checked={selected}
                     onChange={() => setShippingMode(addr.id)}
-                    className="mt-1"
+                    className="mt-1 accent-primary"
                   />
                   <span>
-                    <span className="font-medium">
+                    <span className="font-medium text-athens-dark">
                       {formatAddressLabel(addr)}
                     </span>
                     {(addr.is_default_shipping || addr.is_default_billing) && (
-                      <span className="ml-2 text-xs text-[var(--color-ink-muted)]">
+                      <span className="ml-2 text-xs text-athens-body">
                         {addr.is_default_shipping && "Default shipping"}
                         {addr.is_default_shipping &&
                           addr.is_default_billing &&
@@ -201,19 +218,23 @@ export function CheckoutAddressForm({
               )
             })}
             <label
-              className={`flex cursor-pointer items-center gap-3 border px-3 py-2.5 text-sm ${
+              className={cn(
+                "flex cursor-pointer items-center gap-3 rounded-[var(--radius)] border px-3 py-2.5 text-sm transition-colors",
                 shippingMode === "new"
-                  ? "model-selected"
-                  : "border-[var(--color-line)] hover:border-[var(--color-ink-faint)]"
-              }`}
+                  ? "border-primary bg-primary/5"
+                  : "border-athens-line hover:border-athens-dark"
+              )}
             >
               <input
                 type="radio"
                 name="_shipping_pick"
                 checked={shippingMode === "new"}
                 onChange={() => setShippingMode("new")}
+                className="accent-primary"
               />
-              <span className="font-medium">Use a new address</span>
+              <span className="font-medium text-athens-dark">
+                Use a new address
+              </span>
             </label>
           </div>
         </div>
@@ -222,30 +243,34 @@ export function CheckoutAddressForm({
       {!useSavedShipping && (
         <>
           <AddressFields values={shippingValues ?? undefined} />
-          <label className="flex items-center gap-2 text-sm sm:col-span-2">
-            <input type="checkbox" name="save_shipping" defaultChecked />
-            Save this delivery address for future orders
-          </label>
+          <Field orientation="horizontal" className="sm:col-span-2">
+            <Checkbox id="save_shipping" name="save_shipping" defaultChecked />
+            <FieldLabel htmlFor="save_shipping" className="font-normal">
+              Save this delivery address for future orders
+            </FieldLabel>
+          </Field>
         </>
       )}
 
-      <div className="border-t border-[var(--color-line)] pt-4 sm:col-span-2">
-        <label className="flex items-center gap-2 text-sm font-medium">
-          <input
-            type="checkbox"
+      <div className="border-t border-athens-line pt-4 sm:col-span-2">
+        <Field orientation="horizontal">
+          <Checkbox
+            id="billing_same_as_shipping"
             name="billing_same_as_shipping"
             checked={billingSame}
-            onChange={(e) => setBillingSame(e.target.checked)}
+            onCheckedChange={(checked) => setBillingSame(checked === true)}
           />
-          Billing address is the same as delivery address
-        </label>
+          <FieldLabel htmlFor="billing_same_as_shipping">
+            Billing address is the same as delivery address
+          </FieldLabel>
+        </Field>
       </div>
 
       {!billingSame && (
         <>
           {savedAddresses.length > 0 && (
             <div className="space-y-2 sm:col-span-2">
-              <div className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+              <div className="text-xs font-semibold tracking-wide text-athens-body uppercase">
                 Billing address
               </div>
               <div className="grid gap-2">
@@ -254,39 +279,44 @@ export function CheckoutAddressForm({
                   return (
                     <label
                       key={addr.id}
-                      className={`flex cursor-pointer items-start gap-3 border px-3 py-2.5 text-sm ${
+                      className={cn(
+                        "flex cursor-pointer items-start gap-3 rounded-[var(--radius)] border px-3 py-2.5 text-sm transition-colors",
                         selected
-                          ? "model-selected"
-                          : "border-[var(--color-line)]"
-                      }`}
+                          ? "border-primary bg-primary/5"
+                          : "border-athens-line hover:border-athens-dark"
+                      )}
                     >
                       <input
                         type="radio"
                         name="_billing_pick"
                         checked={selected}
                         onChange={() => setBillingMode(addr.id)}
-                        className="mt-1"
+                        className="mt-1 accent-primary"
                       />
-                      <span className="font-medium">
+                      <span className="font-medium text-athens-dark">
                         {formatAddressLabel(addr)}
                       </span>
                     </label>
                   )
                 })}
                 <label
-                  className={`flex cursor-pointer items-center gap-3 border px-3 py-2.5 text-sm ${
+                  className={cn(
+                    "flex cursor-pointer items-center gap-3 rounded-[var(--radius)] border px-3 py-2.5 text-sm transition-colors",
                     billingMode === "new"
-                      ? "model-selected"
-                      : "border-[var(--color-line)]"
-                  }`}
+                      ? "border-primary bg-primary/5"
+                      : "border-athens-line hover:border-athens-dark"
+                  )}
                 >
                   <input
                     type="radio"
                     name="_billing_pick"
                     checked={billingMode === "new"}
                     onChange={() => setBillingMode("new")}
+                    className="accent-primary"
                   />
-                  <span className="font-medium">New billing address</span>
+                  <span className="font-medium text-athens-dark">
+                    New billing address
+                  </span>
                 </label>
               </div>
             </div>
@@ -298,45 +328,51 @@ export function CheckoutAddressForm({
                 prefix="billing_"
                 values={billingValues ?? undefined}
               />
-              <label className="flex items-center gap-2 text-sm sm:col-span-2">
-                <input type="checkbox" name="save_billing" defaultChecked />
-                Save this billing address for future orders
-              </label>
+              <Field orientation="horizontal" className="sm:col-span-2">
+                <Checkbox id="save_billing" name="save_billing" defaultChecked />
+                <FieldLabel htmlFor="save_billing" className="font-normal">
+                  Save this billing address for future orders
+                </FieldLabel>
+              </Field>
             </>
           )}
         </>
       )}
 
-      <label className="grid gap-1 text-sm font-medium sm:col-span-2">
-        GSTIN (for GST invoice, optional)
-        <input
+      <Field className="sm:col-span-2">
+        <FieldLabel htmlFor="gstin">GSTIN</FieldLabel>
+        <Input
+          id="gstin"
           name="gstin"
           defaultValue={gstin ?? ""}
           placeholder="27AAAAA0000A1Z5"
-          className={inputClass}
         />
-      </label>
+        <FieldDescription>
+          Optional — used to issue a GST invoice for this order.
+        </FieldDescription>
+      </Field>
 
       {setCheckout.error && (
-        <p className="text-sm text-[var(--color-bad)] sm:col-span-2">
-          {setCheckout.error instanceof Error
-            ? setCheckout.error.message
-            : "Could not save the address. Please check the fields and retry."}
-        </p>
+        <Alert variant="destructive" className="sm:col-span-2">
+          <AlertDescription>
+            {setCheckout.error instanceof Error
+              ? setCheckout.error.message
+              : "Could not save the address. Please check the fields and retry."}
+          </AlertDescription>
+        </Alert>
       )}
 
       <div className="sm:col-span-2">
-        <button
-          type="submit"
-          disabled={setCheckout.isPending}
-          className="btn-primary px-6 py-2.5"
-        >
+        <Button type="submit" disabled={setCheckout.isPending}>
+          {setCheckout.isPending && (
+            <Loader2 className="size-4 animate-spin" aria-hidden />
+          )}
           {setCheckout.isPending
             ? "Saving…"
             : hasAddress
               ? "Update Address"
               : "Save & Continue"}
-        </button>
+        </Button>
       </div>
     </form>
   )

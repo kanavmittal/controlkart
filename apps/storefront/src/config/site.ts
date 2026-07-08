@@ -110,6 +110,17 @@ export const footerFeatures: FooterFeature[] = [
   },
 ];
 
+// Static copy for the PDP accordions (T28's Shipping/Warranty items — see
+// `product/product-accordions.tsx`). Both items render only when their
+// string is present, so this is a single always-on pair, not per-product
+// content.
+export const pdpContent: { shipping: string; warranty: string } = {
+  shipping:
+    "Dispatched within 2-3 business days from our Mumbai warehouse. Pan-India delivery via our logistics partner; delivery timelines vary by pincode serviceability.", // TODO(content): confirm dispatch SLA and warehouse location
+  warranty:
+    "Covered by the manufacturer's standard warranty against manufacturing defects. Contact our support team with your invoice for warranty claims.", // TODO(content): confirm warranty duration per brand
+};
+
 export const footer: FooterConfig = {
   logoText: "ControlKart",
   address: [

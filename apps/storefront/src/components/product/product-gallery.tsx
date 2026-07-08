@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import dynamic from "next/dynamic"
 import useEmblaCarousel from "embla-carousel-react"
+import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 import { HttpTypes } from "@medusajs/types"
 import { useProductSelection } from "@/components/providers/product-selection-provider"
+import { cn } from "@/lib/utils"
 
 const ProductZoomLightbox = dynamic(() => import("./product-zoom-lightbox"), {
   ssr: false,
@@ -38,6 +40,12 @@ function normalize(
  * falling back to all product images, then the product thumbnail, then a
  * placeholder. Renders with next/image (priority on the first slide of the
  * initial variant) so the LCP image is server-rendered and optimized.
+ *
+ * Ported wholesale from `products/product-gallery.tsx` (variant image subset,
+ * Embla main viewport, lazy zoom lightbox) — restyled to the Athens look from
+ * `my-clone/src/components/ProductGallery.tsx` (white square media with a
+ * hairline `--color-athens-line` ring, bordered active thumb, top-right zoom
+ * affordance icon, thumb rail left-of/below the main image).
  */
 export function ProductGallery({
   product,
@@ -90,18 +98,18 @@ export function ProductGallery({
   // No images at all → thumbnail, then the original "coming soon" placeholder.
   if (visible.length === 0) {
     return (
-      <div className="relative flex aspect-[4/3] items-center justify-center border border-[var(--color-line)] bg-[var(--color-surface-alt)]">
+      <div className="relative flex aspect-square items-center justify-center rounded-[var(--radius)] bg-white shadow-[0_0_0_1px_var(--color-athens-line)]">
         {product.thumbnail ? (
           <Image
             src={product.thumbnail}
             alt={product.title}
             fill
-            className="object-contain p-12"
-            sizes="(max-width: 1024px) 100vw, (max-width: 1440px) 56vw, 810px"
+            className="object-contain p-8"
+            sizes="(min-width: 990px) 620px, 100vw"
             priority
           />
         ) : (
-          <span className="font-mono text-sm text-[var(--color-ink-faint)]">
+          <span className="font-mono text-sm text-[var(--color-athens-body)]">
             Product image coming soon
           </span>
         )}
@@ -128,6 +136,17 @@ export function ProductGallery({
         />
       )}
     </>
+  )
+}
+
+function ZoomAffordance() {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full border border-[var(--color-athens-line)] bg-white text-[var(--color-athens-blue)]"
+    >
+      <Search className="size-[18px]" />
+    </span>
   )
 }
 
@@ -177,25 +196,26 @@ function GalleryCarousel({
         type="button"
         onClick={() => onOpenZoom(0)}
         aria-label="Open full-size image"
-        className="relative flex aspect-[4/3] w-full cursor-zoom-in items-center justify-center border border-[var(--color-line)] bg-[var(--color-surface-alt)]"
+        className="relative flex aspect-square w-full cursor-zoom-in items-center justify-center rounded-[var(--radius)] bg-white shadow-[0_0_0_1px_var(--color-athens-line)]"
       >
         <Image
           src={images[0].url}
           alt={title}
           fill
-          className="object-contain p-12"
-          sizes="(max-width: 1024px) 100vw, (max-width: 1440px) 56vw, 810px"
+          className="object-contain p-8"
+          sizes="(min-width: 990px) 620px, 100vw"
           priority={isPrimaryVariant}
         />
+        <ZoomAffordance />
       </button>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3 md:flex-row md:items-start">
+    <div className="flex flex-col-reverse gap-3 min-[990px]:flex-row">
       {/* Thumbnail rail: horizontal row under the image on mobile, vertical
           column to the left on desktop. Fixed thumb size reserves space (no CLS). */}
-      <div className="order-2 flex gap-2 overflow-x-auto md:order-1 md:max-h-[520px] md:flex-col md:overflow-y-auto md:overflow-x-visible">
+      <div className="flex flex-row gap-3 overflow-x-auto min-[990px]:max-h-[620px] min-[990px]:w-[88px] min-[990px]:flex-col min-[990px]:overflow-x-visible min-[990px]:overflow-y-auto">
         {images.map((img, i) => {
           const active = i === selectedIndex
           return (
@@ -205,18 +225,19 @@ function GalleryCarousel({
               onClick={() => scrollTo(i)}
               aria-label={`Show image ${i + 1}`}
               aria-current={active}
-              className={`relative aspect-square w-16 shrink-0 border bg-[var(--color-surface-alt)] transition-colors md:w-20 ${
+              className={cn(
+                "relative aspect-square w-[88px] shrink-0 cursor-pointer rounded-[var(--radius)] bg-white p-1.5 transition-shadow min-[990px]:w-auto",
                 active
-                  ? "border-[var(--color-line-strong)]"
-                  : "border-[var(--color-line)] hover:border-[var(--color-ink-faint)]"
-              }`}
+                  ? "shadow-[0_0_0_1px_var(--color-athens-blue)]"
+                  : "shadow-[0_0_0_1px_var(--color-athens-line)] hover:shadow-[0_0_0_1px_var(--color-athens-dark)]"
+              )}
             >
               <Image
                 src={img.url}
                 alt=""
                 fill
                 className="object-contain p-1.5"
-                sizes="80px"
+                sizes="88px"
               />
             </button>
           )
@@ -224,57 +245,57 @@ function GalleryCarousel({
       </div>
 
       {/* Main viewport */}
-      <div className="order-1 min-w-0 flex-1 md:order-2">
-        <div
-          className="relative aspect-[4/3] overflow-hidden border border-[var(--color-line)] bg-[var(--color-surface-alt)]"
-          ref={emblaRef}
-        >
-          <div className="flex h-full">
-            {images.map((img, i) => (
-              <div
-                key={img.id}
-                className="relative h-full flex-[0_0_100%]"
-                aria-hidden={i !== selectedIndex}
+      <div
+        className="relative aspect-square flex-1 overflow-hidden rounded-[var(--radius)] bg-white shadow-[0_0_0_1px_var(--color-athens-line)]"
+        ref={emblaRef}
+      >
+        <div className="flex h-full">
+          {images.map((img, i) => (
+            <div
+              key={img.id}
+              className="relative h-full flex-[0_0_100%]"
+              aria-hidden={i !== selectedIndex}
+            >
+              <button
+                type="button"
+                onClick={() => onOpenZoom(i)}
+                tabIndex={i === selectedIndex ? 0 : -1}
+                aria-label={`Open image ${i + 1} of ${images.length} full size`}
+                className="absolute inset-0 cursor-zoom-in"
               >
-                <button
-                  type="button"
-                  onClick={() => onOpenZoom(i)}
-                  tabIndex={i === selectedIndex ? 0 : -1}
-                  aria-label={`Open image ${i + 1} of ${images.length} full size`}
-                  className="absolute inset-0 cursor-zoom-in"
-                >
-                  <Image
-                    src={img.url}
-                    alt={`${title} — image ${i + 1}`}
-                    fill
-                    className="object-contain p-12"
-                    sizes="(max-width: 1024px) 100vw, (max-width: 1440px) 56vw, 810px"
-                    priority={isPrimaryVariant && i === 0}
-                  />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollPrev()}
-            disabled={!canPrev}
-            aria-label="Previous image"
-            className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center border border-[var(--color-line)] bg-[var(--color-surface)]/90 text-lg leading-none text-[var(--color-ink)] transition-colors hover:border-[var(--color-line-strong)] disabled:pointer-events-none disabled:opacity-30"
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollNext()}
-            disabled={!canNext}
-            aria-label="Next image"
-            className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center border border-[var(--color-line)] bg-[var(--color-surface)]/90 text-lg leading-none text-[var(--color-ink)] transition-colors hover:border-[var(--color-line-strong)] disabled:pointer-events-none disabled:opacity-30"
-          >
-            ›
-          </button>
+                <Image
+                  src={img.url}
+                  alt={`${title} — image ${i + 1}`}
+                  fill
+                  className="object-contain p-8"
+                  sizes="(min-width: 990px) 620px, 100vw"
+                  priority={isPrimaryVariant && i === 0}
+                />
+              </button>
+            </div>
+          ))}
         </div>
+
+        <ZoomAffordance />
+
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollPrev()}
+          disabled={!canPrev}
+          aria-label="Previous image"
+          className="absolute left-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-athens-line)] bg-white text-[var(--color-athens-dark)] transition-colors hover:border-[var(--color-athens-dark)] disabled:pointer-events-none disabled:opacity-30"
+        >
+          <ChevronLeft className="size-[18px]" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollNext()}
+          disabled={!canNext}
+          aria-label="Next image"
+          className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-athens-line)] bg-white text-[var(--color-athens-dark)] transition-colors hover:border-[var(--color-athens-dark)] disabled:pointer-events-none disabled:opacity-30"
+        >
+          <ChevronRight className="size-[18px]" aria-hidden />
+        </button>
       </div>
     </div>
   )
