@@ -1,0 +1,19 @@
+apps/storefront/src/app/globals.css
+  s_a5ab152597b3b1::t_9d6f57c417626e 2-3,5-277,279-290,480
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2e5e4c98d0f055aec2ce2e67f82b45b224c97910",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
