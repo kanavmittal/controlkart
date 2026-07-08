@@ -1,0 +1,59 @@
+apps/storefront/src/app/compare/page.tsx
+  s_a5ab152597b3b1::t_717ca404648a95 1-25
+apps/storefront/src/app/auth/google/callback/page.tsx
+  s_a5ab152597b3b1::t_67136fdd82dd6e 108-142
+  s_a5ab152597b3b1::t_35afdbb1f5f0a7 4-5,7-9
+apps/storefront/src/app/products/products-browser.tsx
+  s_a5ab152597b3b1::t_6826d780762bbd 4-5,7-16,22-51,53-60,68,75,77-78,81,90-123,126-131,133-159,161-167,170-182,184-199
+apps/storefront/src/app/account/addresses/address-manager.tsx
+  s_a5ab152597b3b1::t_182a6873c5d7c0 8
+  s_a5ab152597b3b1::t_33b781fd899e70 3-4,9-48,77-85,88-89,92-93,103,105,111-112,114,116-119,122-138,141-183,185-219,221-236,238-239,243-356
+  s_a5ab152597b3b1::t_3985cb9392b4bb 357-358
+apps/storefront/src/components/layout/search-typeahead.tsx
+  s_a5ab152597b3b1::t_19bf8aaf6d2396 1-327
+apps/storefront/src/app/account/orders/[id]/invoice/invoice-view.tsx
+  s_a5ab152597b3b1::t_8415e45d328458 7,12-13,45-54,85-90,96-105,107,114-124,126-129,131-135,137-139,141-142,144-153,155-163,165-172,174-193,195-215,217-218,220-223,227-237,239-256,259
+apps/storefront/src/components/layout/header-search.tsx
+  s_a5ab152597b3b1::t_a2492062c36384 19-20,28-31
+  s_a5ab152597b3b1::t_12ce8f7d7ccc58 14
+  s_a5ab152597b3b1::t_3022df35913c7d 71,73,75
+apps/storefront/src/app/account/addresses/addresses-view.tsx
+  s_a5ab152597b3b1::t_0a1c0b70236be1 3,5-6,9-11,14-21,26,36,43-78,80
+apps/storefront/src/components/product/compare-table.tsx
+  s_a5ab152597b3b1::t_45200a35cbb365 1-313
+apps/storefront/src/components/product/compare-card-checkbox.tsx
+  s_a5ab152597b3b1::t_51a8d634ad66d5 1-41
+apps/storefront/src/components/product/compare-context.tsx
+  s_a5ab152597b3b1::t_20bb68868666a1 1-115
+apps/storefront/src/app/products/page.tsx
+  s_a5ab152597b3b1::t_78e0465b223985 82-83,99,101
+  s_a5ab152597b3b1::t_7a9ff872d2890e 25-34
+  s_a5ab152597b3b1::t_35557b0fd85d6e 12
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a5ab152597b3b1::t_718eb769989ab2 357-364,368-380,382-392,395-399,403-412,414-424,426-480
+  s_a5ab152597b3b1::t_57df7f8ba297d4 5-6,14-21,23-38,44-45,48-132
+  s_a5ab152597b3b1::t_5e1a4f0cebe8f9 195-237
+apps/storefront/src/components/product/compare-bar.tsx
+  s_a5ab152597b3b1::t_8c69e41ebaf1f2 1-108
+apps/storefront/src/app/checkout/checkout-view.tsx
+  s_a5ab152597b3b1::t_a8c721c8664923 4-5,7-8,14-25,29-41,64-76,82-89,91-99,102-184,187-192,194-199,201-219,221-224,226-278,280-365,367-377,379-391,393
+apps/storefront/src/app/verify-email/page.tsx
+  s_a5ab152597b3b1::t_15dfeaa012614f 78-84,86-144
+  s_a5ab152597b3b1::t_9b251d3aeb6974 4,6-8,26-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "61ead8d7eea9d22dc198e9317dec491f57ea388e",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
