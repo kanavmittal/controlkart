@@ -1,0 +1,35 @@
+apps/storefront/src/components/layout/footer-features.tsx
+  s_a5ab152597b3b1::t_c79d53370b93e7 1-43
+apps/storefront/src/components/cart/cart-drawer.tsx
+  s_a5ab152597b3b1::t_bfa856ac7d98aa 69
+  s_a5ab152597b3b1::t_db6b457869c178 1-68,70-207
+apps/storefront/src/components/cart/cart-drawer-context.tsx
+  s_a5ab152597b3b1::t_10ea603c45d257 1-56
+apps/storefront/src/components/layout/header-search.tsx
+  s_a5ab152597b3b1::t_77918047ac7ad0 60-62
+  s_a5ab152597b3b1::t_70fc21f9a27fa7 1-59,63-88
+apps/storefront/src/components/layout/announcement-bar.tsx
+  s_a5ab152597b3b1::t_ead08d095e4925 1-32
+apps/storefront/src/components/layout/site-footer.tsx
+  s_a5ab152597b3b1::t_dc10fd371b5eab 1-113
+apps/storefront/src/components/layout/mobile-menu.tsx
+  s_a5ab152597b3b1::t_50c1c0192a14ca 1-203
+apps/storefront/src/components/layout/site-header.tsx
+  s_a5ab152597b3b1::t_64a0393d1f80bb 1-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6e7a5dd1de2a2b97319be8469137d1fca1ec85de",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
