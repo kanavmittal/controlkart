@@ -1,18 +1,31 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { formatINR } from "@/lib/format"
+import { ShoppingCart } from "lucide-react"
+
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { Price } from "@/components/shared/price"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { buttonVariants } from "@/components/ui/button"
 import { useCart } from "@/lib/hooks/use-cart"
+import { cn } from "@/lib/utils"
 import { CartLineControls } from "./cart-line-controls"
 
-/** Client-side cart (CSR). Reads the cart from the browser SDK via useCart(). */
+/**
+ * Client-side cart (CSR). Reads the cart from the browser SDK via
+ * `useCart()` — untouched from the pre-restyle version, this file only
+ * changes presentation. Empty/loading states mirror `cart-drawer.tsx`'s
+ * pattern; totals fields shown (subtotal incl. GST, GST, total) are the
+ * same fields the pre-restyle page rendered.
+ */
 export function CartView() {
   const { cart, isLoading } = useCart()
   const items = cart?.items ?? []
 
   if (isLoading) {
     return (
-      <div className="shell py-20 text-center text-sm text-[var(--color-ink-muted)]">
+      <div className="athens-container py-24 text-center text-sm text-athens-body">
         Loading your cart…
       </div>
     )
@@ -20,93 +33,144 @@ export function CartView() {
 
   if (!items.length) {
     return (
-      <div className="shell py-20 text-center">
-        <h1 className="text-2xl font-bold">Your cart is empty</h1>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-          Browse the catalog or use Quick Order to add items by SKU.
-        </p>
-        <div className="mt-6 flex justify-center gap-3">
-          <Link href="/products" className="btn-primary px-6 py-2.5">
-            Browse Products
-          </Link>
-          <Link href="/quick-order" className="btn-secondary px-6 py-2.5">
-            Quick Order
-          </Link>
+      <>
+        <Breadcrumbs crumbs={[{ label: "Cart" }]} />
+        <div className="athens-container flex min-h-[50vh] flex-col items-center justify-center gap-4 py-20 text-center">
+          <ShoppingCart className="size-10 text-athens-body" aria-hidden />
+          <div>
+            <h1 className="athens-section-heading">Your cart is empty</h1>
+            <p className="mt-2 text-sm text-athens-body">
+              Browse the catalog or use Quick Order to add items by SKU.
+            </p>
+          </div>
+          <div className="mt-2 flex flex-wrap justify-center gap-3">
+            <Link href="/products" className={cn(buttonVariants({ variant: "default" }))}>
+              Browse products
+            </Link>
+            <Link
+              href="/quick-order"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              Quick order
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
-    <div className="shell py-12">
-      <h1 className="text-3xl font-bold tracking-tight">Cart</h1>
-      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_360px]">
-        <div className="border border-[var(--color-line)]">
-          <div className="grid grid-cols-[1fr_auto_auto] gap-4 border-b border-[var(--color-line)] bg-[var(--color-surface-alt)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
-            <span>Item</span>
-            <span>Qty</span>
-            <span className="text-right">Total</span>
-          </div>
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-[var(--color-line)] px-4 py-4 last:border-b-0"
-            >
-              <div>
-                <div className="font-mono text-xs text-[var(--color-ink-muted)]">
-                  {item.variant?.sku}
-                </div>
-                <Link
-                  href={`/products/${item.variant?.product?.handle ?? ""}`}
-                  className="text-sm font-semibold hover:text-[var(--color-accent)]"
-                >
-                  {item.product_title}
-                </Link>
-                <div className="text-xs text-[var(--color-ink-muted)]">
-                  {item.variant_title}
-                </div>
-              </div>
-              <CartLineControls lineId={item.id} quantity={item.quantity} />
-              <div className="text-right text-sm font-semibold">
-                {formatINR(item.total)}
-              </div>
-            </div>
-          ))}
-        </div>
+    <>
+      <Breadcrumbs crumbs={[{ label: "Cart" }]} />
+      <div className="athens-container py-10">
+        <h1 className="athens-section-heading mb-6">Your cart</h1>
 
-        <aside className="h-fit border border-[var(--color-line)]">
-          <div className="border-b border-[var(--color-line)] bg-[var(--color-surface-alt)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
-            Order Summary
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          <div className="divide-y divide-athens-line border border-athens-line">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col gap-4 p-4 sm:grid sm:grid-cols-[88px_1fr_auto_auto_auto] sm:items-center sm:gap-4"
+              >
+                <div className="relative size-24 shrink-0 overflow-hidden rounded-[var(--radius)] border border-athens-line bg-athens-band sm:size-[88px]">
+                  {item.thumbnail ? (
+                    <Image
+                      src={item.thumbnail}
+                      alt={item.product_title ?? item.title}
+                      fill
+                      className="object-contain p-2"
+                      sizes="88px"
+                    />
+                  ) : null}
+                </div>
+
+                <div className="min-w-0">
+                  <Link
+                    href={`/products/${item.variant?.product?.handle ?? ""}`}
+                    className="text-sm font-medium text-athens-dark hover:underline"
+                  >
+                    {item.product_title}
+                  </Link>
+                  {item.variant_title ? (
+                    <p className="mt-0.5 truncate text-xs text-athens-body">
+                      {item.variant_title}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div className="flex items-center justify-between gap-3 sm:block sm:text-right">
+                  <span className="text-xs text-athens-body sm:hidden">
+                    Unit price
+                  </span>
+                  <Price
+                    amount={item.unit_price}
+                    className="text-sm font-normal sm:justify-end"
+                  />
+                </div>
+
+                <CartLineControls lineId={item.id} quantity={item.quantity} />
+
+                <div className="flex items-center justify-between gap-3 sm:block sm:text-right">
+                  <span className="text-xs text-athens-body sm:hidden">
+                    Line total
+                  </span>
+                  <Price
+                    amount={item.total}
+                    className="text-sm font-semibold sm:justify-end"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="space-y-2 p-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-[var(--color-ink-muted)]">
-                Subtotal (incl. GST)
-              </span>
-              <span>{formatINR(cart?.item_total)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[var(--color-ink-muted)]">GST included</span>
-              <span>{formatINR(cart?.item_tax_total)}</span>
-            </div>
-            <div className="flex justify-between border-t border-[var(--color-line)] pt-2 text-base font-bold">
-              <span>Total</span>
-              <span>{formatINR(cart?.total)}</span>
-            </div>
-            <p className="text-xs text-[var(--color-ink-faint)]">
-              Shipping calculated at checkout.
-            </p>
-          </div>
-          <div className="p-4 pt-0">
-            <Link
-              href="/checkout"
-              className="btn-primary block w-full px-4 py-2.5 text-center"
-            >
-              Proceed to Checkout
-            </Link>
-          </div>
-        </aside>
+
+          <Card size="sm" className="h-fit">
+            <CardHeader>
+              <CardTitle>Order summary</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3">
+              <div className="flex items-baseline justify-between text-sm">
+                <span className="text-athens-body">Subtotal (incl. GST)</span>
+                <Price
+                  amount={cart?.item_total}
+                  className="text-sm leading-none font-normal text-athens-dark"
+                />
+              </div>
+              <div className="flex items-baseline justify-between text-sm">
+                <span className="text-athens-body">GST included</span>
+                <Price
+                  amount={cart?.item_tax_total}
+                  className="text-sm leading-none font-normal text-athens-dark"
+                />
+              </div>
+              <div className="flex items-baseline justify-between border-t border-athens-line pt-3 text-base font-semibold">
+                <span className="text-athens-dark">Total</span>
+                <Price
+                  amount={cart?.total}
+                  className="text-base leading-none font-semibold text-athens-dark"
+                />
+              </div>
+              <p className="text-xs text-athens-body">
+                Prices include GST. Shipping calculated at checkout.
+              </p>
+
+              <div className="mt-2 flex flex-col gap-2">
+                <Link
+                  href="/checkout"
+                  className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
+                >
+                  Proceed to checkout
+                </Link>
+                <Link
+                  href="/products"
+                  className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+                >
+                  Continue shopping
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

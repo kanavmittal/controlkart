@@ -16,6 +16,7 @@ import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { Price } from "@/components/shared/price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
+import { ProductCard } from "@/components/product/product-card"
 
 export const dynamic = "force-static"
 
@@ -71,6 +72,65 @@ const mockPlainProduct = {
       allow_backorder: false,
       inventory_quantity: 40,
       calculated_price: { calculated_amount: 899, original_amount: 899 },
+    },
+  ],
+} as unknown as HttpTypes.StoreProduct
+
+// Mock products for the T15 ProductCard demo grid below. Single-variant
+// exercises the "Add to cart" client CTA (product-card-actions.tsx);
+// multi-variant exercises "Select options" + the "N models" line + the
+// `from` price flag, and its cheapest variant is on sale (original_amount >
+// calculated_amount) to exercise the sale badge.
+const mockCardSingleVariant = {
+  id: "prod_card_demo_1",
+  title: "Selec 9-Pin DIN Rail Relay Socket",
+  handle: "selec-9-pin-din-rail-relay-socket",
+  thumbnail: "https://picsum.photos/seed/ck-card-1/800/800",
+  images: [
+    { id: "img_card_1a", url: "https://picsum.photos/seed/ck-card-1/800/800" },
+    { id: "img_card_1b", url: "https://picsum.photos/seed/ck-card-1-alt/800/800" },
+  ],
+  metadata: { brand: "Selec", mpn: "S6A-2C-DIN" },
+  created_at: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000).toISOString(),
+  variants: [
+    {
+      id: "variant_card_demo_1",
+      sku: "S6A-2C-DIN",
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 18,
+      calculated_price: { calculated_amount: 249, original_amount: 249 },
+    },
+  ],
+} as unknown as HttpTypes.StoreProduct
+
+const mockCardMultiVariant = {
+  id: "prod_card_demo_2",
+  title: "Selec MPR35 Multifunction Protection Relay Series",
+  handle: "selec-mpr35-multifunction-protection-relay",
+  thumbnail: "https://picsum.photos/seed/ck-card-2/800/800",
+  images: [
+    { id: "img_card_2a", url: "https://picsum.photos/seed/ck-card-2/800/800" },
+    { id: "img_card_2b", url: "https://picsum.photos/seed/ck-card-2-alt/800/800" },
+  ],
+  metadata: { brand: "Selec", mpn: "MPR35" },
+  created_at: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000).toISOString(),
+  variants: [
+    {
+      id: "variant_card_demo_2a",
+      sku: "MPR35-100A",
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 6,
+      calculated_price: { calculated_amount: 5499, original_amount: 6999 },
+    },
+    {
+      id: "variant_card_demo_2b",
+      sku: "MPR35-250A",
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 2,
+      calculated_price: { calculated_amount: 7499, original_amount: 7499 },
     },
   ],
 } as unknown as HttpTypes.StoreProduct
@@ -228,6 +288,29 @@ export default function StyleCheckPage() {
             <ProductBadges badges={deriveProductBadges(mockSoldOutProduct)} />
             <ProductBadges badges={deriveProductBadges(mockPlainProduct)} />
           </div>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-6">
+        <h2 className="athens-section-heading text-lg">T15 — ProductCard (flagship)</h2>
+        <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">
+          Single-variant (Add to cart) · Multi-variant on sale (Select
+          options, &quot;2 models&quot;, From price)
+        </p>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ProductCard product={mockCardSingleVariant} priority />
+          <ProductCard
+            product={mockCardMultiVariant}
+            specs={[
+              { label: "Current", value: "100–250A" },
+              { label: "Mount", value: "Panel" },
+            ]}
+            quickViewSlot={
+              <Button type="button" variant="secondary" size="sm">
+                Quick view
+              </Button>
+            }
+          />
         </div>
       </section>
     </div>
