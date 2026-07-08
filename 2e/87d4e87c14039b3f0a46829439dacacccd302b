@@ -1,0 +1,62 @@
+apps/storefront/src/components/home/also-popular.tsx
+  s_a5ab152597b3b1::t_68862cc560e6d5 1-54
+apps/storefront/src/components/home/video-background.tsx
+  s_a5ab152597b3b1::t_2eaf2746b6bb3b 1-51
+apps/storefront/src/components/home/hero-slideshow.tsx
+  s_a5ab152597b3b1::t_d1215fc2804aac 76-77
+  s_a5ab152597b3b1::t_d6fe23005a9329 1-75,78-117
+apps/storefront/src/components/home/scrolling-marquee.tsx
+  s_a5ab152597b3b1::t_f7473c5b45f0d8 1-54
+apps/storefront/src/components/home/popular-categories.tsx
+  s_a5ab152597b3b1::t_f2b6bf214c6631 1-87
+apps/storefront/src/components/home/product-comparison.tsx
+  s_a5ab152597b3b1::t_d55639eaa29d33 1-241
+apps/storefront/src/app/resources/page.tsx
+  s_a5ab152597b3b1::t_5e7c8de9475f11 3,15-20,26-38
+apps/storefront/src/components/home/deals-tabs.tsx
+  s_a5ab152597b3b1::t_f2e92694ad2167 1-113
+apps/storefront/src/app/resources/[slug]/page.tsx
+  s_a5ab152597b3b1::t_07b6c17e8c3f34 2,7-8,12-17
+  s_a5ab152597b3b1::t_c0574dde6e529f 47-63,81,86-93,96-106,113-114
+  s_a5ab152597b3b1::t_b9831c28e5034b 18
+apps/storefront/src/app/resources/resources-browser.tsx
+  s_a5ab152597b3b1::t_3d753c3ffc7e8a 4,6-7,10-18,28-34,38-47,55-75,78-128
+apps/storefront/src/components/home/countdown-banner.tsx
+  s_a5ab152597b3b1::t_a8106393cc2253 1-114
+apps/storefront/src/components/home/sliding-panels.tsx
+  s_a5ab152597b3b1::t_663483d182d643 1-139
+apps/storefront/src/components/home/media-with-text.tsx
+  s_a5ab152597b3b1::t_de7190b1ccbd1a 1-54
+apps/storefront/src/components/home/promo-tiles-row.tsx
+  s_a5ab152597b3b1::t_bf6c835069dbfb 1-90
+apps/storefront/src/components/home/simple-collection-list.tsx
+  s_a5ab152597b3b1::t_6d755085107613 1-49
+apps/storefront/src/components/home/shop-by-brand.tsx
+  s_a5ab152597b3b1::t_6b96b598aeb706 1-76
+apps/storefront/src/app/pages/[slug]/page.tsx
+  s_a5ab152597b3b1::t_daa45882f6a9bf 1-60
+apps/storefront/src/components/home/filters-bar.tsx
+  s_a5ab152597b3b1::t_400cd65e97cbff 1-141
+apps/storefront/src/app/brands/page.tsx
+  s_a5ab152597b3b1::t_1fa74c2616ebcb 1-90
+apps/storefront/src/components/home/featured-product.tsx
+  s_a5ab152597b3b1::t_73e13b371578f2 1-289
+apps/storefront/src/components/home/featured-collection.tsx
+  s_a5ab152597b3b1::t_0fb4de4dc75413 1-107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2e87d4e87c14039b3f0a46829439dacacccd302b",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
