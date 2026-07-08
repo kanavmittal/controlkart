@@ -9,6 +9,8 @@ import { CartDrawerProvider } from "@/components/cart/cart-drawer-context"
 import { QueryProvider } from "@/components/providers/query-provider"
 import { CartProvider } from "@/components/providers/cart-provider"
 import { QuickViewProvider } from "@/components/providers/quick-view-provider"
+import { CompareProvider } from "@/components/product/compare-context"
+import { CompareBar } from "@/components/product/compare-bar"
 import { Toaster } from "@/components/ui/sonner"
 import { BASE_URL, STORE_NAME, STORE_TAGLINE } from "@/lib/config"
 import { getCategoryTree } from "@/lib/data/categories"
@@ -49,14 +51,17 @@ export default async function RootLayout({
         <QueryProvider>
           <CartProvider>
             <QuickViewProvider>
-              <CartDrawerProvider>
-                <AnnouncementBar />
-                <SiteHeader categoryTree={categoryTree} />
-                <main className="flex-1">{children}</main>
-                <FooterFeatures />
-                <SiteFooter />
-                <CartDrawer />
-              </CartDrawerProvider>
+              <CompareProvider>
+                <CartDrawerProvider>
+                  <AnnouncementBar />
+                  <SiteHeader categoryTree={categoryTree} />
+                  <main className="flex-1">{children}</main>
+                  <FooterFeatures />
+                  <SiteFooter />
+                  <CartDrawer />
+                  <CompareBar />
+                </CartDrawerProvider>
+              </CompareProvider>
             </QuickViewProvider>
           </CartProvider>
         </QueryProvider>

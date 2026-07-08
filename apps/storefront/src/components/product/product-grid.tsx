@@ -36,9 +36,7 @@ export interface ProductGridProps {
  *
  * Ported from the clone's inline listing-grid markup
  * (`grid gap-5 grid-cols-2 min-[750px]:grid-cols-3 min-[1200px]:grid-cols-4`)
- * — NOT the legacy hairline-border grid at
- * `components/products/product-grid.tsx` (that file is untouched here;
- * its deletion owner is T57 once its last importers are rebuilt).
+ * — NOT the legacy hairline-border grid it replaced (deleted in T57).
  *
  * Server component, no interactivity: callers render `<ProductCard />`
  * children (or skeletons — see `product-grid-skeleton.tsx`). When

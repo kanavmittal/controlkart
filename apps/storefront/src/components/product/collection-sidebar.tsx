@@ -18,8 +18,8 @@ import { parseSpecParam } from "@/lib/specs"
 import type { SpecFacetDTO } from "@/lib/data/types"
 
 /**
- * Athens restyle of `components/products/spec-filter-sidebar.tsx` (T21 still
- * owns deleting that file — see plan T18). Visual structure ported from
+ * Athens restyle of the legacy spec-filter sidebar (deleted in T21 with the
+ * /products rebuild — see plan T18). Visual structure ported from
  * `my-clone/src/components/CollectionSidebar.tsx` (Categories tree above
  * collapsible facet groups); behavior ported from the old sidebar.
  */

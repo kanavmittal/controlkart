@@ -1,112 +1,155 @@
-import Link from "next/link"
-import { HomeCategories } from "@/components/home/home-categories"
-import { HomeFeaturedProducts } from "@/components/home/home-featured-products"
-import { HomeResources } from "@/components/home/home-resources"
+import type { Metadata } from "next"
+import type { HttpTypes } from "@medusajs/types"
 
-// Static shell (SSG): the hero/trust/shortcuts (above the fold) have no backend
-// dependency. Categories / featured products / posts render client-side (CSR)
-// below the fold — per Medusa's production rendering guide.
+import { HeroSlideshow } from "@/components/home/hero-slideshow"
+import { PromoTilesRow } from "@/components/home/promo-tiles-row"
+import { DealsTabs } from "@/components/home/deals-tabs"
+import { FiltersBar, SectionDivider } from "@/components/home/filters-bar"
+import { PopularCategories } from "@/components/home/popular-categories"
+import { ShopByBrand } from "@/components/home/shop-by-brand"
+import { AlsoPopular } from "@/components/home/also-popular"
+import { CountdownBanner } from "@/components/home/countdown-banner"
+import { ProductComparison } from "@/components/home/product-comparison"
+import { ScrollingMarquee } from "@/components/home/scrolling-marquee"
+import { FeaturedProduct } from "@/components/home/featured-product"
+import { VideoBackground } from "@/components/home/video-background"
+import { ProductLists } from "@/components/home/product-lists"
+import { SlidingPanels } from "@/components/home/sliding-panels"
+import { FeaturedCollection } from "@/components/home/featured-collection"
+import { SimpleCollectionList } from "@/components/home/simple-collection-list"
+import { MediaWithText } from "@/components/home/media-with-text"
+import { BlogPosts } from "@/components/home/blog-posts"
+import {
+  dealsTabs,
+  featuredCollection,
+  featuredProductHandle,
+  homeComparisonHandles,
+  productListColumns,
+} from "@/config/home"
+import { listTopLevelCategories } from "@/lib/data/categories"
+import { getProductByHandle, getProductSpecs } from "@/lib/data/products"
+import { listPosts } from "@/lib/data/content"
+import type { SpecValueDTO } from "@/lib/data/types"
 
-const TRUST_ITEMS = [
-  { title: "Authorized Distribution", body: "Genuine Selec products sourced directly, with full manufacturer warranty." },
-  { title: "Stock Transparency", body: "Live inventory on every product. What you see is what ships." },
-  { title: "GST Invoicing", body: "GST-compliant invoice with every order. Add your GSTIN at checkout." },
-  { title: "Pan-India Dispatch", body: "24-48 hr dispatch from our Mumbai warehouse to any pincode in India." },
-]
+// Static route (like /categories): rendered at build time and revalidated on
+// an ISR window. Every fetch below carries a `.catch` fallback so a down
+// backend degrades to config-only sections instead of failing the build.
+export const revalidate = 300
 
-const SHORTCUTS = [
-  { href: "/quick-order", title: "Quick Order", body: "Enter SKUs and quantities directly. Built for repeat procurement." },
-  { href: "/request-quote", title: "Request a Quote", body: "Bulk requirement? Get trade pricing within one working day." },
-  { href: "/categories/plcs", title: "Browse PLCs", body: "Modular PLCs with flexible IO, Modbus RTU and Ethernet options." },
-]
+// Title/description/OG inherit the layout defaults (the old home page
+// exported no metadata of its own); the canonical is pinned per-route,
+// matching the other indexable pages.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+}
 
-export default function HomePage() {
+/**
+ * Home assembly (T57). Server page: batches all live data in one
+ * `Promise.all`, then distributes products to sections by handle.
+ *
+ * Product strategy: `lib/data/products.ts` (untouchable) exposes no
+ * `handle[]` batch filter on `listProducts` (its `storeFetch` query only
+ * serializes scalar params), so the handle lists from `config/home.ts`
+ * (deals tabs + featured product + featured collection + home comparison +
+ * product-list columns)
+ * are DEDUPED into one set and resolved with one cached
+ * `getProductByHandle` call per unique handle, in parallel. Handles that
+ * don't resolve (placeholder config handles, backend down) simply drop out
+ * of their sections — every product-bearing section renders nothing (or
+ * skips) when it has no data.
+ *
+ * Section order mirrors the clone's `src/app/page.tsx` top-to-bottom.
+ * The layout provides the `<main>` wrapper and all chrome.
+ */
+export default async function HomePage() {
+  // Dedupe product handles across every product-bearing section.
+  const uniqueHandles = [
+    ...new Set(
+      [
+        ...dealsTabs.flatMap((tab) => tab.handles),
+        featuredProductHandle,
+        ...featuredCollection.handles,
+        ...homeComparisonHandles,
+        ...productListColumns.flatMap((column) => column.handles),
+      ].filter(Boolean)
+    ),
+  ]
+
+  const [categories, posts, resolvedProducts] = await Promise.all([
+    listTopLevelCategories().catch(() => []),
+    listPosts({ limit: 4 })
+      .then(({ posts }) => posts)
+      .catch(() => []),
+    Promise.all(
+      uniqueHandles.map((handle) =>
+        getProductByHandle(handle).catch(() => null)
+      )
+    ),
+  ])
+
+  const productsByHandle = new Map<string, HttpTypes.StoreProduct>()
+  for (const product of resolvedProducts) {
+    if (product?.handle) productsByHandle.set(product.handle, product)
+  }
+  const pick = (handles: string[]) =>
+    handles
+      .map((handle) => productsByHandle.get(handle))
+      .filter((p): p is HttpTypes.StoreProduct => Boolean(p))
+
+  // Distribute by handle.
+  const tabs = dealsTabs.map((tab) => ({
+    brandLabel: tab.brandLabel,
+    products: pick(tab.handles),
+  }))
+  const featuredProduct = productsByHandle.get(featuredProductHandle) ?? null
+  const featuredCollectionProducts = pick(featuredCollection.handles)
+  const comparisonProducts = pick(homeComparisonHandles)
+  const productListColumnsData = productListColumns.map((column) => ({
+    banner: column.banner,
+    products: pick(column.handles),
+  }))
+
+  // Specs for the pinned comparison table only (one call per product).
+  const comparisonSpecs = await Promise.all(
+    comparisonProducts.map((product) =>
+      getProductSpecs(product.id).catch(() => [] as SpecValueDTO[])
+    )
+  )
+  const specsByProductId: Record<string, SpecValueDTO[]> = {}
+  comparisonProducts.forEach((product, index) => {
+    specsByProductId[product.id] = comparisonSpecs[index]
+  })
+
   return (
     <div>
-      {/* Hero (SSG, above the fold) */}
-      <section className="border-b border-[var(--color-line)]">
-        <div className="shell grid gap-12 py-20 md:grid-cols-2 md:py-28">
-          <div>
-            <p className="text-sm font-medium text-[var(--color-accent)]">
-              Authorized Selec Controls Distributor
-            </p>
-            <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-              Industrial automation components, stocked and shipped pan-India.
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-[var(--color-ink-muted)]">
-              Selec PLCs, IO modules and accessories with transparent stock,
-              GST invoicing and dispatch within 48 hours. Built for OEMs,
-              panel builders and maintenance teams.
-            </p>
-            <div className="mt-8 flex gap-3">
-              <Link href="/categories/plcs" className="btn-primary px-6 py-2.5">
-                Browse PLCs
-              </Link>
-              <Link href="/quick-order" className="btn-secondary px-6 py-2.5">
-                Quick Order by SKU
-              </Link>
-            </div>
-          </div>
-          <div className="hidden border border-[var(--color-line)] md:grid md:grid-cols-2">
-            {TRUST_ITEMS.map((item, i) => (
-              <div
-                key={item.title}
-                className={`p-6 ${i % 2 === 0 ? "border-r" : ""} ${i < 2 ? "border-b" : ""} border-[var(--color-line)]`}
-              >
-                <h3 className="text-sm font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Procurement shortcuts (SSG) */}
-      <section className="border-b border-[var(--color-line)] bg-[var(--color-surface-alt)]">
-        <div className="shell grid gap-px py-0 md:grid-cols-3">
-          {SHORTCUTS.map((s) => (
-            <Link
-              key={s.href}
-              href={s.href}
-              className="group border-[var(--color-line)] p-8 md:border-r md:last:border-r-0"
-            >
-              <h3 className="text-base font-semibold group-hover:text-[var(--color-accent)]">
-                {s.title} →
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                {s.body}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories (CSR grid; static heading) */}
-      <section className="shell py-20">
-        <div className="flex items-end justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">
-            Product Categories
-          </h2>
-          <Link
-            href="/products"
-            className="text-sm font-medium text-[var(--color-accent)] hover:underline"
-          >
-            View all products →
-          </Link>
-        </div>
-        <HomeCategories />
-      </section>
-
-      {/* Featured products (CSR grid; static heading) */}
-      <section className="shell pb-20">
-        <h2 className="text-2xl font-bold tracking-tight">Featured Products</h2>
-        <HomeFeaturedProducts />
-      </section>
-
-      {/* Resources (CSR; renders its own section, hidden when empty) */}
-      <HomeResources />
+      <HeroSlideshow />
+      <PromoTilesRow />
+      <DealsTabs tabs={tabs} />
+      <FiltersBar categories={categories} />
+      <SectionDivider />
+      <PopularCategories />
+      <ShopByBrand />
+      <AlsoPopular />
+      <CountdownBanner />
+      <ProductComparison
+        products={comparisonProducts}
+        specsByProductId={specsByProductId}
+      />
+      <ScrollingMarquee />
+      {featuredProduct ? <FeaturedProduct product={featuredProduct} /> : null}
+      <VideoBackground />
+      <ProductLists columns={productListColumnsData} />
+      <SlidingPanels />
+      {featuredCollectionProducts.length > 0 ? (
+        <FeaturedCollection
+          heading={featuredCollection.heading}
+          products={featuredCollectionProducts}
+          promoTile={featuredCollection.promoTile}
+        />
+      ) : null}
+      <SimpleCollectionList />
+      <MediaWithText />
+      <BlogPosts posts={posts} />
     </div>
   )
 }

@@ -24,7 +24,6 @@ const pillBase =
 // (out of stock / low <=5 / in stock), extended with the `purchasable` rule
 // from `use-product-live.ts` so untracked/backorderable variants don't read
 // as "out of stock" just because their tracked quantity is 0.
-// Do not delete `products/stock-badge.tsx` here — deletion owner is T27.
 export function StockPill({ availableQuantity, canBackorder = false, className }: StockPillProps) {
   const purchasable = canBackorder || (typeof availableQuantity === "number" && availableQuantity > 0)
 

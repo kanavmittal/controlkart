@@ -13,6 +13,7 @@ import {
 } from "@/components/product/collection-sidebar"
 import { CatalogToolbar } from "@/components/product/catalog-toolbar"
 import { QuickViewButton } from "@/components/product/quick-view-button"
+import { CompareCardCheckbox } from "@/components/product/compare-card-checkbox"
 import { Input } from "@/components/ui/input"
 import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
 
@@ -188,6 +189,7 @@ export function ProductsBrowser({
                   key={product.id}
                   product={product}
                   quickViewSlot={<QuickViewButton product={product} />}
+                  compareSlot={<CompareCardCheckbox productId={product.id} />}
                 />
               ))}
             </ProductGrid>

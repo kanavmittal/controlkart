@@ -25,6 +25,10 @@ export interface ProductCardProps {
    *  card takes no dependency on it — callers pass their own trigger.
    *  Renders nothing when omitted. */
   quickViewSlot?: ReactNode
+  /** Optional compare-tray control (e.g. `CompareCardCheckbox`), rendered
+   *  small/unobtrusive in the footer next to the CTA. Callers opt in per
+   *  listing context — the card renders nothing when omitted. */
+  compareSlot?: ReactNode
   className?: string
   /** Forwarded to `next/image` for above-the-fold cards (disables lazy
    *  loading on the primary thumbnail only). */
@@ -52,6 +56,7 @@ export function ProductCard({
   product,
   specs = [],
   quickViewSlot,
+  compareSlot,
   className,
   priority = false,
 }: ProductCardProps) {
@@ -195,7 +200,7 @@ export function ProductCard({
         />
       </div>
 
-      <div>
+      <div className="flex flex-col gap-2">
         {multiVariant ? (
           <Button variant="outline" className="w-full" render={<Link href={href} />}>
             Select options
@@ -203,6 +208,7 @@ export function ProductCard({
         ) : singleVariantId ? (
           <ProductCardActions variantId={singleVariantId} productTitle={product.title} />
         ) : null}
+        {compareSlot ? <div className="flex justify-center">{compareSlot}</div> : null}
       </div>
     </article>
   )

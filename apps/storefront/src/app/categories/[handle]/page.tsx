@@ -19,6 +19,7 @@ import {
 } from "@/components/product/collection-sidebar"
 import { CatalogToolbar } from "@/components/product/catalog-toolbar"
 import { QuickViewButton } from "@/components/product/quick-view-button"
+import { CompareCardCheckbox } from "@/components/product/compare-card-checkbox"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import {
   Empty,
@@ -396,6 +397,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       key={product.id}
                       product={product}
                       quickViewSlot={<QuickViewButton product={product} />}
+                      compareSlot={<CompareCardCheckbox productId={product.id} />}
                     />
                   )
               )}
