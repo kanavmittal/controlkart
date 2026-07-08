@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
@@ -12,7 +13,9 @@ import { ProductCard } from "@/components/products/product-card"
 import { ProductGrid } from "@/components/products/product-grid"
 import { SpecFilterSidebar } from "@/components/products/spec-filter-sidebar"
 import { SpecSortDropdown } from "@/components/products/spec-sort-dropdown"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { parseSpecParam } from "@/lib/specs"
+import { cn } from "@/lib/utils"
 
 export const revalidate = 300
 
@@ -100,70 +103,106 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     })),
   }
 
+  // Visual crumb chain: Home -> parent (if the fetched category has one, via
+  // `parent_category` — one level deep is all `getCategoryByHandle` fetches)
+  // -> current. Kept independent of the JSON-LD chain above, which stays
+  // byte-identical to what it always emitted.
+  const visualCrumbs = [
+    ...(parent
+      ? [{ label: parent.name, href: `/categories/${parent.handle}` }]
+      : []),
+    { label: category.name },
+  ]
+
+  const heroImage =
+    typeof category.metadata?.image === "string"
+      ? category.metadata.image
+      : undefined
+
   return (
-    <div className="shell py-12">
+    <div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <nav className="flex flex-wrap gap-1 text-xs text-[var(--color-ink-muted)]">
-        <Link href="/" className="hover:text-[var(--color-ink)]">
-          Home
-        </Link>
-        <span>/</span>
-        <Link href="/products" className="hover:text-[var(--color-ink)]">
-          Products
-        </Link>
-        {parent && (
-          <>
-            <span>/</span>
-            <Link
-              href={`/categories/${parent.handle}`}
-              className="hover:text-[var(--color-ink)]"
+
+      <Breadcrumbs crumbs={visualCrumbs} />
+
+      <div className="athens-container pt-6">
+        <section className="relative h-[180px] overflow-hidden rounded-[5px] bg-[var(--color-athens-dark)]">
+          {heroImage ? (
+            <>
+              <Image
+                src={heroImage}
+                alt={category.name}
+                fill
+                priority
+                sizes="1420px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.15)_70%)]" />
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-[var(--color-athens-band)]" />
+          )}
+          <div className="absolute left-0 top-0 h-2 w-[42px] bg-[var(--color-athens-blue)]" />
+          <div className="relative z-10 flex h-full max-w-[620px] flex-col justify-center px-9">
+            <h1
+              className={cn(
+                "text-[28px] font-medium leading-[1.3]",
+                heroImage ? "text-white" : "text-[var(--color-athens-dark)]"
+              )}
             >
-              {parent.name}
-            </Link>
-          </>
-        )}
-        <span>/</span>
-        <span className="text-[var(--color-ink)]">{category.name}</span>
-      </nav>
-
-      <header className="mt-4 border-b border-[var(--color-line)] pb-6">
-        <h1 className="text-3xl font-bold tracking-tight">{category.name}</h1>
-        {category.description && (
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-muted)]">
-            {category.description}
-          </p>
-        )}
-        <p className="mt-2 text-xs text-[var(--color-ink-faint)]">
-          {count} product{count === 1 ? "" : "s"}
-          {hasFilters ? " match your filters" : ""} · Prices inclusive of GST
-        </p>
-      </header>
-
-      {children.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
-            Shop by sub-category
-          </h2>
-          <div className="mt-3 grid grid-cols-2 border-l border-t border-[var(--color-line)] [&>*]:border-r [&>*]:border-b [&>*]:border-[var(--color-line)] sm:grid-cols-3 lg:grid-cols-4">
-            {children.map((child) => (
-              <Link
-                key={child.id}
-                href={`/categories/${child.handle}`}
-                className="group bg-[var(--color-surface)] p-4 hover:bg-[var(--color-surface-alt)]"
+              {category.name}
+            </h1>
+            {category.description && (
+              <p
+                className={cn(
+                  "mt-1 text-[15px] leading-6",
+                  heroImage ? "text-white/90" : "text-[var(--color-athens-body)]"
+                )}
               >
-                <h3 className="text-sm font-medium group-hover:text-[var(--color-accent)]">
-                  {child.name}
-                </h3>
-              </Link>
-            ))}
+                {category.description}
+              </p>
+            )}
+            <p
+              className={cn(
+                "mt-2 text-xs",
+                heroImage ? "text-white/70" : "text-[var(--color-athens-body)]"
+              )}
+            >
+              {count} product{count === 1 ? "" : "s"}
+              {hasFilters ? " match your filters" : ""} · Prices inclusive of
+              GST
+            </p>
           </div>
         </section>
-      )}
 
-      <div className="mt-8 flex flex-col gap-8 lg:flex-row">
+        {children.length > 0 && (
+          <section className="mt-[30px]">
+            <h2 className="sr-only">Shop by sub-category</h2>
+            <div className="flex gap-5 overflow-x-auto athens-no-scrollbar">
+              {children.map((child) => (
+                <Link
+                  key={child.id}
+                  href={`/categories/${child.handle}`}
+                  className="group w-[152px] shrink-0"
+                >
+                  {/* category_children are fetched with id/name/handle only
+                      (see CATEGORY_TREE_FIELDS) — no per-child image, so the
+                      card art is a neutral athens-band placeholder. */}
+                  <span className="block h-[69px] overflow-hidden rounded-[5px] bg-[var(--color-athens-band)] shadow-[inset_0_0_0_1px_var(--color-athens-line)]" />
+                  <span className="mt-2 block truncate text-center text-[14px] text-[var(--color-athens-body)] group-hover:text-[var(--color-athens-dark)] group-hover:underline">
+                    {child.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <div className="shell mt-8 flex flex-col gap-8 py-12 lg:flex-row">
         {facets.length > 0 && (
           <SpecFilterSidebar facets={facets} selected={selected} />
         )}
