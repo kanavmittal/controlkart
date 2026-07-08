@@ -14,7 +14,7 @@ export default function NotFound() {
       <p className="text-sm font-medium tracking-wide text-athens-body uppercase">
         404
       </p>
-      <h1 className="text-3xl font-bold text-athens-dark sm:text-4xl">
+      <h1 className="athens-page-title">
         Page not found
       </h1>
       <p className="max-w-md text-athens-body">

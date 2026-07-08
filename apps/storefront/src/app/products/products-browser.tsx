@@ -125,7 +125,7 @@ export function ProductsBrowser({
 
   return (
     <div className="athens-container py-10 md:py-14">
-      <h1 className="athens-section-heading text-[28px]">All Products</h1>
+      <h1 className="athens-page-title">All Products</h1>
       <p className="mt-2 text-[15px] text-athens-body">
         Selec PLCs, HMIs, timers, meters and accessories — live stock,
         GST-inclusive pricing, pan-India shipping.

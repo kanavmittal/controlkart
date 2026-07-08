@@ -25,7 +25,7 @@ export default function GlobalError({
       <p className="text-sm font-medium tracking-wide text-athens-body uppercase">
         Error
       </p>
-      <h1 className="text-3xl font-bold text-athens-dark sm:text-4xl">
+      <h1 className="athens-page-title">
         Something went wrong
       </h1>
       <p className="max-w-md text-athens-body">

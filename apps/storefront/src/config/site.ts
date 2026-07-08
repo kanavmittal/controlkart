@@ -19,6 +19,7 @@ import type {
   HeaderMastConfig,
   MainNavItem,
   MegaMenuBrandLink,
+  PdpContentConfig,
   SimpleMenu,
 } from "./types";
 
@@ -110,15 +111,28 @@ export const footerFeatures: FooterFeature[] = [
   },
 ];
 
-// Static copy for the PDP accordions (T28's Shipping/Warranty items — see
-// `product/product-accordions.tsx`). Both items render only when their
-// string is present, so this is a single always-on pair, not per-product
-// content.
-export const pdpContent: { shipping: string; warranty: string } = {
+// Static copy for the PDP buy column (post-review fix: Athens block-order
+// parity). `shipping`/`warranty` feed the PDP accordions (T28); `shipsCaption`
+// / `infoBox` / `highlights` feed `product/buy-box.tsx`'s stock bar, info
+// box, and highlights chip row (Athens `product-stock-bar-block` /
+// `product-info-box-block` / `product-block-highlights`). All copy here is
+// storewide static (not per-product) content, ported 1:1 from the Athens
+// clone's `productDetail` fixture wording pending real ControlKart copy.
+export const pdpContent: PdpContentConfig = {
   shipping:
     "Dispatched within 2-3 business days from our Mumbai warehouse. Pan-India delivery via our logistics partner; delivery timelines vary by pincode serviceability.", // TODO(content): confirm dispatch SLA and warehouse location
   warranty:
     "Covered by the manufacturer's standard warranty against manufacturing defects. Contact our support team with your invoice for warranty claims.", // TODO(content): confirm warranty duration per brand
+  shipsCaption: "Usually ships within 24 hours", // TODO(content): confirm actual dispatch SLA shown on the PDP stock bar (mirrors `shipping` above but as a short caption)
+  infoBox: {
+    heading: "Need help choosing the right model?", // TODO(content): confirm real ControlKart offer/copy for this callout
+    caption: "Our team can help you match specs, voltage and mounting before you order.", // TODO(content)
+  },
+  highlights: [
+    { icon: "truck", text: "Free shipping" }, // TODO(content): confirm actual shipping policy copy (ported verbatim from Athens clone)
+    { icon: "creditCard", text: "100% secure payments" },
+    { icon: "settings", text: "Industry leading quality" },
+  ],
 };
 
 export const footer: FooterConfig = {

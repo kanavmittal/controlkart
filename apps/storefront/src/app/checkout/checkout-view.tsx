@@ -91,7 +91,7 @@ export function CheckoutView() {
     <>
       <Breadcrumbs crumbs={CHECKOUT_CRUMBS} />
       <div className="athens-container py-10 md:py-12">
-        <h1 className="athens-section-heading text-[32px]">Checkout</h1>
+        <h1 className="athens-page-title">Checkout</h1>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_380px]">
           <div>
@@ -306,7 +306,7 @@ function AuthGuardNotice({ signedIn }: { signedIn: boolean }) {
     <>
       <Breadcrumbs crumbs={CHECKOUT_CRUMBS} />
       <div className="athens-container py-10 md:py-12">
-        <h1 className="athens-section-heading text-[32px]">Checkout</h1>
+        <h1 className="athens-page-title">Checkout</h1>
         <Alert className="mt-6 max-w-xl border-athens-warning/40 bg-athens-warning-bg">
           {signedIn ? (
             <>

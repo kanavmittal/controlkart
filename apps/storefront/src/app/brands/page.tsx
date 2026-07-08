@@ -39,7 +39,7 @@ export default function BrandsPage() {
     <>
       <Breadcrumbs crumbs={[{ label: "Brands" }]} />
       <div className="athens-container py-10 md:py-14">
-        <h1 className="athens-section-heading text-[28px]">Shop by Brand</h1>
+        <h1 className="athens-page-title">Shop by Brand</h1>
 
         {brands.length === 0 ? (
           <Empty className="mt-8 border border-dashed border-athens-line">

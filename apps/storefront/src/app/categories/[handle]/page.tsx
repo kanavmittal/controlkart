@@ -301,8 +301,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <div className="relative z-10 flex h-full max-w-[620px] flex-col justify-center px-9">
             <h1
               className={cn(
-                "text-[28px] font-medium leading-[1.3]",
-                heroImage ? "text-white" : "text-[var(--color-athens-dark)]"
+                "athens-page-title",
+                heroImage && "text-white"
               )}
             >
               {category.name}

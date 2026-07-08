@@ -20,7 +20,7 @@ export default function QuickOrderPage() {
 
       <div className="athens-container py-10 md:py-14">
         <div className="max-w-2xl">
-          <h1 className="athens-section-heading text-[32px]">Quick Order</h1>
+          <h1 className="athens-page-title">Quick Order</h1>
           <p className="mt-3 text-sm leading-relaxed text-athens-body">
             Paste or type one SKU per line with quantity, separated by a comma
             or space. We will validate stock and add everything to your cart

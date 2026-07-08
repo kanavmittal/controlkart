@@ -29,7 +29,7 @@ export default async function ResourcesPage() {
     <main>
       <Breadcrumbs crumbs={[{ label: "Resources" }]} />
       <div className="athens-container my-[60px]">
-        <h1 className="text-[28px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-athens-dark)]">
+        <h1 className="athens-page-title">
           Resources
         </h1>
         <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--color-athens-body)]">

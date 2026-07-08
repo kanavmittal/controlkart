@@ -117,7 +117,7 @@ export default function GoogleCallbackPage() {
             <>
               <XCircle className="size-10 text-destructive" aria-hidden />
               <div>
-                <h1 className="text-xl font-bold text-destructive">
+                <h1 className="text-xl font-medium text-destructive">
                   Google sign-in failed
                 </h1>
                 <p className="mt-2 text-sm text-athens-body">{error}</p>

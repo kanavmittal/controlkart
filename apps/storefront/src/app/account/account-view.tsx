@@ -101,7 +101,7 @@ export function AccountView() {
         <Breadcrumbs crumbs={[{ label: "Account" }]} />
         <div className="athens-container py-12">
           <div className="mx-auto max-w-md">
-            <h1 className="athens-section-heading text-[32px]">Sign In</h1>
+            <h1 className="athens-page-title">Sign In</h1>
             <p className="mt-2 text-sm text-athens-body">
               An account is required to purchase. Sign in or create an account
               in under a minute.
@@ -134,7 +134,7 @@ function AccountDashboard({ verify }: { verify?: string }) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="athens-section-heading text-[32px]">
+              <h1 className="athens-page-title">
                 {customer.first_name
                   ? `Hello, ${customer.first_name}`
                   : "My Account"}

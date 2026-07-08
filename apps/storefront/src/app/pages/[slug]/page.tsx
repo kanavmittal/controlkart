@@ -47,7 +47,7 @@ export default async function InfoPage({ params }: Props) {
     <main>
       <Breadcrumbs crumbs={[{ label: page.title }]} />
       <div className="athens-container my-[60px]">
-        <h1 className="mb-6 text-[28px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-athens-dark)]">
+        <h1 className="mb-6 athens-page-title">
           {page.title}
         </h1>
         <div

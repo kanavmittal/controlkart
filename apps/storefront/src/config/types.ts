@@ -105,6 +105,37 @@ export interface InfoPage {
   html: string;
 }
 
+/** Icon keys for the PDP `product-block-highlights` chip row
+ * (`components/product/buy-box.tsx`) — mapped to lucide icons locally in
+ * that component, same pattern as `FooterFeatureIconKey`. */
+export type PdpHighlightIconKey = "truck" | "creditCard" | "settings";
+
+/** One bordered chip in the PDP highlights row. */
+export interface PdpHighlight {
+  icon?: PdpHighlightIconKey;
+  text: string;
+}
+
+/** The PDP buy column's tinted "info box" callout (Athens
+ * `product-info-box-block`) — heading + caption, Box icon. */
+export interface PdpInfoBox {
+  heading: string;
+  caption: string;
+}
+
+/** Static PDP copy (`config/site.ts` `pdpContent`), consumed by
+ * `product/product-accordions.tsx` (shipping/warranty) and
+ * `product/buy-box.tsx` (shipsCaption/infoBox/highlights). */
+export interface PdpContentConfig {
+  shipping: string;
+  warranty: string;
+  /** Caption under the stock pill on the PDP stock bar, e.g. "Usually ships
+   *  within 24 hours". */
+  shipsCaption: string;
+  infoBox: PdpInfoBox;
+  highlights: PdpHighlight[];
+}
+
 // ---------------------------------------------------------------------------
 // Home page + brands (T5) — modeled loosely on the clone's `src/types.ts`
 // (`PromoTile`, `CategoryTile`, `CategoryLink`, `SlidingPanelData`,

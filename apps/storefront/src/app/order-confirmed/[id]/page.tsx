@@ -23,7 +23,7 @@ export default async function OrderConfirmedPage({
         <CardContent className="flex flex-col items-center gap-4 text-center">
           <CheckCircle2 className="size-12 text-athens-success" aria-hidden />
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-athens-dark">
+            <h1 className="athens-page-title">
               Order confirmed
             </h1>
             <p className="mt-2 font-mono text-xs text-athens-body">

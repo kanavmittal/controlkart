@@ -38,7 +38,7 @@ export function CartView() {
         <div className="athens-container flex min-h-[50vh] flex-col items-center justify-center gap-4 py-20 text-center">
           <ShoppingCart className="size-10 text-athens-body" aria-hidden />
           <div>
-            <h1 className="athens-section-heading">Your cart is empty</h1>
+            <h1 className="athens-page-title">Your cart is empty</h1>
             <p className="mt-2 text-sm text-athens-body">
               Browse the catalog or use Quick Order to add items by SKU.
             </p>
@@ -63,7 +63,7 @@ export function CartView() {
     <>
       <Breadcrumbs crumbs={[{ label: "Cart" }]} />
       <div className="athens-container py-10">
-        <h1 className="athens-section-heading mb-6">Your cart</h1>
+        <h1 className="athens-page-title mb-6">Your cart</h1>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
           <div className="divide-y divide-athens-line border border-athens-line">

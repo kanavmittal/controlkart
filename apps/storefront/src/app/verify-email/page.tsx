@@ -28,7 +28,7 @@ export default async function VerifyEmailPage({
           <CardContent className="flex flex-col items-center gap-4 text-center">
             <MailQuestion className="size-10 text-athens-body" aria-hidden />
             <div>
-              <h1 className="text-xl font-bold text-athens-dark">
+              <h1 className="text-xl font-medium text-athens-dark">
                 Invalid verification link
               </h1>
               <p className="mt-2 text-sm text-athens-body">
@@ -92,7 +92,7 @@ export default async function VerifyEmailPage({
                 aria-hidden
               />
               <div>
-                <h1 className="text-xl font-bold text-athens-success">
+                <h1 className="text-xl font-medium text-athens-success">
                   Email verified
                 </h1>
                 <p className="mt-2 text-sm text-athens-body">
@@ -127,7 +127,7 @@ export default async function VerifyEmailPage({
             <>
               <XCircle className="size-10 text-destructive" aria-hidden />
               <div>
-                <h1 className="text-xl font-bold text-destructive">
+                <h1 className="text-xl font-medium text-destructive">
                   Verification failed
                 </h1>
                 <p className="mt-2 text-sm text-athens-body">{error}</p>

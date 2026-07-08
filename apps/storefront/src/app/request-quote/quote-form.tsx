@@ -32,7 +32,7 @@ export function QuoteForm({ initialSku }: { initialSku?: string }) {
             aria-hidden
           />
           <div>
-            <h2 className="text-base font-semibold text-[var(--color-athens-success)]">
+            <h2 className="text-base font-medium text-[var(--color-athens-success)]">
               Quote request received
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-athens-body)]">

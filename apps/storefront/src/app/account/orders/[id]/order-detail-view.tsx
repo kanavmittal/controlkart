@@ -120,7 +120,7 @@ export function OrderDetailView() {
           crumbs={[{ label: "Account", href: "/account" }, { label: "Order" }]}
         />
         <div className="athens-container py-20 text-center">
-          <h1 className="athens-section-heading text-[32px]">
+          <h1 className="athens-page-title">
             Order not found
           </h1>
           <p className="mt-2 text-sm text-athens-body">
@@ -152,7 +152,7 @@ export function OrderDetailView() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="athens-section-heading text-[32px]">
+              <h1 className="athens-page-title">
                 Order #{order.display_id}
               </h1>
               <Badge

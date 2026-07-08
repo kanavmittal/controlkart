@@ -149,8 +149,15 @@ export default async function ProductPage({ params }: Props) {
 
       <div className="athens-container py-[50px]">
         <ProductSelectionProvider initialVariantId={variants[0]?.id}>
-          <div className="grid gap-12 min-[990px]:grid-cols-2">
-            {/* Left: gallery + accordions */}
+          {/*
+            `items-start` is required for `self-start` sticky to work below —
+            without it the grid's default `stretch` alignment forces the
+            right column to the left column's full height, so it never has
+            room to "unstick" and finish scrolling before the left column
+            does.
+          */}
+          <div className="grid gap-12 min-[990px]:grid-cols-2 min-[990px]:items-start">
+            {/* Left: gallery + accordions — scrolls normally */}
             <div>
               <ProductGallery product={product} />
               <ProductAccordions
@@ -162,10 +169,25 @@ export default async function ProductPage({ params }: Props) {
               />
             </div>
 
-            {/* Right: buy column */}
-            <div className="max-w-[640px]">
+            {/*
+              Right: buy column — sticks under the sticky header once the
+              2-col layout kicks in (min-[990px], matching the grid
+              breakpoint above), then scrolls away with the page once the
+              taller left column finishes. Offset = the sticky header's
+              total height at this breakpoint (mast `min-[990px]:h-[95px]`
+              in site-header.tsx + mega-menu nav bar `h-[52px]` in
+              mega-menu.tsx = 147px) plus 16px breathing room = 163px. The
+              announcement bar above the header is NOT sticky (scrolls away
+              first), so it isn't part of this offset.
+            */}
+            <div className="max-w-[640px] min-[990px]:sticky min-[990px]:top-[163px] min-[990px]:self-start">
               <ProductSummary product={product} />
-              <BuyBox product={product} />
+              <BuyBox
+                product={product}
+                infoBox={pdpContent.infoBox}
+                highlights={pdpContent.highlights}
+                shipsCaption={pdpContent.shipsCaption}
+              />
             </div>
           </div>
         </ProductSelectionProvider>

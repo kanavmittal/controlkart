@@ -90,7 +90,7 @@ export default async function PostPage({ params }: Props) {
         <p className="text-[13px] text-[var(--color-athens-body)]">
           {TYPE_LABELS[post.type]} · {formatDate(post.published_at)}
         </p>
-        <h1 className="mt-2 text-[32px] font-medium leading-[1.25] tracking-[-0.01em] text-[var(--color-athens-dark)]">
+        <h1 className="mt-2 athens-article-title">
           {post.title}
         </h1>
         {post.cover_image ? (

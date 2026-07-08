@@ -162,7 +162,7 @@ export function CollectionSidebar({
   return (
     <aside className="w-full shrink-0 lg:w-[275px]">
       <div className="flex items-center justify-between pb-2">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           Filters
         </h2>
         {hasActiveFilters ? (

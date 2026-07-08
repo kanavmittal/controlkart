@@ -50,7 +50,7 @@ export function AddressesView() {
       <div className="athens-container py-10 md:py-12">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="athens-section-heading text-[32px]">
+            <h1 className="athens-page-title">
               Saved Addresses
             </h1>
             <p className="mt-2 max-w-xl text-sm text-athens-body">

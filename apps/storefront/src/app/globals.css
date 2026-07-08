@@ -98,7 +98,7 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply font-sans;
+    font-family: var(--font-sans);
     scroll-behavior: smooth;
   }
   body {
@@ -133,6 +133,27 @@
     font-weight: 500;
     color: #232323;
     letter-spacing: -0.01em;
+  }
+  /* Canonical page-level H1 (category/products/brands/cart/checkout/account/etc.):
+     28px / 1.3, weight 500, -0.01em, athens-dark. Matches the clone's
+     collections/[handle] H1 — the established page-title scale. Utility
+     classes (e.g. text-white on hero banners) always win via the Tailwind
+     utilities layer, so callers can still override color per-context. */
+  .athens-page-title {
+    font-size: 28px;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-athens-dark);
+  }
+  /* Larger variant for long-form content titles (blog article H1): 32px / 1.25.
+     Matches the clone's blogs/news/[slug] H1. */
+  .athens-article-title {
+    font-size: 32px;
+    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-athens-dark);
   }
   /* .athens-btn / .athens-btn-outline / .athens-btn-ghost rules removed in
      T62 dead-code sweep: fully superseded by `buttonVariants` (see

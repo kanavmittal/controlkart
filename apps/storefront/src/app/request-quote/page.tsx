@@ -44,7 +44,7 @@ export default async function RequestQuotePage({
 
       <div className="athens-container py-10 md:py-14">
         <div className="max-w-2xl">
-          <h1 className="athens-section-heading text-[32px]">Request a Bulk Quote</h1>
+          <h1 className="athens-page-title">Request a Bulk Quote</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--color-athens-body)]">
             Buying in volume? Send us your requirement and our team will respond with
             trade pricing and lead times within one working day.

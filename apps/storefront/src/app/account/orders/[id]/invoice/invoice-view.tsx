@@ -96,7 +96,7 @@ export function InvoiceView() {
       <>
         <Breadcrumbs className="print:hidden" crumbs={invoiceCrumbs(id)} />
         <div className="athens-container py-20 text-center">
-          <h1 className="text-2xl font-bold">Invoice not available</h1>
+          <h1 className="text-2xl font-medium">Invoice not available</h1>
           <p className="mt-2 text-sm text-athens-body">
             We couldn’t load that invoice.
           </p>
@@ -117,7 +117,7 @@ export function InvoiceView() {
         <div className="border border-athens-line p-8">
           <header className="flex items-start justify-between border-b border-athens-line pb-6">
             <div>
-              <h1 className="text-xl font-bold">TAX INVOICE</h1>
+              <h1 className="text-xl font-medium">TAX INVOICE</h1>
               <p className="mt-1 font-mono text-sm">{invoice.invoice_number}</p>
               <p className="text-xs text-athens-body">
                 {formatDate(invoice.date)}
@@ -138,7 +138,7 @@ export function InvoiceView() {
 
           <section className="grid grid-cols-2 gap-8 border-b border-athens-line py-6 text-sm">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-athens-body">
+              <h2 className="text-xs font-medium uppercase tracking-wide text-athens-body">
                 Bill To
               </h2>
               <div className="mt-2">
@@ -154,7 +154,7 @@ export function InvoiceView() {
             </div>
             {invoice.buyer.gstin && (
               <div>
-                <h2 className="text-xs font-semibold uppercase tracking-wide text-athens-body">
+                <h2 className="text-xs font-medium uppercase tracking-wide text-athens-body">
                   Buyer GSTIN
                 </h2>
                 <div className="mt-2 font-mono">{invoice.buyer.gstin}</div>

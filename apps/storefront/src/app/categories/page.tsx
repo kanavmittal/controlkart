@@ -52,7 +52,7 @@ export default async function CategoriesIndexPage() {
     <>
       <Breadcrumbs crumbs={[{ label: "Categories" }]} />
       <div className="athens-container py-10 md:py-14">
-        <h1 className="athens-section-heading text-[28px]">Categories</h1>
+        <h1 className="athens-page-title">Categories</h1>
 
         {categories.length === 0 ? (
           <Empty className="mt-8 border border-dashed border-athens-line">

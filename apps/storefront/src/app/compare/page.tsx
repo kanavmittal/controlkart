@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function ComparePage() {
   return (
     <section className="athens-container my-[60px]">
-      <h1 className="athens-section-heading mb-8">Compare products</h1>
+      <h1 className="athens-page-title mb-8">Compare products</h1>
       <CompareTable />
     </section>
   )
