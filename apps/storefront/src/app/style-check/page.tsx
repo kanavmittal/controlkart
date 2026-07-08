@@ -8,8 +8,14 @@
 // (dead-code sweep) along with this whole route.
 
 import type { Metadata } from "next"
+import type { HttpTypes } from "@medusajs/types"
 import { Plus, ArrowRight, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { SectionHeading } from "@/components/shared/section-heading"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { Price } from "@/components/shared/price"
+import { StockPill } from "@/components/shared/stock-pill"
+import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
 
 export const dynamic = "force-static"
 
@@ -28,6 +34,46 @@ const variants = [
 ] as const
 
 const sizes = ["xs", "sm", "default", "lg"] as const
+
+// Mock products for the T6 shared-primitives demo section below — enough
+// fields for `deriveProductBadges` to exercise sale/new/sold-out, cast
+// through `unknown` since a full StoreProduct has many more required
+// fields we don't need for this scratch page.
+const mockSaleProduct = {
+  created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  variants: [
+    {
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 12,
+      calculated_price: { calculated_amount: 3499, original_amount: 4999 },
+    },
+  ],
+} as unknown as HttpTypes.StoreProduct
+
+const mockSoldOutProduct = {
+  created_at: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000).toISOString(),
+  variants: [
+    {
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 0,
+      calculated_price: { calculated_amount: 1299, original_amount: 1299 },
+    },
+  ],
+} as unknown as HttpTypes.StoreProduct
+
+const mockPlainProduct = {
+  created_at: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000).toISOString(),
+  variants: [
+    {
+      manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 40,
+      calculated_price: { calculated_amount: 899, original_amount: 899 },
+    },
+  ],
+} as unknown as HttpTypes.StoreProduct
 
 export default function StyleCheckPage() {
   return (
@@ -122,6 +168,66 @@ export default function StyleCheckPage() {
           <Button variant="ghost" disabled>
             ghost
           </Button>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-6">
+        <h2 className="athens-section-heading text-lg">T6 — Shared primitives</h2>
+
+        <div className="flex flex-col gap-4 rounded-[5px] border border-[#dfdfdf] p-6">
+          <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">
+            SectionHeading
+          </p>
+          <SectionHeading
+            title="Power Tools"
+            actionLabel="View all"
+            actionHref="/products"
+            className="mb-0"
+          />
+        </div>
+
+        <div className="flex flex-col gap-4 rounded-[5px] border border-[#dfdfdf] p-6">
+          <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">
+            Breadcrumbs
+          </p>
+          <Breadcrumbs
+            crumbs={[
+              { label: "Power Tools", href: "/categories/power-tools" },
+              { label: "Angle Grinders" },
+            ]}
+          />
+        </div>
+
+        <div className="flex flex-col gap-4 rounded-[5px] border border-[#dfdfdf] p-6">
+          <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">Price</p>
+          <div className="flex flex-wrap items-center gap-8">
+            <Price amount={16609} taxNote />
+            <Price amount={3499} originalAmount={4999} taxNote />
+            <Price amount={899} from taxNote />
+            <Price amount={null} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 rounded-[5px] border border-[#dfdfdf] p-6">
+          <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">StockPill</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <StockPill availableQuantity={0} />
+            <StockPill availableQuantity={3} />
+            <StockPill availableQuantity={40} />
+            <StockPill availableQuantity={0} canBackorder />
+            <StockPill availableQuantity={undefined} canBackorder />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 rounded-[5px] border border-[#dfdfdf] p-6">
+          <p className="text-xs font-medium tracking-wide text-[#676767] uppercase">
+            ProductBadges + deriveProductBadges
+          </p>
+          <div className="flex flex-wrap items-center gap-6">
+            <ProductBadges badges={deriveProductBadges(mockSaleProduct)} />
+            <ProductBadges badges={deriveProductBadges(mockSoldOutProduct)} />
+            <ProductBadges badges={deriveProductBadges(mockPlainProduct)} />
+          </div>
         </div>
       </section>
     </div>
