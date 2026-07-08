@@ -1,0 +1,31 @@
+apps/storefront/src/components/shared/stock-pill.tsx
+  s_a5ab152597b3b1::t_4d9f9c260f27bf 1-67
+apps/storefront/src/components/shared/breadcrumbs.tsx
+  s_a5ab152597b3b1::t_c4b48cda39266f 1-65
+apps/storefront/src/app/style-check/page.tsx
+  s_a5ab152597b3b1::t_5084bc4550b5f2 173-232
+  s_a5ab152597b3b1::t_92992367ceb89a 11,14-18
+  s_a5ab152597b3b1::t_64b85f8d5fe8b4 38-77
+apps/storefront/src/components/shared/section-heading.tsx
+  s_a5ab152597b3b1::t_f77b7fc8eaba99 1-43
+apps/storefront/src/components/shared/price.tsx
+  s_a5ab152597b3b1::t_30611d088255f6 1-46
+apps/storefront/src/components/shared/product-badges.tsx
+  s_a5ab152597b3b1::t_82948042773155 1-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "de85fceec7c451271ce2377fb47a3c8472f8c60c",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
