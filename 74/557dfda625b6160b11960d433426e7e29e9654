@@ -1,0 +1,85 @@
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a5ab152597b3b1::t_aa2dc3e0bddda2 304-305
+apps/storefront/src/app/brands/page.tsx
+  s_a5ab152597b3b1::t_59041207c89bb2 42
+apps/storefront/src/components/product/buy-box.tsx
+  s_a5ab152597b3b1::t_6af3d56779a033 8,19,21-28,31-37,40-42,44-49,53-56,64-67,69,75,110-124,178-237,269,341,343-350,354,357-368,371-381
+apps/storefront/src/app/account/orders/[id]/invoice/invoice-view.tsx
+  s_a5ab152597b3b1::t_f1b3bde524d238 99
+  s_a5ab152597b3b1::t_d527f856071d80 120
+  s_a5ab152597b3b1::t_dfe06343903411 141,157
+apps/storefront/src/app/verify-email/page.tsx
+  s_a5ab152597b3b1::t_fa82492338a377 31
+  s_a5ab152597b3b1::t_dcbe90c12f5da0 130
+  s_a5ab152597b3b1::t_504992908866f7 95
+apps/storefront/src/app/globals.css
+  s_a5ab152597b3b1::t_b66e3ce3fb6e27 101
+  s_a5ab152597b3b1::t_8f950664d03202 137-157
+apps/storefront/src/app/products/products-browser.tsx
+  s_a5ab152597b3b1::t_2cd53828f28aad 128
+apps/storefront/src/app/auth/google/callback/page.tsx
+  s_a5ab152597b3b1::t_8c45d200bb1bc0 120
+apps/storefront/src/app/cart/cart-view.tsx
+  s_a5ab152597b3b1::t_c19011e8fde30a 66
+  s_a5ab152597b3b1::t_6cbc18fa026d80 41
+apps/storefront/src/app/products/[handle]/page.tsx
+  s_a5ab152597b3b1::t_4282e76c25be0a 152-160,172-183,185-190
+apps/storefront/src/app/account/account-view.tsx
+  s_a5ab152597b3b1::t_1bb264f7128321 137
+  s_a5ab152597b3b1::t_15448b86e55e79 104
+apps/storefront/src/app/categories/page.tsx
+  s_a5ab152597b3b1::t_6f40f84cc53ea9 55
+apps/storefront/src/config/site.ts
+  s_a5ab152597b3b1::t_f55b9f7724ff77 22
+  s_a5ab152597b3b1::t_0600336d6d90d5 114-121,126-135
+apps/storefront/src/app/request-quote/quote-form.tsx
+  s_a5ab152597b3b1::t_da204f1f4684cb 35
+apps/storefront/src/app/pages/[slug]/page.tsx
+  s_a5ab152597b3b1::t_fa5026bf050e5d 50
+apps/storefront/src/app/request-quote/page.tsx
+  s_a5ab152597b3b1::t_d1661117620899 47
+apps/storefront/src/app/not-found.tsx
+  s_a5ab152597b3b1::t_26cd981de38933 17
+apps/storefront/src/app/order-confirmed/[id]/page.tsx
+  s_a5ab152597b3b1::t_7afb53b19f5623 26
+apps/storefront/src/app/checkout/checkout-view.tsx
+  s_a5ab152597b3b1::t_b9c6c20c834230 94,309
+apps/storefront/src/app/account/orders/[id]/order-detail-view.tsx
+  s_a5ab152597b3b1::t_9755c1fb039201 123
+  s_a5ab152597b3b1::t_7db9883d20ff04 155
+apps/storefront/src/app/error.tsx
+  s_a5ab152597b3b1::t_5d6d8380db00b8 28
+apps/storefront/src/app/account/addresses/addresses-view.tsx
+  s_a5ab152597b3b1::t_3054865197ec60 53
+apps/storefront/src/components/product/collection-sidebar.tsx
+  s_a5ab152597b3b1::t_3c65b0ed82c109 165
+apps/storefront/src/app/quick-order/page.tsx
+  s_a5ab152597b3b1::t_ca8ebb59892b81 23
+apps/storefront/src/config/types.ts
+  s_a5ab152597b3b1::t_d7ac7f6b15858e 108-138
+apps/storefront/src/app/resources/[slug]/page.tsx
+  s_a5ab152597b3b1::t_dadca73d7f8c54 93
+apps/storefront/src/components/product/product-summary.tsx
+  s_a5ab152597b3b1::t_8f03295451bfe0 1,9-22,32-37,45
+  s_a5ab152597b3b1::t_6308da45b622b1 39
+apps/storefront/src/app/resources/page.tsx
+  s_a5ab152597b3b1::t_10b8ef8b795813 32
+apps/storefront/src/app/compare/page.tsx
+  s_a5ab152597b3b1::t_552fd9474d4b1b 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "74557dfda625b6160b11960d433426e7e29e9654",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
