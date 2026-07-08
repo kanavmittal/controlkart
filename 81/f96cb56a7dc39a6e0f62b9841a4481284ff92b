@@ -1,0 +1,48 @@
+apps/storefront/src/components/product/quick-view-button.tsx
+  s_a5ab152597b3b1::t_5086bdefb93b65 1-39
+apps/storefront/src/components/product/product-grid-skeleton.tsx
+  s_a5ab152597b3b1::t_79d611f8af3ce6 1-46
+apps/storefront/src/components/product/catalog-toolbar.tsx
+  s_a5ab152597b3b1::t_965747c67f266f 90,95
+  s_a5ab152597b3b1::t_99dd6ac011bdf3 18-23
+  s_a5ab152597b3b1::t_9435851afb73c7 69
+  s_a5ab152597b3b1::t_355c2f7fd0c656 1-17,24-68,70-89,91-94,96-153
+apps/storefront/src/app/products/loading.tsx
+  s_a5ab152597b3b1::t_28a7eedf3e4354 1-19
+apps/storefront/src/app/account/verification-banner.tsx
+  s_a5ab152597b3b1::t_75fb7173402193 30-32,35,41,43,49,51,62
+  s_a5ab152597b3b1::t_2a9027633e0ed6 3,5-6,13-18,33-34,38-39,57,66,74,76-77,79,81-87,89
+apps/storefront/src/components/product/quick-view-dialog.tsx
+  s_a5ab152597b3b1::t_360d3737bcb87a 1-330
+apps/storefront/src/app/categories/page.tsx
+  s_a5ab152597b3b1::t_36680e1c9accef 1-119
+apps/storefront/src/components/product/product-grid.tsx
+  s_a5ab152597b3b1::t_95aba56974b739 1-66
+apps/storefront/src/app/categories/[handle]/loading.tsx
+  s_a5ab152597b3b1::t_170d06be3c06a3 1-20
+apps/storefront/src/app/account/account-view.tsx
+  s_a5ab152597b3b1::t_f37edc21186fbd 5-14,19-45,49-81,92,100-111,114,131-162,165,167-177,179-180,182-197,199-202,204-312
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a5ab152597b3b1::t_93117ee9976b7d 106-121,123,128-154,156-163,165-177,181-205
+  s_a5ab152597b3b1::t_197d2a3dc22280 2,16,18
+apps/storefront/src/components/product/collection-sidebar.tsx
+  s_a5ab152597b3b1::t_3101a0a7554ba0 1-304
+apps/storefront/src/components/providers/quick-view-provider.tsx
+  s_a5ab152597b3b1::t_e065b4d87b42e0 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "81f96cb56a7dc39a6e0f62b9841a4481284ff92b",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
