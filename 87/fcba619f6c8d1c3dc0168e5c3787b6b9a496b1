@@ -1,0 +1,24 @@
+apps/storefront/src/components/product/buy-box.tsx
+  s_a5ab152597b3b1::t_d3f6e634668c9b 224-225
+  s_a5ab152597b3b1::t_3e77aa981ab351 192-197
+apps/storefront/src/components/shared/price.tsx
+  s_a5ab152597b3b1::t_2087897e36cd08 19-34
+  s_a5ab152597b3b1::t_af3ac251cafc35 49-50,58-93
+  s_a5ab152597b3b1::t_4264b3b587a78d 94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "87fcba619f6c8d1c3dc0168e5c3787b6b9a496b1",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
