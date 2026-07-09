@@ -1,7 +1,18 @@
 "use client"
 
-import { useCart } from "@/lib/hooks/use-cart"
+import { Minus, Plus, Trash2 } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
+import { useCart } from "@/lib/hooks/use-cart"
+import { cn } from "@/lib/utils"
+
+/**
+ * Line-level controls for the full cart page: qty stepper (outline icon
+ * `Button`s + numeric display) + remove. Mutation logic is untouched from
+ * the pre-restyle version — `useCart().updateItem` is optimistic and
+ * quantity <= 0 removes the line (see `lib/hooks/use-cart.ts`); this
+ * component only decides *what* quantity to send.
+ */
 export function CartLineControls({
   lineId,
   quantity,
@@ -14,35 +25,46 @@ export function CartLineControls({
   const set = (qty: number) => updateItem.mutate({ lineId, quantity: qty })
 
   return (
-    <div className={`flex items-center gap-2 ${pending ? "opacity-50" : ""}`}>
-      <div className="flex border border-[var(--color-line)]">
-        <button
-          onClick={() => set(quantity - 1)}
+    <div className={cn("flex items-center gap-3", pending && "opacity-50")}>
+      <div className="flex items-center gap-1.5">
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-xs"
           disabled={pending}
-          className="px-2.5 py-1 text-sm"
           aria-label="Decrease quantity"
+          onClick={() => set(quantity - 1)}
         >
-          −
-        </button>
-        <span className="flex w-10 items-center justify-center border-x border-[var(--color-line)] text-sm">
+          <Minus />
+        </Button>
+        <span
+          className="w-8 text-center text-sm tabular-nums text-athens-dark"
+          aria-live="polite"
+        >
           {quantity}
         </span>
-        <button
-          onClick={() => set(quantity + 1)}
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-xs"
           disabled={pending}
-          className="px-2.5 py-1 text-sm"
           aria-label="Increase quantity"
+          onClick={() => set(quantity + 1)}
         >
-          +
-        </button>
+          <Plus />
+        </Button>
       </div>
-      <button
-        onClick={() => set(0)}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-xs"
         disabled={pending}
-        className="text-xs text-[var(--color-ink-muted)] underline hover:text-[var(--color-bad)]"
+        aria-label="Remove item"
+        onClick={() => set(0)}
+        className="border-0"
       >
-        Remove
-      </button>
+        <Trash2 />
+      </Button>
     </div>
   )
 }

@@ -1,204 +1,244 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-/*
- * ControlKart design system.
- * Minimalist, grid-driven, border-based. High information density,
- * large whitespace, no decoration. Light theme only.
- */
-@theme {
-  --color-ink: #16181d;
-  --color-ink-muted: #5c626e;
-  --color-ink-faint: #9aa0ab;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f6f7f8;
-  --color-line: #e2e4e8;
-  --color-line-strong: #16181d;
-  --color-accent: #1d4ed8;
-  --color-ok: #15803d;
-  --color-warn: #b45309;
-  --color-bad: #b91c1c;
+@custom-variant dark (&:is(.dark *));
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
-    monospace;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Athens theme uses the system font stack ("system_ui") for everything */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* ===== Athens design tokens (extracted from athens-theme.myshopify.com) ===== */
+  --color-athens-blue: #004fc7; /* nav bar, buttons, links, newsletter band, marquee */
+  --color-athens-blue-light: #287dff; /* secondary blue (Add to cart on featured product, video band) */
+  --color-athens-dark: #232323; /* accent-3: footer, dark bands, heading/price text */
+  --color-athens-band: #f8f8f8; /* background-2: announcement bar, grey bands */
+  --color-athens-body: #676767; /* body text */
+  --color-athens-line: #dfdfdf; /* card & input borders */
+  --color-athens-sale: #c61c1c; /* discounted final price text */
+  --color-athens-sale-badge: #e21919; /* -N% badge background */
+  --color-athens-sale-bg: #f7b7b7;
+  --color-athens-star: #ffc700; /* rating stars */
+  --color-athens-success: #337239;
+  --color-athens-success-bg: #ddf0df;
+  --color-athens-warning: #bd6b1b;
+  --color-athens-warning-bg: #f8e1cb;
+  --color-athens-black-friday: #ffd51d; /* BLACK FRIDAY badge text on black */
 }
 
-/* Expose design tokens on :root so var() references work in utilities */
 :root {
-  --color-ink: #16181d;
-  --color-ink-muted: #5c626e;
-  --color-ink-faint: #9aa0ab;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f6f7f8;
-  --color-line: #e2e4e8;
-  --color-line-strong: #16181d;
-  --color-accent: #1d4ed8;
-  --color-ok: #15803d;
-  --color-warn: #b45309;
-  --color-bad: #b91c1c;
+  --background: #ffffff;
+  --foreground: #676767;
+  --card: #ffffff;
+  --card-foreground: #232323;
+  --popover: #ffffff;
+  --popover-foreground: #232323;
+  --primary: #004fc7;
+  --primary-foreground: #ffffff;
+  --secondary: #f8f8f8;
+  --secondary-foreground: #232323;
+  --muted: #f8f8f8;
+  --muted-foreground: #676767;
+  --accent: #232323;
+  --accent-foreground: #ffffff;
+  --destructive: #c61c1c;
+  --border: #dfdfdf;
+  --input: #dfdfdf;
+  --ring: #004fc7;
+  /* Athens radii: cards/inputs 5px, buttons 2px, badges 24px */
+  --radius: 5px;
+  --radius-button: 2px;
+  --radius-badge: 24px;
+  --page-width: 1460px;
+  --sidebar: #f8f8f8;
+  --sidebar-foreground: #232323;
+  --sidebar-primary: #004fc7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8f8f8;
+  --sidebar-accent-foreground: #232323;
+  --sidebar-border: #dfdfdf;
+  --sidebar-ring: #004fc7;
 }
 
-body {
-  background: var(--color-surface);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Medusa-inspired buttons — rounded, subtle depth, premium feel */
-.btn-primary,
-.btn-secondary {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.25rem;
-  letter-spacing: -0.01em;
-  cursor: pointer;
-  outline: none;
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.1s ease;
-}
-
-.btn-primary::after,
-.btn-secondary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-
-.btn-primary {
-  color: #fafafa;
-  background-color: #18181b;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-.btn-primary::after {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0) 52%
-  );
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #27272a;
-}
-
-.btn-primary:active:not(:disabled) {
-  background-color: #09090b;
-  transform: translateY(0.5px);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-    0 0 1px rgba(0, 0, 0, 0.2);
-}
-
-.btn-primary:focus-visible {
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.18),
-    0 0 0 2px #fff,
-    0 0 0 4px rgba(24, 24, 27, 0.28);
-}
-
-.btn-primary:disabled {
-  background-color: #e4e4e7;
-  color: #a1a1aa;
-  border-color: #e4e4e7;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-primary:disabled::after {
-  opacity: 0;
-}
-
-.btn-secondary {
-  color: #18181b;
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(0, 0, 0, 0.06),
-    0 0 0 1px rgba(0, 0, 0, 0.02);
-}
-
-.btn-secondary::after {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: #fafafa;
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-.btn-secondary:active:not(:disabled) {
-  background-color: #f4f4f5;
-  transform: translateY(0.5px);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.06),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-.btn-secondary:focus-visible {
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(0, 0, 0, 0.06),
-    0 0 0 2px #fff,
-    0 0 0 4px rgba(24, 24, 27, 0.18);
-}
-
-.btn-secondary:disabled {
-  background-color: #fafafa;
-  color: #a1a1aa;
-  border-color: #e4e4e7;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-secondary:disabled::after {
-  opacity: 0;
-}
-
-/* Selected variant/model chip */
-.model-selected {
-  border: 2px solid var(--color-ink) !important;
-  background-color: var(--color-surface-alt);
-  box-shadow: inset 0 0 0 1px var(--color-ink);
-}
-
-/* Strict 1440px content grid */
-.shell {
-  max-width: 1440px;
-  margin-inline: auto;
-  padding-inline: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .shell {
-    padding-inline: 2.5rem;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 15px;
+    line-height: 24px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #232323;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 }
+
+@layer components {
+  /* Site container: --page-width 146rem with 20px gutters (matches .container on target) */
+  .athens-container {
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  /* Section heading: 24px / 31.2px, weight 500, #232323 */
+  .athens-section-heading {
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 500;
+    color: #232323;
+    letter-spacing: -0.01em;
+  }
+  /* Canonical page-level H1 (category/products/brands/cart/checkout/account/etc.):
+     28px / 1.3, weight 500, -0.01em, athens-dark. Matches the clone's
+     collections/[handle] H1 — the established page-title scale. Utility
+     classes (e.g. text-white on hero banners) always win via the Tailwind
+     utilities layer, so callers can still override color per-context. */
+  .athens-page-title {
+    font-size: 28px;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-athens-dark);
+  }
+  /* Larger variant for long-form content titles (blog article H1): 32px / 1.25.
+     Matches the clone's blogs/news/[slug] H1. */
+  .athens-article-title {
+    font-size: 32px;
+    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-athens-dark);
+  }
+  /* .athens-btn / .athens-btn-outline / .athens-btn-ghost rules removed in
+     T62 dead-code sweep: fully superseded by `buttonVariants` (see
+     components/ui/button.tsx) and verified unreferenced — no tsx className
+     usage and no .athens-rte-rendered content depends on them. */
+}
+
+/* Rich-text content extracted from the live site (info pages, blog articles) */
+.athens-rte {
+  font-size: 15px;
+  line-height: 24px;
+  color: #676767;
+}
+.athens-rte p {
+  margin-bottom: 16px;
+}
+.athens-rte h2,
+.athens-rte h3,
+.athens-rte h4 {
+  margin: 28px 0 12px;
+  color: #232323;
+  font-weight: 500;
+}
+.athens-rte h2 {
+  font-size: 22px;
+}
+.athens-rte h3 {
+  font-size: 18px;
+}
+.athens-rte ul,
+.athens-rte ol {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  list-style: disc;
+}
+.athens-rte ol {
+  list-style: decimal;
+}
+.athens-rte li {
+  margin-bottom: 4px;
+}
+.athens-rte a {
+  color: #004fc7;
+}
+.athens-rte a:hover {
+  text-decoration: underline;
+}
+.athens-rte img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+.athens-rte strong {
+  color: #232323;
+  font-weight: 500;
+}
+.athens-rte table {
+  width: 100%;
+  margin-bottom: 16px;
+  border-collapse: collapse;
+}
+.athens-rte td,
+.athens-rte th {
+  border: 1px solid #ececec;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+/* Scrolling marquee ("Deal of the day" band): group translates -100% in 30s, linear, infinite */
+@keyframes scrolling-elements {
+  0% {
+    transform: translate(0px);
+  }
+  100% {
+    transform: translate(-100%);
+  }
+}
+
+/* Hide scrollbars on carousel scrollers while keeping scrollability */
+.athens-no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.athens-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

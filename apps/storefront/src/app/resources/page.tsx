@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { listPosts } from "@/lib/data/content"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { ResourcesBrowser } from "./resources-browser"
 
 export const revalidate = 1800
@@ -11,18 +12,32 @@ export const metadata: Metadata = {
   alternates: { canonical: "/resources" },
 }
 
+/**
+ * Resources index (T60). Structure ported from
+ * `my-clone/src/app/blogs/news/page.tsx` (Breadcrumbs, H1, 2/4-col post-card
+ * grid) — the `listPosts` fetch, ISR window and client-side type filter
+ * (`ResourcesBrowser`) are unchanged; only the presentation is restyled.
+ */
 export default async function ResourcesPage() {
   // Static list (ISR) — type filtering happens client-side in ResourcesBrowser.
-  const { posts } = await listPosts({ limit: 50 })
+  // Static route: it always prerenders at `next build`, so fall back to an
+  // empty list when the backend is unreachable (same pattern as /categories);
+  // ISR re-fetches once it's back.
+  const { posts } = await listPosts({ limit: 50 }).catch(() => ({ posts: [] }))
 
   return (
-    <div className="shell py-12">
-      <h1 className="text-3xl font-bold tracking-tight">Resources</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-ink-muted)]">
-        Selection guides, application notes, case studies and product news from
-        the ControlKart engineering team.
-      </p>
-      <ResourcesBrowser posts={posts} />
-    </div>
+    <main>
+      <Breadcrumbs crumbs={[{ label: "Resources" }]} />
+      <div className="athens-container my-[60px]">
+        <h1 className="athens-page-title">
+          Resources
+        </h1>
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--color-athens-body)]">
+          Selection guides, application notes, case studies and product news
+          from the ControlKart engineering team.
+        </p>
+        <ResourcesBrowser posts={posts} />
+      </div>
+    </main>
   )
 }

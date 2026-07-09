@@ -1,7 +1,12 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { Loader2, XCircle } from "lucide-react"
 import { sdk } from "@/lib/sdk"
+import { Card, CardContent } from "@/components/ui/card"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 /**
  * Client-side Google OAuth callback (CSR). Google redirects the browser here
@@ -100,10 +105,41 @@ export default function GoogleCallbackPage() {
   }, [])
 
   return (
-    <div className="shell py-24 text-center">
-      <p className="text-sm text-[var(--color-ink-muted)]">
-        {error ? "Redirecting…" : "Signing you in…"}
-      </p>
+    <div className="athens-container flex min-h-[60vh] flex-col items-center justify-center py-16">
+      <Card
+        className={cn(
+          "w-full max-w-md",
+          error && "border-destructive/40 bg-destructive/10"
+        )}
+      >
+        <CardContent className="flex flex-col items-center gap-4 text-center">
+          {error ? (
+            <>
+              <XCircle className="size-10 text-destructive" aria-hidden />
+              <div>
+                <h1 className="text-xl font-medium text-destructive">
+                  Google sign-in failed
+                </h1>
+                <p className="mt-2 text-sm text-athens-body">{error}</p>
+              </div>
+              <Link
+                href="/account"
+                className={cn(buttonVariants({ variant: "default" }))}
+              >
+                Back to sign in
+              </Link>
+            </>
+          ) : (
+            <>
+              <Loader2
+                className="size-10 animate-spin text-athens-body"
+                aria-hidden
+              />
+              <p className="text-sm text-athens-body">Signing you in…</p>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

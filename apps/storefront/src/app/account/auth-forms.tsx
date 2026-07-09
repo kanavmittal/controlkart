@@ -1,11 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
+import { Loader2 } from "lucide-react"
 import { sdk } from "@/lib/sdk"
 import { useAuthMutations } from "@/lib/hooks/use-customer"
-
-const inputClass =
-  "w-full border border-[var(--color-line)] px-3 py-2 text-sm outline-none focus:border-[var(--color-line-strong)]"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function errorMessageOf(error: unknown): string {
   if (error instanceof Error) return error.message
@@ -21,6 +29,7 @@ export function AuthForms({
 }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin")
   const { login, register } = useAuthMutations()
+  const formId = useId()
 
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -80,121 +89,174 @@ export function AuthForms({
   }
 
   return (
-    <div className="border border-[var(--color-line)]">
-      <div className="grid grid-cols-2 border-b border-[var(--color-line)] text-sm font-semibold">
-        <button
-          type="button"
-          onClick={() => setMode("signin")}
-          className={`py-3 ${mode === "signin" ? "bg-[var(--color-surface)]" : "bg-[var(--color-surface-alt)] text-[var(--color-ink-muted)]"}`}
+    <div className="border border-athens-line bg-white">
+      <Tabs
+        value={mode}
+        onValueChange={(v) => setMode(v as "signin" | "signup")}
+      >
+        <TabsList
+          variant="line"
+          className="grid w-full grid-cols-2 rounded-none border-b border-athens-line bg-transparent p-0"
         >
-          Sign In
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode("signup")}
-          className={`border-l border-[var(--color-line)] py-3 ${mode === "signup" ? "bg-[var(--color-surface)]" : "bg-[var(--color-surface-alt)] text-[var(--color-ink-muted)]"}`}
-        >
-          Create Account
-        </button>
-      </div>
-
-      <div className="border-b border-[var(--color-line)] p-6">
-        <button
-          type="button"
-          onClick={handleGoogle}
-          className="btn-secondary block w-full px-4 py-2.5 text-center"
-        >
-          Continue with Google
-        </button>
-        <p className="mt-3 text-center text-xs text-[var(--color-ink-muted)]">
-          or use email and password below
-        </p>
-      </div>
-
-      {errorMessage && (
-        <p className="border-b border-[var(--color-line)] px-6 py-3 text-sm text-[var(--color-bad)]">
-          {errorMessage}
-        </p>
-      )}
-
-      {mode === "signin" ? (
-        <form onSubmit={handleSignIn} className="grid gap-4 p-6">
-          <input type="hidden" name="redirect" value={redirectTo ?? ""} />
-          <label className="grid gap-1 text-sm font-medium">
-            Email
-            <input type="email" name="email" required className={inputClass} />
-          </label>
-          <label className="grid gap-1 text-sm font-medium">
-            Password
-            <input
-              type="password"
-              name="password"
-              required
-              className={inputClass}
-            />
-          </label>
-          {login.error && (
-            <p className="text-sm text-[var(--color-bad)]">
-              {errorMessageOf(login.error)}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={login.isPending}
-            className="btn-primary px-6 py-2.5"
+          <TabsTrigger
+            value="signin"
+            className="h-12 rounded-none border-0 text-sm font-semibold text-athens-body data-active:bg-athens-band data-active:text-athens-dark data-active:shadow-none data-active:after:opacity-0"
           >
-            {login.isPending ? "Signing in…" : "Sign In"}
-          </button>
-        </form>
-      ) : (
-        <form onSubmit={handleSignUp} className="grid gap-4 p-6">
-          <input type="hidden" name="redirect" value={redirectTo ?? ""} />
-          <div className="grid grid-cols-2 gap-4">
-            <label className="grid gap-1 text-sm font-medium">
-              First Name
-              <input name="first_name" required className={inputClass} />
-            </label>
-            <label className="grid gap-1 text-sm font-medium">
-              Last Name
-              <input name="last_name" required className={inputClass} />
-            </label>
-          </div>
-          <label className="grid gap-1 text-sm font-medium">
-            Email
-            <input type="email" name="email" required className={inputClass} />
-          </label>
-          <label className="grid gap-1 text-sm font-medium">
-            Phone
-            <input type="tel" name="phone" className={inputClass} />
-          </label>
-          <label className="grid gap-1 text-sm font-medium">
-            Password
-            <input
-              type="password"
-              name="password"
-              required
-              minLength={8}
-              className={inputClass}
-            />
-          </label>
-          <p className="text-xs text-[var(--color-ink-muted)]">
-            We will send a verification link to your email before you can
-            checkout.
+            Sign In
+          </TabsTrigger>
+          <TabsTrigger
+            value="signup"
+            className="h-12 rounded-none border-0 border-l border-athens-line text-sm font-semibold text-athens-body data-active:bg-athens-band data-active:text-athens-dark data-active:shadow-none data-active:after:opacity-0"
+          >
+            Create Account
+          </TabsTrigger>
+        </TabsList>
+
+        <div className="border-b border-athens-line p-6">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGoogle}
+            className="w-full"
+          >
+            <span
+              aria-hidden
+              className="inline-flex size-4 items-center justify-center rounded-full bg-[#4285F4] text-[11px] font-bold leading-none text-white"
+            >
+              G
+            </span>
+            Continue with Google
+          </Button>
+          <p className="mt-3 text-center text-xs text-athens-body">
+            or use email and password below
           </p>
-          {register.error && (
-            <p className="text-sm text-[var(--color-bad)]">
-              {errorMessageOf(register.error)}
-            </p>
-          )}
-          <button
-            type="submit"
-            disabled={register.isPending}
-            className="btn-primary px-6 py-2.5"
-          >
-            {register.isPending ? "Creating account…" : "Create Account"}
-          </button>
-        </form>
-      )}
+        </div>
+
+        {errorMessage && (
+          <p className="border-b border-athens-line bg-destructive/5 px-6 py-3 text-sm text-destructive">
+            {errorMessage}
+          </p>
+        )}
+
+        <TabsContent value="signin" className="p-6">
+          <form onSubmit={handleSignIn} id={`${formId}-signin`}>
+            <input type="hidden" name="redirect" value={redirectTo ?? ""} />
+            <FieldGroup>
+              <Field data-invalid={!!login.error}>
+                <FieldLabel htmlFor={`${formId}-signin-email`}>
+                  Email
+                </FieldLabel>
+                <Input
+                  id={`${formId}-signin-email`}
+                  type="email"
+                  name="email"
+                  required
+                  aria-invalid={!!login.error}
+                />
+              </Field>
+              <Field data-invalid={!!login.error}>
+                <FieldLabel htmlFor={`${formId}-signin-password`}>
+                  Password
+                </FieldLabel>
+                <Input
+                  id={`${formId}-signin-password`}
+                  type="password"
+                  name="password"
+                  required
+                  aria-invalid={!!login.error}
+                />
+                {login.error && (
+                  <FieldError>{errorMessageOf(login.error)}</FieldError>
+                )}
+              </Field>
+              <Button type="submit" disabled={login.isPending} className="mt-2">
+                {login.isPending && (
+                  <Loader2 className="animate-spin" data-icon="inline-start" />
+                )}
+                {login.isPending ? "Signing in…" : "Sign In"}
+              </Button>
+            </FieldGroup>
+          </form>
+        </TabsContent>
+
+        <TabsContent value="signup" className="p-6">
+          <form onSubmit={handleSignUp} id={`${formId}-signup`}>
+            <input type="hidden" name="redirect" value={redirectTo ?? ""} />
+            <FieldGroup>
+              <div className="grid grid-cols-2 gap-4">
+                <Field data-invalid={!!register.error}>
+                  <FieldLabel htmlFor={`${formId}-first-name`}>
+                    First Name
+                  </FieldLabel>
+                  <Input
+                    id={`${formId}-first-name`}
+                    name="first_name"
+                    required
+                    aria-invalid={!!register.error}
+                  />
+                </Field>
+                <Field data-invalid={!!register.error}>
+                  <FieldLabel htmlFor={`${formId}-last-name`}>
+                    Last Name
+                  </FieldLabel>
+                  <Input
+                    id={`${formId}-last-name`}
+                    name="last_name"
+                    required
+                    aria-invalid={!!register.error}
+                  />
+                </Field>
+              </div>
+              <Field data-invalid={!!register.error}>
+                <FieldLabel htmlFor={`${formId}-signup-email`}>
+                  Email
+                </FieldLabel>
+                <Input
+                  id={`${formId}-signup-email`}
+                  type="email"
+                  name="email"
+                  required
+                  aria-invalid={!!register.error}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor={`${formId}-phone`}>Phone</FieldLabel>
+                <Input id={`${formId}-phone`} type="tel" name="phone" />
+              </Field>
+              <Field data-invalid={!!register.error}>
+                <FieldLabel htmlFor={`${formId}-signup-password`}>
+                  Password
+                </FieldLabel>
+                <Input
+                  id={`${formId}-signup-password`}
+                  type="password"
+                  name="password"
+                  required
+                  minLength={8}
+                  aria-invalid={!!register.error}
+                />
+                {register.error && (
+                  <FieldError>{errorMessageOf(register.error)}</FieldError>
+                )}
+              </Field>
+              <p className="text-xs text-athens-body">
+                We will send a verification link to your email before you can
+                checkout.
+              </p>
+              <Button
+                type="submit"
+                disabled={register.isPending}
+                className={cn("mt-2")}
+              >
+                {register.isPending && (
+                  <Loader2 className="animate-spin" data-icon="inline-start" />
+                )}
+                {register.isPending ? "Creating account…" : "Create Account"}
+              </Button>
+            </FieldGroup>
+          </form>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

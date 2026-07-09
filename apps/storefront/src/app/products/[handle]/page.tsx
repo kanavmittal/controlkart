@@ -6,13 +6,17 @@ import {
   getProductDocuments,
   listProducts,
 } from "@/lib/data/products"
-import { SpecTable } from "@/components/products/spec-table"
-import { DownloadsList } from "@/components/products/downloads-list"
-import { PurchasePanel } from "@/components/products/purchase-panel"
-import { ProductGallery } from "@/components/products/product-gallery"
+import { ProductAccordions } from "@/components/product/product-accordions"
+import { ProductGallery } from "@/components/product/product-gallery"
+import { ProductSummary } from "@/components/product/product-summary"
+import { BuyBox } from "@/components/product/buy-box"
 import { ProductSelectionProvider } from "@/components/providers/product-selection-provider"
-import { ProductCard } from "@/components/products/product-card"
-import { ProductGrid } from "@/components/products/product-grid"
+import { ProductCard } from "@/components/product/product-card"
+import { ProductGrid } from "@/components/product/product-grid"
+import { QuickViewButton } from "@/components/product/quick-view-button"
+import { Breadcrumbs } from "@/components/shared/breadcrumbs"
+import { SectionHeading } from "@/components/shared/section-heading"
+import { pdpContent } from "@/config/site"
 import { BASE_URL, STORE_NAME } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 
@@ -128,87 +132,87 @@ export default async function ProductPage({ params }: Props) {
       : undefined,
   }
 
+  const category = product.categories?.[0]
+  const crumbs = [
+    ...(category ? [{ label: category.name, href: `/categories/${category.handle}` }] : []),
+    { label: product.title },
+  ]
+
   return (
-    <div className="shell py-12">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <nav className="text-xs text-[var(--color-ink-muted)]">
-        Home / {product.categories?.[0]?.name ?? "Products"} /{" "}
-        <span className="text-[var(--color-ink)]">{product.title}</span>
-      </nav>
 
-      <ProductSelectionProvider initialVariantId={variants[0]?.id}>
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_minmax(360px,420px)]">
-        <div>
-          <header>
-            <div className="font-mono text-sm text-[var(--color-ink-muted)]">
-              {(product.metadata?.brand as string) ?? "Selec"} ·{" "}
-              {(product.metadata?.mpn as string) ?? variants[0]?.sku}
+      <Breadcrumbs crumbs={crumbs} />
+
+      <div className="athens-container py-[50px]">
+        <ProductSelectionProvider initialVariantId={variants[0]?.id}>
+          {/*
+            `items-start` is required for `self-start` sticky to work below —
+            without it the grid's default `stretch` alignment forces the
+            right column to the left column's full height, so it never has
+            room to "unstick" and finish scrolling before the left column
+            does.
+          */}
+          <div className="grid gap-12 min-[990px]:grid-cols-2 min-[990px]:items-start">
+            {/* Left: gallery + accordions — scrolls normally */}
+            <div>
+              <ProductGallery product={product} />
+              <p className="mt-4 text-[13px] leading-relaxed text-[var(--color-athens-body)]">
+                <strong className="font-medium">Disclaimer:</strong> Actual product colors may
+                vary slightly from the images shown due to different monitor settings and
+                lighting conditions during photo shoots.
+              </p>
+              <ProductAccordions
+                description={product.description}
+                specs={specs}
+                documents={documents}
+                shipping={pdpContent.shipping}
+                warranty={pdpContent.warranty}
+                className="mt-10"
+              />
             </div>
-            <h1 className="mt-2 text-3xl font-bold leading-tight tracking-tight">
-              {product.title}
-            </h1>
-            {product.subtitle && (
-              <p className="mt-2 text-base text-[var(--color-ink-muted)]">
-                {product.subtitle}
-              </p>
-            )}
-          </header>
 
-          <div className="mt-8">
-            <ProductGallery product={product} />
+            {/*
+              Right: buy column — sticks under the sticky header once the
+              2-col layout kicks in (min-[990px], matching the grid
+              breakpoint above), then scrolls away with the page once the
+              taller left column finishes. Offset = the sticky header's
+              total height at this breakpoint (mast `min-[990px]:h-[95px]`
+              in site-header.tsx + mega-menu nav bar `h-[52px]` in
+              mega-menu.tsx = 147px) plus 16px breathing room = 163px. The
+              announcement bar above the header is NOT sticky (scrolls away
+              first), so it isn't part of this offset.
+            */}
+            <div className="max-w-[640px] min-[990px]:sticky min-[990px]:top-[163px] min-[990px]:self-start">
+              <ProductSummary product={product} />
+              <BuyBox
+                product={product}
+                infoBox={pdpContent.infoBox}
+                highlights={pdpContent.highlights}
+                shipsCaption={pdpContent.shipsCaption}
+              />
+            </div>
           </div>
-
-          {product.description && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">Overview</h2>
-              <p className="mt-3 max-w-3xl whitespace-pre-line text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                {product.description}
-              </p>
-            </section>
-          )}
-
-          {specs.length > 0 && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">
-                Technical Specifications
-              </h2>
-              <div className="mt-4">
-                <SpecTable specs={specs} />
-              </div>
-            </section>
-          )}
-
-          {documents.length > 0 && (
-            <section className="mt-10">
-              <h2 className="text-lg font-semibold">Downloads</h2>
-              <div className="mt-4">
-                <DownloadsList documents={documents} />
-              </div>
-            </section>
-          )}
-        </div>
-
-        <aside className="lg:sticky lg:top-32 lg:self-start">
-          <PurchasePanel product={product} />
-        </aside>
+        </ProductSelectionProvider>
       </div>
-      </ProductSelectionProvider>
 
       {relatedProducts.length > 0 && (
-        <section className="mt-20 border-t border-[var(--color-line)] pt-10">
-          <h2 className="text-xl font-bold tracking-tight">
-            Related Products & Accessories
-          </h2>
-          <ProductGrid cols={4} className="mt-6">
+        <section className="athens-container mb-[60px]">
+          <SectionHeading title="Related products" />
+          <ProductGrid columns={4}>
             {relatedProducts.map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard
+                key={p.id}
+                product={p}
+                quickViewSlot={<QuickViewButton product={p} />}
+              />
             ))}
           </ProductGrid>
         </section>
       )}
-    </div>
+    </>
   )
 }

@@ -1,5 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { CheckCircle2 } from "lucide-react"
+
+import { Card, CardContent } from "@/components/ui/card"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Order Confirmed",
@@ -13,31 +18,45 @@ export default async function OrderConfirmedPage({
 }) {
   const { id } = await params
   return (
-    <div className="shell py-24">
-      <div className="mx-auto max-w-lg border border-[var(--color-line)] p-10 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-ok)] text-xl text-white">
-          ✓
-        </div>
-        <h1 className="mt-6 text-2xl font-bold tracking-tight">
-          Order Confirmed
-        </h1>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-          Thank you for your order. A confirmation with your GST invoice
-          details will be emailed to you. Your order will be dispatched from
-          our Mumbai warehouse within 24-48 hours.
-        </p>
-        <p className="mt-4 font-mono text-xs text-[var(--color-ink-faint)]">
-          Order Ref: {id}
-        </p>
-        <div className="mt-8 flex justify-center gap-3">
-          <Link href="/account" className="btn-primary px-6 py-2.5">
-            View Orders
+    <div className="athens-container flex min-h-[60vh] flex-col items-center justify-center py-16">
+      <Card className="w-full max-w-lg">
+        <CardContent className="flex flex-col items-center gap-4 text-center">
+          <CheckCircle2 className="size-12 text-athens-success" aria-hidden />
+          <div>
+            <h1 className="athens-page-title">
+              Order confirmed
+            </h1>
+            <p className="mt-2 font-mono text-xs text-athens-body">
+              Order Ref: {id}
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-athens-body">
+            Thank you for your order. A confirmation with your GST invoice
+            details will be emailed to you. Your order will be dispatched
+            from our Mumbai warehouse within 24-48 hours.
+          </p>
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={`/account/orders/${id}`}
+              className={cn(buttonVariants({ variant: "default" }))}
+            >
+              View order
+            </Link>
+            <Link
+              href="/products"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              Continue shopping
+            </Link>
+          </div>
+          <Link
+            href="/account"
+            className="mt-1 text-xs text-athens-body underline-offset-4 hover:text-athens-dark hover:underline"
+          >
+            Go to your account
           </Link>
-          <Link href="/products" className="btn-secondary px-6 py-2.5">
-            Continue Shopping
-          </Link>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

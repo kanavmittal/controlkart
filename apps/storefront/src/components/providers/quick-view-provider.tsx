@@ -6,7 +6,7 @@ import type { HttpTypes } from "@medusajs/types"
 
 // Code-split: the modal chunk loads only after the first Quick view click.
 const QuickViewModal = dynamic(
-  () => import("@/components/products/quick-view-modal"),
+  () => import("@/components/product/quick-view-dialog"),
   { ssr: false }
 )
 
