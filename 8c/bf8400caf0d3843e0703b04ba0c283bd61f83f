@@ -1,0 +1,58 @@
+apps/storefront/src/components/product/product-accordions.tsx
+  s_a5ab152597b3b1::t_cbdd53a102d4e7 42-43,54
+  s_a5ab152597b3b1::t_297592431a3331 100-104,106-112,122-128,136-142,150-156,164-170
+  s_a5ab152597b3b1::t_c40ee4ac08a9c7 81
+  s_a5ab152597b3b1::t_2ce56e076fb549 1-11,13
+apps/storefront/src/app/products/[handle]/page.tsx
+  s_a5ab152597b3b1::t_61b5764ecb0b98 163-167,174
+apps/storefront/src/components/product/buy-box.tsx
+  s_a5ab152597b3b1::t_cf404487afcae0 280-281,283,288-290,293,295,300-301
+  s_a5ab152597b3b1::t_4f3e3888756081 64-69
+  s_a5ab152597b3b1::t_d1446ee20b9173 101-108
+  s_a5ab152597b3b1::t_6e94bd88ca2c03 11
+apps/storefront/src/components/product/collection-sidebar.tsx
+  s_a5ab152597b3b1::t_c2f2ff62c6723b 6,26-33,41-45
+  s_a5ab152597b3b1::t_1cd51947ced344 176-186,204-208,210-211,221-226,233,244,257-258,266,276,299-303,306,308,313-374
+  s_a5ab152597b3b1::t_46fe68b2e2245f 375
+apps/storefront/src/app/cart/cart-view.tsx
+  s_a5ab152597b3b1::t_034c8c23e8f98c 3,6-7,12-14
+  s_a5ab152597b3b1::t_7efeeeebdf2983 29
+  s_a5ab152597b3b1::t_22847b060a7a0f 150-157,169
+  s_a5ab152597b3b1::t_309f7d6b0167a0 192-267
+  s_a5ab152597b3b1::t_d660484e914acc 170
+apps/storefront/src/lib/hooks/use-product-live.ts
+  s_a5ab152597b3b1::t_d10faab0cc1b01 10-14
+  s_a5ab152597b3b1::t_05532f27eea186 58
+  s_a5ab152597b3b1::t_8a8078ac137bc4 39,44,51
+apps/storefront/src/app/checkout/checkout-view.tsx
+  s_a5ab152597b3b1::t_7b9aa3fd107fc9 209-216
+  s_a5ab152597b3b1::t_3f31f2f032aa50 14
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a5ab152597b3b1::t_e3c07ae33d5fe1 179,182
+  s_a5ab152597b3b1::t_276dc6d0ad98c6 235-260
+  s_a5ab152597b3b1::t_450c7c93421c7c 11
+apps/storefront/src/components/cart/cart-drawer.tsx
+  s_a5ab152597b3b1::t_7ec65246b36503 71-80
+apps/storefront/src/app/products/products-browser.tsx
+  s_a5ab152597b3b1::t_94b6ac37109efb 112-129
+apps/storefront/src/lib/hooks/use-cart.ts
+  s_a5ab152597b3b1::t_674da0be6a0c51 95-125,133-134
+apps/storefront/src/components/shared/price.tsx
+  s_a5ab152597b3b1::t_f0adc3f934ea47 15-18,27-34,37-38,57-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "8cbf8400caf0d3843e0703b04ba0c283bd61f83f",
+  "prompts": {},
+  "sessions": {
+    "s_a5ab152597b3b1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "202f2f3c-ef5f-4398-bc8a-f8ec00f8daf7",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
