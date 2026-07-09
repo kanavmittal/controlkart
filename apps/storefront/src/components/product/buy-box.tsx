@@ -189,12 +189,12 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
         {live.isLoading ? (
           <div className="h-7 w-28 animate-pulse rounded bg-[var(--color-athens-band)]" />
         ) : (
-          <div className="flex flex-wrap items-baseline gap-x-1.5">
-            <Price amount={price} originalAmount={originalPrice} />
-            <sup className="text-[11px] leading-none font-normal text-[var(--color-athens-body)]">
-              Inclusive of GST
-            </sup>
-          </div>
+          <Price
+            amount={price}
+            originalAmount={originalPrice}
+            variant="stacked"
+            gstNote="Inclusive of GST"
+          />
         )}
         <p className="mt-1 text-xs text-[var(--color-athens-body)]">HSN: {hsn}</p>
       </div>
@@ -221,10 +221,8 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
             </div>
             <div
               className={cn(
-                "mt-3 h-[3px] w-full overflow-hidden rounded-full",
-                stockBarTier === "out"
-                  ? "bg-destructive/15"
-                  : "bg-[var(--color-athens-line)]"
+                "mt-3 h-2 w-full overflow-hidden rounded-full",
+                stockBarTier === "out" ? "bg-destructive/15" : "bg-[#e9ecef]"
               )}
             >
               <div

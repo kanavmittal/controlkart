@@ -16,6 +16,22 @@ interface PriceProps {
    *  every `<Price>` consumer gets the indicator automatically; pass `false`
    *  to opt out (e.g. a context that already shows its own discount badge). */
   showDiscountPercent?: boolean
+  /**
+   * `"inline"` (default): current behavior — strikethrough, price, and the
+   * `-N%` pill all on one baseline row (used by product cards, cart lines,
+   * etc.).
+   * `"stacked"`: Athens PDP `price-on-sale` layout — when on sale, line 1 is
+   * the `-N%` badge + strikethrough original, line 2 is a larger sale-red
+   * price (with `gstNote` inline). When not on sale, renders as a single
+   * line (price + `gstNote`), same as `"inline"` would with no strike/badge.
+   * Reuses the same onSale/discountPercent math as `"inline"` — no
+   * duplicated rounding formula.
+   */
+  variant?: "inline" | "stacked"
+  /** `"stacked"`-only: small note rendered as a `<sup>` right after the
+   *  price (e.g. "Inclusive of GST"). Ignored in `"inline"` mode — pair with
+   *  `taxNote` there instead. */
+  gstNote?: string
   className?: string
 }
 
@@ -30,12 +46,51 @@ export function Price({
   from = false,
   taxNote = false,
   showDiscountPercent = true,
+  variant = "inline",
+  gstNote,
   className,
 }: PriceProps) {
   const onSale =
     typeof amount === "number" && typeof originalAmount === "number" && originalAmount > amount
   const discountPercent =
     onSale && originalAmount ? Math.round(((originalAmount - amount) / originalAmount) * 100) : null
+
+  if (variant === "stacked") {
+    return (
+      <div className={cn("flex flex-col", className)}>
+        {onSale ? (
+          <div className="flex items-center gap-2">
+            {showDiscountPercent && discountPercent ? (
+              <span className="inline-flex items-center rounded-[var(--radius-badge)] bg-[var(--color-athens-sale-badge)] px-[7px] py-[2px] text-[12px] leading-[12px] font-medium text-white">
+                -{discountPercent}%
+              </span>
+            ) : null}
+            <s className="text-[15px] font-medium text-[var(--color-athens-body)]">
+              {formatINR(originalAmount)}
+            </s>
+          </div>
+        ) : null}
+        <span
+          className={cn(
+            "font-medium",
+            onSale
+              ? "text-[26px] leading-[1.2] text-[var(--color-athens-sale)]"
+              : "text-xl leading-8 text-[var(--color-athens-dark)]"
+          )}
+        >
+          {from ? (
+            <span className="mr-1 text-sm font-normal text-[var(--color-athens-body)]">From</span>
+          ) : null}
+          {formatINR(amount)}
+          {gstNote ? (
+            <sup className="ml-1.5 text-[11px] leading-none font-normal text-[var(--color-athens-body)]">
+              {gstNote}
+            </sup>
+          ) : null}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div className={cn("flex flex-wrap items-baseline gap-x-2", className)}>
