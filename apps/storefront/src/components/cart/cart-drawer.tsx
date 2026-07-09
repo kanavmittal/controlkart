@@ -68,6 +68,16 @@ export function CartDrawer() {
                 </span>
                 <Price amount={cart?.item_total} taxNote />
               </div>
+              {(cart?.discount_total ?? 0) > 0 ? (
+                <div className="mt-1 flex items-baseline justify-between">
+                  <span className="text-xs font-medium text-[var(--color-athens-success)]">
+                    Discount
+                  </span>
+                  <span className="text-xs font-medium text-[var(--color-athens-success)]">
+                    −{formatINR(cart?.discount_total)}
+                  </span>
+                </div>
+              ) : null}
               <p className="mt-1 text-xs text-[var(--color-athens-body)]">
                 Shipping calculated at checkout.
               </p>

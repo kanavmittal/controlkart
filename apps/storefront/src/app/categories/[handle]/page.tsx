@@ -8,6 +8,7 @@ import {
   flattenDescendants,
   getCategoryByHandle,
   getCategorySpecFacets,
+  getCategoryTree,
   listCategories,
 } from "@/lib/data/categories"
 import { listProductsInCategories } from "@/lib/data/products"
@@ -175,9 +176,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ...flattenDescendants(category).map((c) => c.id),
   ]
 
-  const [products, facetsRes] = await Promise.all([
+  const [products, facetsRes, categoryTree] = await Promise.all([
     listProductsInCategories(descendantIds),
     getCategorySpecFacets(category.id, selected, sort),
+    getCategoryTree(),
   ])
   // Tolerate an older backend that doesn't yet return these (deploy window).
   const facets = facetsRes.facets ?? []
@@ -230,10 +232,32 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     return query ? `/categories/${handle}?${query}` : `/categories/${handle}`
   }
 
-  const categoryLinks: CollectionSidebarCategoryLink[] = children.map((child) => ({
-    label: child.name,
-    href: `/categories/${child.handle}`,
-  }))
+  // Categories facet: ALWAYS the full top-level tree (every top-level
+  // category, each with its children one level deep) so users can jump
+  // between categories without leaving the sidebar — not just the current
+  // category's own children (that's still shown separately, above the grid,
+  // as the "shop by sub-category" strip). `active` is set only on the exact
+  // matching link (used for text-primary styling); `defaultExpanded` is set
+  // on the top-level item whose own handle matches OR whose subtree
+  // contains the current category, so that branch auto-expands.
+  const categoryLinks: CollectionSidebarCategoryLink[] = categoryTree.map(
+    (top) => {
+      const childActive = top.children.some((c) => c.handle === handle)
+      return {
+        label: top.name,
+        href: `/categories/${top.handle}`,
+        active: top.handle === handle,
+        defaultExpanded: top.handle === handle || childActive,
+        children: top.children.length
+          ? top.children.map((child) => ({
+              label: child.name,
+              href: `/categories/${child.handle}`,
+              active: child.handle === handle,
+            }))
+          : undefined,
+      }
+    }
+  )
   const hasSidebarContent = facets.length > 0 || categoryLinks.length > 0
 
   const crumbs = [

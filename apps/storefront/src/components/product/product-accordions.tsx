@@ -1,5 +1,16 @@
-import { BadgeCheck, Box, BookOpen, File as FileIcon, FileText } from "lucide-react"
+import {
+  BadgeCheck,
+  Box,
+  BookOpen,
+  File as FileIcon,
+  FileText,
+  Info,
+  ListChecks,
+  Globe,
+  Shield,
+} from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import type { ProductDocumentDTO, SpecValueDTO } from "@/lib/data/types"
 import {
   Accordion,
@@ -28,6 +39,8 @@ const DOCUMENT_TYPE_ICONS: Record<ProductDocumentDTO["type"], typeof FileText> =
 const TRIGGER_CLASSNAME =
   "py-4 text-[15px] font-medium text-[var(--color-athens-dark)] hover:no-underline"
 
+const ITEM_CLASSNAME = "border-b border-dashed border-[var(--color-athens-line)] last:border-b-0"
+
 export interface ProductAccordionsProps {
   description?: string | null
   specs: SpecValueDTO[]
@@ -38,6 +51,7 @@ export interface ProductAccordionsProps {
   /** Static warranty copy. T29 passes this from config; the item is omitted
    * entirely when not provided. */
   warranty?: string
+  className?: string
 }
 
 /**
@@ -64,6 +78,7 @@ export function ProductAccordions({
   documents,
   shipping,
   warranty,
+  className,
 }: ProductAccordionsProps) {
   const hasDescription = Boolean(description?.trim())
   const hasSpecs = specs.length > 0
@@ -82,10 +97,19 @@ export function ProductAccordions({
   ].filter((v): v is string => Boolean(v))
 
   return (
-    <Accordion multiple defaultValue={defaultValue} className="border-y border-border">
+    <Accordion
+      multiple
+      defaultValue={defaultValue}
+      className={cn("border-y border-dashed border-[var(--color-athens-line)]", className)}
+    >
       {hasDescription && (
-        <AccordionItem value="description">
-          <AccordionTrigger className={TRIGGER_CLASSNAME}>Description</AccordionTrigger>
+        <AccordionItem value="description" className={ITEM_CLASSNAME}>
+          <AccordionTrigger className={TRIGGER_CLASSNAME}>
+            <span className="flex items-center gap-3">
+              <Info className="size-5 shrink-0 text-[var(--color-athens-blue)]" aria-hidden />
+              Description
+            </span>
+          </AccordionTrigger>
           <AccordionContent className="athens-rte pb-4">
             {description!.split("\n\n").map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
@@ -95,8 +119,13 @@ export function ProductAccordions({
       )}
 
       {hasSpecs && (
-        <AccordionItem value="specifications">
-          <AccordionTrigger className={TRIGGER_CLASSNAME}>Specifications</AccordionTrigger>
+        <AccordionItem value="specifications" className={ITEM_CLASSNAME}>
+          <AccordionTrigger className={TRIGGER_CLASSNAME}>
+            <span className="flex items-center gap-3">
+              <ListChecks className="size-5 shrink-0 text-[var(--color-athens-blue)]" aria-hidden />
+              Specifications
+            </span>
+          </AccordionTrigger>
           <AccordionContent className="pb-4">
             <SpecificationsPanel specs={specs} />
           </AccordionContent>
@@ -104,8 +133,13 @@ export function ProductAccordions({
       )}
 
       {hasDocuments && (
-        <AccordionItem value="documents">
-          <AccordionTrigger className={TRIGGER_CLASSNAME}>Documents</AccordionTrigger>
+        <AccordionItem value="documents" className={ITEM_CLASSNAME}>
+          <AccordionTrigger className={TRIGGER_CLASSNAME}>
+            <span className="flex items-center gap-3">
+              <FileText className="size-5 shrink-0 text-[var(--color-athens-blue)]" aria-hidden />
+              Documents
+            </span>
+          </AccordionTrigger>
           <AccordionContent className="pb-4">
             <DocumentsPanel documents={documents} />
           </AccordionContent>
@@ -113,8 +147,13 @@ export function ProductAccordions({
       )}
 
       {hasShipping && (
-        <AccordionItem value="shipping">
-          <AccordionTrigger className={TRIGGER_CLASSNAME}>Shipping</AccordionTrigger>
+        <AccordionItem value="shipping" className={ITEM_CLASSNAME}>
+          <AccordionTrigger className={TRIGGER_CLASSNAME}>
+            <span className="flex items-center gap-3">
+              <Globe className="size-5 shrink-0 text-[var(--color-athens-blue)]" aria-hidden />
+              Shipping
+            </span>
+          </AccordionTrigger>
           <AccordionContent className="athens-rte pb-4">
             <p>{shipping}</p>
           </AccordionContent>
@@ -122,8 +161,13 @@ export function ProductAccordions({
       )}
 
       {hasWarranty && (
-        <AccordionItem value="warranty">
-          <AccordionTrigger className={TRIGGER_CLASSNAME}>Warranty</AccordionTrigger>
+        <AccordionItem value="warranty" className={ITEM_CLASSNAME}>
+          <AccordionTrigger className={TRIGGER_CLASSNAME}>
+            <span className="flex items-center gap-3">
+              <Shield className="size-5 shrink-0 text-[var(--color-athens-blue)]" aria-hidden />
+              Warranty
+            </span>
+          </AccordionTrigger>
           <AccordionContent className="athens-rte pb-4">
             <p>{warranty}</p>
           </AccordionContent>

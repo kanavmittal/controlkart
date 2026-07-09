@@ -160,12 +160,18 @@ export default async function ProductPage({ params }: Props) {
             {/* Left: gallery + accordions — scrolls normally */}
             <div>
               <ProductGallery product={product} />
+              <p className="mt-4 text-[13px] leading-relaxed text-[var(--color-athens-body)]">
+                <strong className="font-medium">Disclaimer:</strong> Actual product colors may
+                vary slightly from the images shown due to different monitor settings and
+                lighting conditions during photo shoots.
+              </p>
               <ProductAccordions
                 description={product.description}
                 specs={specs}
                 documents={documents}
                 shipping={pdpContent.shipping}
                 warranty={pdpContent.warranty}
+                className="mt-10"
               />
             </div>
 

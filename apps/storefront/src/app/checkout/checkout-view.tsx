@@ -11,6 +11,7 @@ import { useCustomer } from "@/lib/hooks/use-customer"
 import { useAddresses } from "@/lib/hooks/use-addresses"
 import { useCartId } from "@/components/providers/cart-provider"
 import { isEmailVerified } from "@/lib/customer"
+import { formatINR } from "@/lib/format"
 import { Price } from "@/components/shared/price"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -205,6 +206,14 @@ export function CheckoutView() {
                   className="text-sm leading-none font-normal text-athens-dark"
                 />
               </div>
+              {(cart.discount_total ?? 0) > 0 ? (
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="text-athens-success">Discount</span>
+                  <span className="text-sm leading-none font-normal text-athens-success">
+                    −{formatINR(cart.discount_total)}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-baseline justify-between border-t border-athens-line pt-3 text-base font-semibold">
                 <span className="text-athens-dark">Total</span>
                 <Price

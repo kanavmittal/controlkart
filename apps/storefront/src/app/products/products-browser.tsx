@@ -109,18 +109,24 @@ export function ProductsBrowser({
       href: "/products",
       active: !activeCategoryHandle,
     },
-    ...categories.map((top) => ({
-      label: top.name,
-      href: `/products?category=${top.handle}`,
-      active: activeCategoryHandle === top.handle,
-      children: top.children.length
-        ? top.children.map((child) => ({
-            label: child.name,
-            href: `/products?category=${child.handle}`,
-            active: activeCategoryHandle === child.handle,
-          }))
-        : undefined,
-    })),
+    ...categories.map((top) => {
+      const childActive = top.children.some(
+        (c) => c.handle === activeCategoryHandle
+      )
+      return {
+        label: top.name,
+        href: `/products?category=${top.handle}`,
+        active: activeCategoryHandle === top.handle,
+        defaultExpanded: activeCategoryHandle === top.handle || childActive,
+        children: top.children.length
+          ? top.children.map((child) => ({
+              label: child.name,
+              href: `/products?category=${child.handle}`,
+              active: activeCategoryHandle === child.handle,
+            }))
+          : undefined,
+      }
+    }),
   ]
 
   return (

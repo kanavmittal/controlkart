@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronDown } from "lucide-react"
 
 import {
   Accordion,
@@ -22,6 +23,14 @@ import type { SpecFacetDTO } from "@/lib/data/types"
  * /products rebuild — see plan T18). Visual structure ported from
  * `my-clone/src/components/CollectionSidebar.tsx` (Categories tree above
  * collapsible facet groups); behavior ported from the old sidebar.
+ *
+ * Categories redesign (facet-sidebar-redesign): the Categories group is now
+ * always populated with the FULL top-level tree (callers pass every
+ * top-level category with its children one level deep — see
+ * `categoryLinks` construction in the category/[handle] and /products
+ * pages), not just the current category's children. Each top-level row gets
+ * its own local expand/collapse toggle (independent of the outer Accordion,
+ * which only governs whole facet-group visibility).
  */
 
 export type CollectionSidebarCategoryLink = {
@@ -29,6 +38,11 @@ export type CollectionSidebarCategoryLink = {
   href: string
   active?: boolean
   children?: CollectionSidebarCategoryLink[]
+  /** Initial expand state for this row's children submenu. Callers set this
+   * true on the top-level item whose subtree contains the active category,
+   * so the relevant branch auto-expands even though `active` itself is only
+   * set on the exact matching link. */
+  defaultExpanded?: boolean
 }
 
 export interface CollectionSidebarProps {
@@ -159,6 +173,17 @@ export function CollectionSidebar({
     return null
   }
 
+  // Athens-style group header: uppercase 13px tracking-wide dark label, the
+  // Accordion trigger's own built-in chevron (down/up swap on open) serves
+  // as the collapse indicator on the right. Group separators are dashed
+  // hairlines on the AccordionItem itself (so the line sits below the
+  // content, matching the clone's `<details className="border-b ...">`
+  // wrapper), not on the trigger.
+  const groupItemClass =
+    "border-b border-dashed border-[var(--color-athens-line)]"
+  const groupTriggerClass =
+    "py-3.5 text-[13px] font-medium tracking-[0.04em] text-[var(--color-athens-dark)] uppercase hover:no-underline"
+
   return (
     <aside className="w-full shrink-0 lg:w-[275px]">
       <div className="flex items-center justify-between pb-2">
@@ -176,10 +201,14 @@ export function CollectionSidebar({
         ) : null}
       </div>
 
-      <Accordion multiple defaultValue={defaultOpen}>
+      <Accordion
+        multiple
+        defaultValue={defaultOpen}
+        className="border-t border-dashed border-[var(--color-athens-line)]"
+      >
         {categories?.length ? (
-          <AccordionItem value="categories">
-            <AccordionTrigger className="border-b border-border py-4 text-[13px] font-medium tracking-[0.04em] text-[var(--color-athens-dark)] uppercase hover:no-underline">
+          <AccordionItem value="categories" className={groupItemClass}>
+            <AccordionTrigger className={groupTriggerClass}>
               Categories
             </AccordionTrigger>
             <AccordionContent className="pt-1 pb-4">
@@ -189,15 +218,19 @@ export function CollectionSidebar({
         ) : null}
 
         {facets.map((facet) => (
-          <AccordionItem key={facet.attribute_code} value={facet.attribute_code}>
-            <AccordionTrigger className="border-b border-border py-4 text-[13px] font-medium tracking-[0.04em] text-[var(--color-athens-dark)] uppercase hover:no-underline">
+          <AccordionItem
+            key={facet.attribute_code}
+            value={facet.attribute_code}
+            className={groupItemClass}
+          >
+            <AccordionTrigger className={groupTriggerClass}>
               {facet.name}
               {facet.unit ? (
                 <span className="normal-case text-muted-foreground"> ({facet.unit})</span>
               ) : null}
             </AccordionTrigger>
             <AccordionContent className="pt-1 pb-4">
-              <ul className="flex flex-col gap-2">
+              <ul className="flex flex-col gap-2.5">
                 {facet.values.map(({ value, count }) => {
                   const checked = (selected[facet.attribute_code] ?? []).includes(
                     value
@@ -208,6 +241,7 @@ export function CollectionSidebar({
                         <Checkbox
                           checked={checked}
                           onCheckedChange={() => toggleSpec(facet.attribute_code, value)}
+                          className="rounded-[3px]"
                         />
                         {value}
                       </label>
@@ -220,8 +254,8 @@ export function CollectionSidebar({
           </AccordionItem>
         ))}
 
-        <AccordionItem value="price">
-          <AccordionTrigger className="border-b border-border py-4 text-[13px] font-medium tracking-[0.04em] text-[var(--color-athens-dark)] uppercase hover:no-underline">
+        <AccordionItem value="price" className={groupItemClass}>
+          <AccordionTrigger className={groupTriggerClass}>
             Price
           </AccordionTrigger>
           <AccordionContent className="pt-1 pb-4">
@@ -229,7 +263,7 @@ export function CollectionSidebar({
               <Input
                 type="number"
                 inputMode="numeric"
-                placeholder="Min"
+                placeholder="From"
                 min={0}
                 value={minPrice}
                 onChange={(event) => setMinPrice(event.target.value)}
@@ -239,7 +273,7 @@ export function CollectionSidebar({
               <Input
                 type="number"
                 inputMode="numeric"
-                placeholder="Max"
+                placeholder="To"
                 min={0}
                 value={maxPrice}
                 onChange={(event) => setMaxPrice(event.target.value)}
@@ -262,43 +296,80 @@ export function CollectionSidebar({
   )
 }
 
+/** Always-visible top-level category list (Athens `navigation-side`): every
+ * top-level item is a row with its link on the left and — when it has
+ * children — a small bordered square toggle on the right that expands an
+ * indented submenu. Expand state is local to each row (independent of the
+ * outer Accordion, which only toggles whole facet-group visibility). */
 function CategoryTree({ links }: { links: CollectionSidebarCategoryLink[] }) {
   return (
-    <ul className="space-y-1">
+    <ul>
       {links.map((link) => (
-        <li key={link.href}>
-          <Link
-            href={link.href}
-            className={cn(
-              "text-[15px] leading-8",
-              link.active
-                ? "text-primary"
-                : "text-muted-foreground hover:text-[var(--color-athens-dark)] hover:underline"
-            )}
-          >
-            {link.label}
-          </Link>
-          {link.children?.length ? (
-            <ul className="ml-3 space-y-0.5">
-              {link.children.map((child) => (
-                <li key={child.href}>
-                  <Link
-                    href={child.href}
-                    className={cn(
-                      "text-[14px] leading-7",
-                      child.active
-                        ? "text-primary"
-                        : "text-muted-foreground hover:text-[var(--color-athens-dark)] hover:underline"
-                    )}
-                  >
-                    {child.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </li>
+        <CategoryTreeRow key={link.href} link={link} />
       ))}
     </ul>
+  )
+}
+
+function CategoryTreeRow({ link }: { link: CollectionSidebarCategoryLink }) {
+  const hasChildren = Boolean(link.children?.length)
+  const [open, setOpen] = React.useState(
+    () => link.defaultExpanded ?? link.active ?? false
+  )
+
+  return (
+    <li className="border-b border-[var(--color-athens-line)] last:border-b-0">
+      <div className="flex items-center justify-between gap-2 py-3">
+        <Link
+          href={link.href}
+          className={cn(
+            "text-[15px]",
+            link.active
+              ? "text-primary"
+              : "text-muted-foreground hover:text-[var(--color-athens-dark)] hover:underline"
+          )}
+        >
+          {link.label}
+        </Link>
+        {hasChildren ? (
+          <button
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-expanded={open}
+            aria-label={
+              open ? `Collapse ${link.label}` : `Expand ${link.label}`
+            }
+            className="flex size-7 shrink-0 items-center justify-center rounded-[5px] border border-[var(--color-athens-line)] text-[var(--color-athens-body)] transition-colors hover:border-[var(--color-athens-dark)] hover:text-[var(--color-athens-dark)]"
+          >
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                "size-3.5 transition-transform",
+                open && "rotate-180"
+              )}
+            />
+          </button>
+        ) : null}
+      </div>
+      {hasChildren && open ? (
+        <ul className="mb-3 ml-1 flex flex-col gap-2 border-l border-[var(--color-athens-line)] pl-3">
+          {link.children!.map((child) => (
+            <li key={child.href}>
+              <Link
+                href={child.href}
+                className={cn(
+                  "text-[14px]",
+                  child.active
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-[var(--color-athens-dark)] hover:underline"
+                )}
+              >
+                {child.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </li>
   )
 }

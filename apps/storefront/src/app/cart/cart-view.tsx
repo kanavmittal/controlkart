@@ -1,13 +1,17 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ShoppingCart } from "lucide-react"
+import { ShoppingCart, X } from "lucide-react"
+import { toast } from "sonner"
 
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { Price } from "@/components/shared/price"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { formatINR } from "@/lib/format"
 import { useCart } from "@/lib/hooks/use-cart"
 import { cn } from "@/lib/utils"
 import { CartLineControls } from "./cart-line-controls"
@@ -22,6 +26,7 @@ import { CartLineControls } from "./cart-line-controls"
 export function CartView() {
   const { cart, isLoading } = useCart()
   const items = cart?.items ?? []
+  const discountTotal = cart?.discount_total ?? 0
 
   if (isLoading) {
     return (
@@ -142,6 +147,14 @@ export function CartView() {
                   className="text-sm leading-none font-normal text-athens-dark"
                 />
               </div>
+              {discountTotal > 0 ? (
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="text-athens-success">Discount</span>
+                  <span className="text-sm leading-none font-normal text-athens-success">
+                    −{formatINR(discountTotal)}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-baseline justify-between border-t border-athens-line pt-3 text-base font-semibold">
                 <span className="text-athens-dark">Total</span>
                 <Price
@@ -152,6 +165,8 @@ export function CartView() {
               <p className="text-xs text-athens-body">
                 Prices include GST. Shipping calculated at checkout.
               </p>
+
+              <PromoCodeForm />
 
               <div className="mt-2 flex flex-col gap-2">
                 <Link
@@ -172,5 +187,81 @@ export function CartView() {
         </div>
       </div>
     </>
+  )
+}
+
+/** Promo/coupon code input + applied-codes list, wired to `useCart()`'s
+ *  `applyPromoCode`/`removePromoCode` mutations (`sdk.store.cart.addPromotions`
+ *  / `removePromotions`). Renders nothing extra when no codes are applied
+ *  beyond the input row itself. */
+function PromoCodeForm() {
+  const { cart, applyPromoCode, removePromoCode } = useCart()
+  const [code, setCode] = useState("")
+  const appliedCodes = (cart?.promotions ?? [])
+    .map((p) => p.code)
+    .filter((c): c is string => !!c)
+
+  const onApply = (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = code.trim()
+    if (!trimmed) return
+    applyPromoCode.mutate(trimmed, {
+      onSuccess: (c) => {
+        const applied = (c.promotions ?? []).some(
+          (p) => p.code?.toLowerCase() === trimmed.toLowerCase()
+        )
+        if (applied) {
+          toast.success(`Applied code ${trimmed}`)
+          setCode("")
+        } else {
+          toast.error("That code isn't valid for this cart.")
+        }
+      },
+      onError: () => toast.error("Couldn't apply that code. Please try again."),
+    })
+  }
+
+  return (
+    <div className="border-t border-athens-line pt-3">
+      <form onSubmit={onApply} className="flex gap-2">
+        <Input
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          placeholder="Promo code"
+          disabled={applyPromoCode.isPending}
+          aria-label="Promo code"
+          className="flex-1"
+        />
+        <Button
+          type="submit"
+          variant="outline"
+          disabled={applyPromoCode.isPending || !code.trim()}
+        >
+          {applyPromoCode.isPending ? "Applying…" : "Apply"}
+        </Button>
+      </form>
+
+      {appliedCodes.length > 0 ? (
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {appliedCodes.map((c) => (
+            <li
+              key={c}
+              className="flex items-center justify-between gap-2 rounded-[var(--radius)] bg-athens-band px-2.5 py-1.5 text-sm"
+            >
+              <span className="font-medium text-athens-dark">{c}</span>
+              <button
+                type="button"
+                onClick={() => removePromoCode.mutate(c)}
+                disabled={removePromoCode.isPending}
+                aria-label={`Remove code ${c}`}
+                className="text-athens-body transition-colors hover:text-athens-dark disabled:pointer-events-none disabled:opacity-40"
+              >
+                <X className="size-3.5" aria-hidden />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   )
 }

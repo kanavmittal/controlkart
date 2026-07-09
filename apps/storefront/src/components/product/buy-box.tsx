@@ -8,7 +8,7 @@ import type { HttpTypes } from "@medusajs/types"
 import { Box, CreditCard, Minus, Plus, Settings, Truck, type LucideIcon } from "lucide-react"
 import { toast } from "sonner"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Price } from "@/components/shared/price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { useCart } from "@/lib/hooks/use-cart"
@@ -61,10 +61,12 @@ interface BuyBoxProps {
  * clamping (`maxQty` = tracked stock, or 99 for untracked/backorder, or 0
  * when unpurchasable) and reset-on-variant-change effect, same Buy Now
  * semantics (add the line, then `router.push("/checkout")`, no toast), same
- * Request Bulk Quote `?sku=` link, same HSN + `metadata.footnote` copy. This
- * post-review pass only restructures markup/ordering and reshapes the
- * `infoBox`/`highlights` props to match the Athens block layout — no hook,
- * mutation, or business-rule change.
+ * HSN + `metadata.footnote` copy. This post-review pass only restructures
+ * markup/ordering and reshapes the `infoBox`/`highlights` props to match the
+ * Athens block layout — no hook, mutation, or business-rule change. The
+ * "Request Bulk Quote" link (rendered broken — top-aligned text, uneven
+ * padding) was removed per user report; the `metadata.footnote` block below
+ * now takes its place.
  *
  * Restyled: Add to cart follows the app-wide `product-card-actions.tsx`
  * pattern (`addItem.mutate` + sonner toast + cart-drawer `openDrawer`)
@@ -96,7 +98,14 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
   )
   const stock = variant ? live.stockByVariant[variant.id] ?? 0 : 0
   const price = variant ? live.priceByVariant[variant.id] ?? null : null
-  const originalPrice = variant?.calculated_price?.original_amount ?? null
+  // Live original price once loaded (pairs correctly with the live sale
+  // price above); falls back to the static ISR value only while loading, so
+  // we never show a live sale price against a stale static "original".
+  const originalPrice = variant
+    ? (live.isLoading
+        ? variant.calculated_price?.original_amount
+        : live.originalPriceByVariant[variant.id]) ?? null
+    : null
   const purchasable = variant
     ? live.purchasableByVariant[variant.id] ?? false
     : false
@@ -268,32 +277,28 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
 
       {/* Block 7: buy row */}
       <div className="flex gap-3">
-        <div className="flex h-11 shrink-0 items-center border border-[var(--color-athens-line)]">
-          <Button
+        <div className="flex h-11 shrink-0 items-stretch overflow-hidden rounded-[5px] border border-[var(--color-athens-line)]">
+          <button
             type="button"
-            variant="outline"
-            size="icon-sm"
-            className="h-11 w-10 rounded-none border-0"
+            className="flex w-10 items-center justify-center text-[var(--color-athens-body)] transition-colors hover:text-[var(--color-athens-dark)] disabled:pointer-events-none disabled:opacity-40"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             disabled={quantity <= 1 || controlsDisabled}
             aria-label="Decrease quantity"
           >
-            <Minus />
-          </Button>
-          <span className="flex w-10 items-center justify-center text-sm font-medium tabular-nums">
+            <Minus className="size-4" />
+          </button>
+          <span className="flex w-10 items-center justify-center border-x border-dashed border-[var(--color-athens-line)] text-sm font-medium tabular-nums">
             {quantity}
           </span>
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="icon-sm"
-            className="h-11 w-10 rounded-none border-0"
+            className="flex w-10 items-center justify-center text-[var(--color-athens-body)] transition-colors hover:text-[var(--color-athens-dark)] disabled:pointer-events-none disabled:opacity-40"
             onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
             disabled={quantity >= maxQty || controlsDisabled}
             aria-label="Increase quantity"
           >
-            <Plus />
-          </Button>
+            <Plus className="size-4" />
+          </button>
         </div>
         <Button
           type="button"
@@ -324,13 +329,6 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
       >
         {pendingAction === "buyNow" ? "Redirecting…" : "Buy Now"}
       </Button>
-
-      <Link
-        href={`/request-quote?sku=${variant?.sku ?? ""}`}
-        className={cn(buttonVariants({ variant: "outline" }), "mt-2 block w-full text-center")}
-      >
-        Request Bulk Quote
-      </Link>
 
       {footnote && (
         <p className="mt-4 border-l-2 border-[var(--color-athens-dark)] bg-[var(--color-athens-band)] px-3 py-2.5 text-xs leading-relaxed whitespace-pre-line text-[var(--color-athens-body)]">

@@ -92,6 +92,37 @@ export function useCart() {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
+  // Apply a promotion/coupon code. `sdk.store.cart.addPromotions` — verified
+  // against the installed @medusajs/js-sdk 2.15.3 types
+  // (dist/store/index.d.ts): `addPromotions(cartId, { promo_codes }, query?,
+  // headers?) => Promise<StoreCartResponse>`. Invalidate on success (no
+  // optimistic update — totals depend on server-side promotion evaluation).
+  const applyPromoCode = useMutation({
+    mutationFn: async (code: string) => {
+      if (!cartId) throw new Error("Your cart could not be found.")
+      const { cart } = await sdk.store.cart.addPromotions(cartId, {
+        promo_codes: [code],
+      })
+      return cart
+    },
+    onSuccess: (c) => writeCart(c),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
+  // Remove a previously-applied promotion/coupon code.
+  // `sdk.store.cart.removePromotions` — same source as above.
+  const removePromoCode = useMutation({
+    mutationFn: async (code: string) => {
+      if (!cartId) throw new Error("Your cart could not be found.")
+      const { cart } = await sdk.store.cart.removePromotions(cartId, {
+        promo_codes: [code],
+      })
+      return cart
+    },
+    onSuccess: (c) => writeCart(c),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
   return {
     cart,
     itemCount,
@@ -99,5 +130,7 @@ export function useCart() {
     isError: cartQuery.isError,
     addItem,
     updateItem,
+    applyPromoCode,
+    removePromoCode,
   }
 }
