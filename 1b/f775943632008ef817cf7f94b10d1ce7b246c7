@@ -1,0 +1,36 @@
+apps/medusa/src/api/store/search/route.ts
+  s_0435b162fd65cd::t_a6aa1fe0d3f3a3 14-16,20,36
+apps/storefront/src/lib/data/search.ts
+  s_0435b162fd65cd::t_71b8b643484ec3 10
+apps/storefront/src/components/layout/search-typeahead.tsx
+  s_0435b162fd65cd::t_69a639896b9f7a 192-195,198
+  s_0435b162fd65cd::t_ada29460fcb81f 10,15,25-26,34-35,38,40-59,74-79,81-83,85-87,102-103,128-161,169-170,172-190,206,210-211,216-217,236-241,254-256,260-264,272-274,280-281,284-301,303,308,327,336-340,346-352,354-377,379-399,401-463,465,467-482
+  s_0435b162fd65cd::t_914db29d3c5eab 207-209
+  s_0435b162fd65cd::t_b2631950997ac3 341-345
+apps/storefront/src/components/layout/header-search.tsx
+  s_0435b162fd65cd::t_5410bbb6386356 43-47
+  s_0435b162fd65cd::t_8b33067cee7cce 95
+apps/storefront/src/app/products/products-browser.tsx
+  s_0435b162fd65cd::t_9b92f5aeb8de05 110-114,121,129,133
+  s_0435b162fd65cd::t_964ab2c3becc7b 75-77,81-84
+  s_0435b162fd65cd::t_e00781c14ad5f7 3-4
+  s_0435b162fd65cd::t_d134f4f061560e 221-232
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_0435b162fd65cd::t_eeb106edfa52c8 301-304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "1bf775943632008ef817cf7f94b10d1ce7b246c7",
+  "prompts": {},
+  "sessions": {
+    "s_0435b162fd65cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1eed661a-34e3-4391-a31a-7bab29dd1edc",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
