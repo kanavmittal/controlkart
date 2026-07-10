@@ -62,7 +62,9 @@ type MeiliIndex = {
   updateTypoTolerance(config: {
     enabled: boolean
     disableOnAttributes: string[]
+    minWordSizeForTypos: { oneTypo: number; twoTypos: number }
   }): Promise<unknown>
+  updateSynonyms(synonyms: Record<string, string[]>): Promise<unknown>
   addDocuments(
     docs: ProductDocument[],
     opts: { primaryKey: string }
@@ -76,7 +78,12 @@ type MeiliIndex = {
   }): Promise<{ results: ProductDocument[] }>
   search(
     q: string,
-    opts: { filter?: string; limit: number; attributesToRetrieve: string[] }
+    opts: {
+      filter?: string
+      limit: number
+      attributesToRetrieve: string[]
+      rankingScoreThreshold?: number
+    }
   ): Promise<{ hits: SearchHitDocument[] }>
 }
 
@@ -86,11 +93,14 @@ type MeiliClient = {
 
 const DEFAULT_INDEX_NAME = "products"
 
+// Order matters: Meilisearch's `attribute` ranking rule scores matches in
+// earlier attributes higher.
 const SEARCHABLE_ATTRIBUTES = [
   "title",
   "skus",
   "mpn",
   "vendor",
+  "categories.name",
   "subtitle",
   "description",
 ]
@@ -100,7 +110,43 @@ const SORTABLE_ATTRIBUTES = ["price_amount", "created_at", "title"]
 // produces false positives across visually-similar codes (e.g. "CK-4501-B"
 // vs "CK-4501-C"), which matters more in an industrial-parts catalog than
 // in general retail.
-const TYPO_TOLERANCE = { enabled: true, disableOnAttributes: ["skus", "mpn"] }
+//
+// minWordSizeForTypos is lowered from Meilisearch's {5, 9} defaults because
+// this catalog's vocabulary is dominated by short acronyms (VFD, PLC, HMI,
+// DIN): with the default, a 3-letter query like "vfk" gets ZERO typo
+// allowance and misses "VFD" entirely. oneTypo:3 lets 3+-letter words carry
+// one typo. Aggressiveness is bounded by Meilisearch itself: a typo on a
+// word's FIRST letter counts as two typos (so "kfd" still won't match
+// "vfd"), and the `typo` ranking rule sorts exact matches above fuzzy ones.
+const TYPO_TOLERANCE = {
+  enabled: true,
+  disableOnAttributes: ["skus", "mpn"],
+  minWordSizeForTypos: { oneTypo: 3, twoTypos: 7 },
+}
+
+// One-way per entry (user vocabulary → indexed tokens); two-way pairs are
+// spelled out in both directions where both forms appear in product copy.
+// Multi-word synonyms are phrase-matched — keep them ≤3 words.
+const SYNONYMS: Record<string, string[]> = {
+  drive: ["vfd"],
+  "ac drive": ["vfd"],
+  vsd: ["vfd"],
+  inverter: ["vfd"],
+  vfd: ["variable frequency drive"],
+  "variable frequency drive": ["vfd"],
+  plc: ["programmable logic controller"],
+  "programmable logic controller": ["plc"],
+  hmi: ["human machine interface"],
+  "human machine interface": ["hmi"],
+  "touch panel": ["hmi"],
+  psu: ["power supply", "smps"],
+  smps: ["power supply"],
+  "power supply": ["smps"],
+}
+
+// Query-time floor on Meilisearch's normalized ranking score — trims the
+// garbage tail that looser typo tolerance would otherwise let through.
+const RANKING_SCORE_THRESHOLD = 0.2
 
 const RESULT_ATTRIBUTES = [
   "id",
@@ -154,6 +200,17 @@ class MeilisearchModuleService {
         host: options.host,
         apiKey: options.apiKey,
       })
+      // Apply index settings eagerly at boot (fire-and-forget) so a deploy
+      // that changes them takes effect immediately — the lazy calls in
+      // indexData()/search() remain as retry paths if Meilisearch is
+      // unreachable right now (`settingsApplied` only flips on success).
+      void this.ensureIndexSettings().catch((error) => {
+        this.logger.warn(
+          `[meilisearch] Could not apply index settings at boot (will retry lazily): ${
+            (error as Error).message
+          }`
+        )
+      })
     } else {
       this.logger.warn(
         "[meilisearch] MEILISEARCH_HOST is not set — indexing and search " +
@@ -191,6 +248,7 @@ class MeilisearchModuleService {
       index.updateFilterableAttributes(FILTERABLE_ATTRIBUTES),
       index.updateSortableAttributes(SORTABLE_ATTRIBUTES),
       index.updateTypoTolerance(TYPO_TOLERANCE),
+      index.updateSynonyms(SYNONYMS),
     ])
     this.settingsApplied = true
   }
@@ -253,10 +311,14 @@ class MeilisearchModuleService {
     if (!this.client) {
       return []
     }
+    // Retry path for settings that failed to apply at boot — a no-op
+    // (flag-guarded) once they've succeeded.
+    await this.ensureIndexSettings()
     const result = await this.index.search(q, {
       filter,
       limit,
       attributesToRetrieve: [...RESULT_ATTRIBUTES],
+      rankingScoreThreshold: RANKING_SCORE_THRESHOLD,
     })
     return result.hits
   }

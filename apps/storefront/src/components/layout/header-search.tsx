@@ -48,7 +48,13 @@ export function HeaderSearch() {
       <Select value={brand} onValueChange={(value) => setBrand(value as string)}>
         <SelectTrigger
           aria-label="Brand"
-          className="hidden w-[150px] shrink-0 justify-start gap-1.5 rounded-none border-0 border-r border-dashed border-athens-line bg-transparent px-4 text-[15px] text-athens-dark [&>svg:last-child]:hidden sm:flex"
+          // min-h-full (not h-full): the shared trigger's variant-prefixed
+          // data-[size=default]:h-8 outranks a plain h-full on specificity
+          // and twMerge keeps both; min-height sidesteps the contest and
+          // makes the trigger — and its dashed border-r divider — span the
+          // full h-11 row instead of anchoring 32px-tall at the top.
+          // Content width (no fixed w-[150px]) matches the reference design.
+          className="hidden min-h-full shrink-0 gap-1.5 rounded-none border-0 border-r border-dashed border-athens-line bg-transparent px-4 text-[15px] text-athens-dark [&>svg:last-child]:hidden sm:flex"
         >
           <SelectValue className="flex-none" />
           <span
@@ -71,7 +77,11 @@ export function HeaderSearch() {
         onChange={setTerm}
         placeholder={headerMast.searchPlaceholder}
         vendor={vendor}
-        className="rounded-none border-0 bg-transparent px-4 text-[15px] text-athens-dark shadow-none focus-visible:ring-0"
+        // h-full replaces the Input primitive's h-8 (same twMerge group) so
+        // the text centers in the full row instead of riding 6px high;
+        // md:text-[15px] overrides the primitive's md:text-sm so input and
+        // trigger text match at desktop widths.
+        className="h-full rounded-none border-0 bg-transparent px-4 text-[15px] text-athens-dark shadow-none focus-visible:ring-0 md:text-[15px]"
       />
 
       <Button
