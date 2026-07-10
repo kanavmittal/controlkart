@@ -1,0 +1,90 @@
+apps/medusa/medusa-config.ts
+  s_0435b162fd65cd::t_7846078e7fb06c 81-91
+apps/medusa/src/subscribers/product-updated.ts
+  s_0435b162fd65cd::t_c46409e60bfa19 1-26
+apps/medusa/src/subscribers/product-deleted.ts
+  s_0435b162fd65cd::t_4db2be990951eb 1-26
+apps/medusa/src/api/admin/meilisearch/sync/route.ts
+  s_0435b162fd65cd::t_ffb04958dec997 1,3-5,7-13
+  s_0435b162fd65cd::t_7586cbba8822d3 6
+  s_0435b162fd65cd::t_f6588070c73c8c 2
+apps/storefront/src/lib/hooks/use-debounced-value.ts
+  s_0435b162fd65cd::t_326657ee084033 1-23
+apps/medusa/src/modules/meilisearch/index.ts
+  s_0435b162fd65cd::t_35a97099649e3b 1-8
+apps/medusa/src/subscribers/product-created.ts
+  s_0435b162fd65cd::t_3a4cc023b0729a 1-26
+apps/medusa/src/workflows/sync-products-to-meilisearch.ts
+  s_0435b162fd65cd::t_17835e38b370b4 127
+  s_0435b162fd65cd::t_4cb8dc0611c79d 11-12
+  s_0435b162fd65cd::t_73a97e7ad8cca4 1-10,13-126,128-168
+apps/storefront/src/app/products/page.tsx
+  s_0435b162fd65cd::t_636a84abc794ce 103
+  s_0435b162fd65cd::t_3ca938d97a2595 104
+  s_0435b162fd65cd::t_49c4f6eeb8a3a0 29-32,34-36
+apps/medusa/src/jobs/meilisearch-resync.ts
+  s_0435b162fd65cd::t_b4d148d4be7b26 1-29
+apps/medusa/.env.template
+  s_0435b162fd65cd::t_614ee837ee3ed4 41-46
+apps/medusa/package.json
+  s_0435b162fd65cd::t_d667157aac1274 39
+apps/storefront/src/components/layout/header-search.tsx
+  s_0435b162fd65cd::t_a5fffd0b2c9c7f 51,53-57
+  s_0435b162fd65cd::t_77bd82ca45a0e9 73
+  s_0435b162fd65cd::t_fe47e7330f2f85 25-30,36,45-46
+apps/storefront/src/lib/data/search.ts
+  s_0435b162fd65cd::t_75403a1dcadfd2 1-42
+apps/medusa/src/subscribers/meilisearch-sync.ts
+  s_0435b162fd65cd::t_01a3dcd481fee2 46-49
+  s_0435b162fd65cd::t_e39c6637ed0579 72-91
+  s_0435b162fd65cd::t_60586bb48e4a0d 1-45,50-71,92-112
+apps/storefront/src/components/layout/search-typeahead.tsx
+  s_0435b162fd65cd::t_2efad689b7de28 18-19,34,42-45,50-59,72,86,88,90,93,96,99,101,111,114,116-117,122,141,186-199,202-204,230-233,270,287,289,298,300,302,318
+apps/medusa/src/api/store/search/route.ts
+  s_0435b162fd65cd::t_a31d5519fdceba 6-38
+  s_0435b162fd65cd::t_5541168a7007b4 4-5
+  s_0435b162fd65cd::t_63efefa527be43 114
+  s_0435b162fd65cd::t_7e02b9157d6b97 1-3,39-113,115-120
+apps/medusa/src/workflows/trigger-meilisearch-sync.ts
+  s_0435b162fd65cd::t_fef126e1a21b1b 1-19
+apps/medusa/src/modules/meilisearch/service.ts
+  s_0435b162fd65cd::t_5dea6dba38a08d 252,259
+  s_0435b162fd65cd::t_d4b8f62ee7c9b1 69-70
+  s_0435b162fd65cd::t_7040d2599bb68f 172-180
+  s_0435b162fd65cd::t_3295ba3c05cd97 55-68,71-79,81-86
+  s_0435b162fd65cd::t_f2de7a3be93ae7 44-54
+  s_0435b162fd65cd::t_2fa64e62d3be06 114-123
+  s_0435b162fd65cd::t_25c2f3bb18f9ed 140
+  s_0435b162fd65cd::t_9e364e2c4bf4ab 165,169
+  s_0435b162fd65cd::t_e8b8b36595a212 256
+  s_0435b162fd65cd::t_43a5dc1a686cb5 1-2,5-15
+  s_0435b162fd65cd::t_e2891cd0cc6731 16-43,87-113,124-139,141-164,166-168,170-171,181-197,201-205,214-217,220-222,229-235,239-251,253-255,257-258,260-289
+  s_0435b162fd65cd::t_c85d40e6eedf40 236-238
+  s_0435b162fd65cd::t_39838739155031 80
+  s_0435b162fd65cd::t_e776b6be715e23 198-200,206-213,218-219,223-228
+  s_0435b162fd65cd::t_3609bb62596dad 3-4
+apps/storefront/src/app/products/products-browser.tsx
+  s_0435b162fd65cd::t_dfd4f8e49a4f33 3,5,19-20,26-27,58-71,74-93,103-104,112-113,118-129,133-144,146-149,159-161,163-168,170-174
+  s_0435b162fd65cd::t_c8f5fa7595cd78 130-132
+  s_0435b162fd65cd::t_ce2499e08f0a55 150-158,162,169
+apps/medusa/src/workflows/delete-products-from-meilisearch.ts
+  s_0435b162fd65cd::t_7aa4829b640a0c 1-33
+pnpm-lock.yaml
+  s_0435b162fd65cd::t_946d5fd5138499 49-51,6450-6452,16284-16285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "4b3b2b209c24f2d8b7d1c853525b9d5139e2caab",
+  "prompts": {},
+  "sessions": {
+    "s_0435b162fd65cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1eed661a-34e3-4391-a31a-7bab29dd1edc",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
