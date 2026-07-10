@@ -1,0 +1,27 @@
+apps/medusa/src/modules/meilisearch/service.ts
+  s_0435b162fd65cd::t_418eb248986849 203-213
+  s_0435b162fd65cd::t_0a00ac2b82efd9 314-316,321
+  s_0435b162fd65cd::t_72f73a65143d79 81-86
+  s_0435b162fd65cd::t_66a39c8281bd3f 96-97,103,113-149
+  s_0435b162fd65cd::t_4e58c181276135 251
+  s_0435b162fd65cd::t_30567b420b92e8 65,67
+apps/storefront/src/components/layout/header-search.tsx
+  s_0435b162fd65cd::t_ce0fb2e463139e 80-84
+  s_0435b162fd65cd::t_a61bfefc6cd4d7 51-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "79d7b837abd88467011e2669f64b7f39271dd803",
+  "prompts": {},
+  "sessions": {
+    "s_0435b162fd65cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1eed661a-34e3-4391-a31a-7bab29dd1edc",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
