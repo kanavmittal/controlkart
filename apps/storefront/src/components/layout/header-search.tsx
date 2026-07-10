@@ -40,7 +40,11 @@ export function HeaderSearch() {
       action="/products"
       method="get"
       role="search"
-      className="flex h-11 w-full max-w-[560px] flex-1 items-stretch overflow-hidden rounded-[var(--radius)] border border-athens-line bg-background"
+      // relative (not overflow-hidden): the typeahead's predictive panel is
+      // absolutely positioned against this form so it spans the full search
+      // bar width — overflow-hidden here would clip it. The button rounds
+      // its own right edge instead.
+      className="relative flex h-11 w-full max-w-[560px] flex-1 items-stretch rounded-[var(--radius)] border border-athens-line bg-background"
     >
       <input type="hidden" name="q" value={trimmed} />
       {vendor ? <input type="hidden" name="vendor" value={vendor} /> : null}
@@ -88,7 +92,7 @@ export function HeaderSearch() {
         type="submit"
         variant="default"
         data-icon="inline-start"
-        className="h-full shrink-0 rounded-none"
+        className="h-full shrink-0 rounded-none rounded-r-[calc(var(--radius)-1px)]"
       >
         <SearchIcon />
         {headerMast.searchButtonLabel}

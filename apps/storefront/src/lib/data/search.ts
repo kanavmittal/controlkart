@@ -7,7 +7,7 @@ export type SearchHit = {
   thumbnail: string | null
   vendor: string | null
   price: { amount: number; currency_code: string } | null
-  categories: { id: string; name: string }[]
+  categories: { id: string; name: string; handle: string }[]
 }
 
 export type SearchProductsResult = {

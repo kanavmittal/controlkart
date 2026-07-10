@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { HttpTypes } from "@medusajs/types"
@@ -193,7 +192,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     hasFilters || sort
       ? product_ids.map((id) => byId.get(id)).filter((p) => p !== undefined)
       : products
-  const count = visibleProducts.length
 
   // --- price overlay (NEW, T18/T20) — intersects the already-ordered
   // `visibleProducts` by cheapest calculated price. Applied here, after the
@@ -290,11 +288,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     { label: category.name },
   ]
 
-  const heroImage =
-    typeof category.metadata?.image === "string"
-      ? category.metadata.image
-      : undefined
-
   return (
     <div>
       <script
@@ -305,54 +298,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <Breadcrumbs crumbs={visualCrumbs} />
 
       <div className="athens-container pt-6">
-        <section className="relative h-[180px] overflow-hidden rounded-[5px] bg-[var(--color-athens-dark)]">
-          {heroImage ? (
-            <>
-              <Image
-                src={heroImage}
-                alt={category.name}
-                fill
-                priority
-                sizes="1420px"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.15)_70%)]" />
-            </>
-          ) : (
-            <div className="absolute inset-0 bg-[var(--color-athens-band)]" />
-          )}
-          <div className="absolute left-0 top-0 h-2 w-[42px] bg-[var(--color-athens-blue)]" />
-          <div className="relative z-10 flex h-full max-w-[620px] flex-col justify-center px-9">
-            <h1
-              className={cn(
-                "athens-page-title",
-                heroImage && "text-white"
-              )}
-            >
-              {category.name}
-            </h1>
-            {category.description && (
-              <p
-                className={cn(
-                  "mt-1 text-[15px] leading-6",
-                  heroImage ? "text-white/90" : "text-[var(--color-athens-body)]"
-                )}
-              >
-                {category.description}
-              </p>
-            )}
-            <p
-              className={cn(
-                "mt-2 text-xs",
-                heroImage ? "text-white/70" : "text-[var(--color-athens-body)]"
-              )}
-            >
-              {count} product{count === 1 ? "" : "s"}
-              {hasFilters ? " match your filters" : ""} · Prices inclusive of
-              GST
-            </p>
-          </div>
-        </section>
+        {/* The visual hero band (title/description/count) was removed by
+            request — the sr-only heading keeps the page's h1 for SEO and
+            screen readers; breadcrumbs above carry the visible context. */}
+        <h1 className="sr-only">{category.name}</h1>
 
         {children.length > 0 && (
           <section className="mt-[30px]">

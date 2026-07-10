@@ -1,9 +1,9 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useQuery, keepPreviousData } from "@tanstack/react-query"
-import { Search } from "lucide-react"
 import { HttpTypes } from "@medusajs/types"
 
 import { ProductCard } from "@/components/product/product-card"
@@ -15,15 +15,11 @@ import {
 import { CatalogToolbar } from "@/components/product/catalog-toolbar"
 import { QuickViewButton } from "@/components/product/quick-view-button"
 import { CompareCardCheckbox } from "@/components/product/compare-card-checkbox"
-import { Input } from "@/components/ui/input"
 import { searchProducts } from "@/lib/data/search"
-import { useDebouncedValue } from "@/lib/hooks/use-debounced-value"
 import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
 
 type Cat = { id: string; name: string; handle: string }
 type CategoryTree = Cat & { children: Cat[] }
-
-const SEARCH_DEBOUNCE_MS = 300
 
 /** `min-max` — both halves optional, mirrors `CollectionSidebar`'s own
  *  `parsePriceParam`. NEW client-side-only overlay (not a preserved
@@ -76,18 +72,16 @@ function matchesVendor(product: HttpTypes.StoreProduct, vendor: string): boolean
  * narrows *within* the already-resolved `products` set, never expands
  * outside it (any hit id absent from `products` is silently dropped).
  *
- * Free-text search (seeded from `?q=` for a correct first paint) is
- * three-way:
- *  - no query, no vendor: `products` as-is (today's behavior, unchanged).
+ * There is no page-level search box — free text comes exclusively from the
+ * URL `?q=` set by the global header search, so it's fixed per navigation:
+ *  - no query, no vendor: `products` as-is.
  *  - no query, vendor selected: instant local filter by
  *    `metadata.brand === vendor` — no network call, since the full
  *    candidate set is already in hand client-side.
- *  - query present: debounced Meilisearch call via `searchProducts()`,
- *    scoped by `categoryIds`/`vendor`, intersected against `products`.
- *    `placeholderData: keepPreviousData` keeps the previous result set
- *    visible between keystrokes instead of flashing the full/empty grid.
- *    On a degraded response or a query error, falls back to the local
- *    substring scan rather than showing an empty grid.
+ *  - query present: one Meilisearch call via `searchProducts()`, scoped by
+ *    `categoryIds`/`vendor`, intersected against `products`. On a degraded
+ *    response or a query error, falls back to the local substring scan
+ *    rather than showing an empty grid.
  *
  * A NEW `?price=<min>-<max>` overlay (read directly off the URL here) is
  * intersected against the result afterwards. Selecting a parent category
@@ -113,16 +107,18 @@ export function ProductsBrowser({
   vendor?: string
 }) {
   const searchParams = useSearchParams()
-  const [q, setQ] = useState(initialQuery)
-  const query = q.trim().toLowerCase()
-  const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS)
+  // The page no longer has its own search box — the free-text query comes
+  // exclusively from the URL `?q=` set by the global header search, so it's
+  // fixed for the lifetime of a navigation (no state, no debounce).
+  const rawQuery = initialQuery.trim()
+  const query = rawQuery.toLowerCase()
 
   const byId = useMemo(
     () => new Map(products.map((p) => [p.id, p])),
     [products]
   )
 
-  const searchEnabled = debouncedQuery.length > 0
+  const searchEnabled = query.length > 0
   const {
     data: searchResult,
     isError: searchErrored,
@@ -130,11 +126,11 @@ export function ProductsBrowser({
     // `categoryIds` is a fresh array each render, but React Query hashes
     // query keys by content (not reference), so this doesn't cause spurious
     // cache misses/refetches.
-    queryKey: ["products-search", debouncedQuery, categoryIds, vendor],
+    queryKey: ["products-search", query, categoryIds, vendor],
     enabled: searchEnabled,
     queryFn: () =>
       searchProducts({
-        q: debouncedQuery,
+        q: query,
         categoryIds,
         vendor,
         limit: 100,
@@ -222,33 +218,18 @@ export function ProductsBrowser({
         GST-inclusive pricing, pan-India shipping.
       </p>
 
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        role="search"
-        className="mt-8 max-w-md"
-      >
-        <div className="relative">
-          <Search
-            aria-hidden
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-athens-body"
-          />
-          <Input
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by name, SKU or model…"
-            aria-label="Search products"
-            className="h-11 rounded-[5px] border-athens-line pl-10 text-[15px]"
-          />
-        </div>
-        {query ? (
-          <p className="mt-2 text-sm text-athens-body">
-            {visibleProducts.length} result
-            {visibleProducts.length === 1 ? "" : "s"} for &ldquo;{q.trim()}
-            &rdquo;
-          </p>
-        ) : null}
-      </form>
+      {/* No page-level search box — search happens in the global header;
+          this line just reflects an active ?q= from that search. */}
+      {rawQuery ? (
+        <p className="mt-3 text-sm text-athens-body">
+          {visibleProducts.length} result
+          {visibleProducts.length === 1 ? "" : "s"} for &ldquo;{rawQuery}&rdquo;{" "}
+          ·{" "}
+          <Link href="/products" className="underline hover:text-athens-dark">
+            Clear
+          </Link>
+        </p>
+      ) : null}
 
       <div className="mt-6 flex flex-col gap-8 lg:flex-row">
         <div className="hidden lg:block">

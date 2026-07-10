@@ -11,13 +11,13 @@ type SearchHitResponse = {
   thumbnail: string | null
   vendor: string | null
   price: { amount: number; currency_code: string } | null
-  categories: { id: string; name: string }[]
+  /** Category `handle` is included so the typeahead's "Suggestions" column
+   *  can link straight to `/products?category=<handle>`. */
+  categories: { id: string; name: string; handle: string }[]
 }
 
 /** Maps the raw Meilisearch index document shape to the storefront-facing
- *  contract — nested `price`, and `categories` without the index-only
- *  `handle` field per category (kept in the index for future filtering use,
- *  not part of this response). */
+ *  contract (nested `price`). */
 function toSearchHitResponse(hit: SearchHitDocument): SearchHitResponse {
   const price =
     hit.price_amount !== null && hit.currency_code !== null
@@ -33,6 +33,7 @@ function toSearchHitResponse(hit: SearchHitDocument): SearchHitResponse {
     categories: hit.categories.map((category) => ({
       id: category.id,
       name: category.name,
+      handle: category.handle,
     })),
   }
 }
