@@ -26,11 +26,14 @@ type Props = {
     category?: string
     specs?: string
     sort?: string
-    /** NEW (T21) — seeds the client-side free-text search; not part of any
-     *  preserved contract. The header search submits a full-page `?q=`
-     *  navigation, so this is read server-side for a correct first paint
-     *  instead of only via `useSearchParams` in the browser component. */
+    /** Seeds the client-side free-text search; not part of any preserved
+     *  contract. The header search submits a full-page `?q=` navigation, so
+     *  this is read server-side for a correct first paint instead of only
+     *  via `useSearchParams` in the browser component. */
     q?: string
+    /** Real Meilisearch vendor facet filter (see header-search.tsx) —
+     *  replaces the old string-prepended-into-`q` brand hack. */
+    vendor?: string
   }>
 }
 
@@ -97,6 +100,8 @@ export default async function ProductsPage({ searchParams }: Props) {
         facets={facets}
         sortable={sortable}
         initialQuery={sp.q}
+        categoryIds={subtreeIds}
+        vendor={sp.vendor}
       />
     </>
   )

@@ -22,24 +22,18 @@ const ALL_BRANDS = "All Brands";
 // a client component and the parent `site-header.tsx` is a server component.
 //
 // Submits a REAL native GET form to `/products` (no router/JS navigation
-// required) so it degrades gracefully; the only client-side behavior is
-// combining the brand + free-text term into a single `q` param before
-// submit, since that can't be expressed as two separate native fields.
-// `/products` doesn't read `?q=` yet — added in T21 — so the full-search
-// submit is inert until then by design (see plan T8 note); the typeahead's
-// own suggestion rows (T23) navigate directly to `/products/<handle>` or
-// `/quick-order?sku=`, independent of that.
+// required) so it degrades gracefully. `q` and `vendor` are two independent
+// params — `vendor` is only rendered when a brand is selected (a real
+// Meilisearch facet filter on `/products`, see `products-browser.tsx`), NOT
+// string-prepended into `q` like the old pre-Meilisearch implementation.
+// The typeahead's own suggestion rows navigate directly to
+// `/products/<handle>` or `/quick-order?sku=`, independent of this submit.
 export function HeaderSearch() {
   const [brand, setBrand] = useState(ALL_BRANDS);
   const [term, setTerm] = useState("");
 
   const trimmed = term.trim();
-  const q =
-    brand === ALL_BRANDS
-      ? trimmed
-      : trimmed
-        ? `${brand} ${trimmed}`
-        : brand;
+  const vendor = brand === ALL_BRANDS ? undefined : brand;
 
   return (
     <form
@@ -48,15 +42,19 @@ export function HeaderSearch() {
       role="search"
       className="flex h-11 w-full max-w-[560px] flex-1 items-stretch overflow-hidden rounded-[var(--radius)] border border-athens-line bg-background"
     >
-      {/* Combined query param — the only thing actually submitted. */}
-      <input type="hidden" name="q" value={q} />
+      <input type="hidden" name="q" value={trimmed} />
+      {vendor ? <input type="hidden" name="vendor" value={vendor} /> : null}
 
       <Select value={brand} onValueChange={(value) => setBrand(value as string)}>
         <SelectTrigger
           aria-label="Brand"
-          className="hidden w-[150px] shrink-0 rounded-none border-0 border-r border-athens-line bg-transparent px-4 text-[15px] text-athens-dark sm:flex"
+          className="hidden w-[150px] shrink-0 justify-start gap-1.5 rounded-none border-0 border-r border-dashed border-athens-line bg-transparent px-4 text-[15px] text-athens-dark [&>svg:last-child]:hidden sm:flex"
         >
-          <SelectValue />
+          <SelectValue className="flex-none" />
+          <span
+            aria-hidden="true"
+            className="ml-1 h-0 w-0 shrink-0 border-x-4 border-t-[5px] border-x-transparent border-t-athens-dark"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={ALL_BRANDS}>{ALL_BRANDS}</SelectItem>
@@ -72,6 +70,7 @@ export function HeaderSearch() {
         value={term}
         onChange={setTerm}
         placeholder={headerMast.searchPlaceholder}
+        vendor={vendor}
         className="rounded-none border-0 bg-transparent px-4 text-[15px] text-athens-dark shadow-none focus-visible:ring-0"
       />
 

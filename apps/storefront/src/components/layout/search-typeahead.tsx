@@ -12,25 +12,12 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
-import type { HttpTypes } from "@medusajs/types"
 
 import { Input } from "@/components/ui/input"
 import { formatINR } from "@/lib/format"
-import { sdk } from "@/lib/sdk"
-import { useRegion } from "@/lib/hooks/use-region"
+import { searchProducts, type SearchHit } from "@/lib/data/search"
+import { useDebouncedValue } from "@/lib/hooks/use-debounced-value"
 import { cn } from "@/lib/utils"
-
-// Cheap field set for the dropdown: id/title/handle/thumbnail to render a
-// row + build the `/products/<handle>` link, plus enough of `variants` to
-// price it. `*variants` + `*variants.calculated_price` is the same expand
-// shape `lib/sdk.ts`'s `PRODUCT_FIELDS_CLIENT` relies on — Medusa's
-// `calculated_price` is a computed field that needs the `*variants` expand
-// present to resolve (restricting to bare `variants.id,variants.sku` prunes
-// it, per the note on `PRODUCT_LIVE_FIELDS`). Everything non-essential to a
-// suggestion row (subtitle, description, metadata, categories) is dropped
-// versus the full client field set.
-const SEARCH_TYPEAHEAD_FIELDS =
-  "id,title,handle,thumbnail,*variants,+variants.sku,*variants.calculated_price"
 
 const DEBOUNCE_MS = 300
 const MIN_QUERY_LENGTH = 2
@@ -44,14 +31,7 @@ const SKU_PATTERN = /^[A-Za-z0-9][A-Za-z0-9\-_/.]{4,}$/
 
 type Row =
   | { kind: "sku"; sku: string; id: string }
-  | { kind: "product"; product: HttpTypes.StoreProduct; id: string }
-
-function cheapestAmount(product: HttpTypes.StoreProduct): number | null {
-  const amounts = (product.variants ?? [])
-    .map((variant) => variant.calculated_price?.calculated_amount)
-    .filter((amount): amount is number => typeof amount === "number")
-  return amounts.length ? Math.min(...amounts) : null
-}
+  | { kind: "product"; hit: SearchHit; id: string }
 
 export interface SearchTypeaheadProps {
   id?: string
@@ -59,15 +39,24 @@ export interface SearchTypeaheadProps {
   onChange: (value: string) => void
   placeholder?: string
   className?: string
+  /** Narrows suggestions to a single brand — wired from the header's brand
+   *  `Select` so the dropdown reflects the same filter the final `/products`
+   *  submit will apply, not just the free-text term. */
+  vendor?: string
 }
 
 /**
  * Drop-in replacement for the header search `Input`: same controlled
- * value/onChange contract as before (so `header-search.tsx`'s brand+term ->
- * hidden `q` submit logic stays untouched), plus a debounced product
- * suggestion dropdown anchored under just this component's own wrapper
- * (mega-menu.tsx precedent — hand-rolled absolute panel, no Popover
- * primitive; shadcn popover isn't installed).
+ * value/onChange contract as before (so `header-search.tsx`'s hidden-input
+ * submit logic stays untouched), plus a debounced product suggestion
+ * dropdown anchored under just this component's own wrapper (mega-menu.tsx
+ * precedent — hand-rolled absolute panel, no Popover primitive; shadcn
+ * popover isn't installed).
+ *
+ * Suggestions come from the Meilisearch-backed `/store/search` route (via
+ * `searchProducts()`) rather than Medusa's built-in Postgres `q` search —
+ * typo-tolerant, relevance-ranked, and already priced/vendor-tagged from
+ * the search index so no second data round trip is needed here.
  *
  * The input stays a real child of the surrounding native `<form
  * action="/products" method="get">`: Enter with no active suggestion row is
@@ -80,42 +69,36 @@ export function SearchTypeahead({
   onChange,
   placeholder,
   className,
+  vendor,
 }: SearchTypeaheadProps) {
   const router = useRouter()
-  const { regionId } = useRegion()
   const generatedId = useId()
   const inputId = id ?? generatedId
   const listboxId = `${inputId}-listbox`
 
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [debouncedTerm, setDebouncedTerm] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
 
   const trimmed = value.trim()
-
   // Debounce the network-bound term only; the SKU pinned row (below) reacts
   // instantly since it's a pure client-side pattern check, no fetch.
-  useEffect(() => {
-    const handle = setTimeout(() => setDebouncedTerm(trimmed), DEBOUNCE_MS)
-    return () => clearTimeout(handle)
-  }, [trimmed])
+  const debouncedTerm = useDebouncedValue(trimmed, DEBOUNCE_MS)
 
-  const queryEnabled = !!regionId && debouncedTerm.length >= MIN_QUERY_LENGTH
+  const queryEnabled = debouncedTerm.length >= MIN_QUERY_LENGTH
 
-  const { data: products, isFetching } = useQuery({
+  const { data: hits, isFetching } = useQuery({
     // Local, component-scoped cache — namespaced "search-typeahead" per plan
     // T23, intentionally NOT added to the shared `lib/query-keys.ts` registry.
-    queryKey: ["search-typeahead", debouncedTerm, regionId],
+    queryKey: ["search-typeahead", debouncedTerm, vendor],
     enabled: queryEnabled,
     queryFn: async () => {
-      const { products } = await sdk.store.product.list({
+      const { hits } = await searchProducts({
         q: debouncedTerm,
         limit: SUGGESTION_LIMIT,
-        region_id: regionId,
-        fields: SEARCH_TYPEAHEAD_FIELDS,
+        vendor,
       })
-      return products
+      return hits
     },
     staleTime: 30_000,
   })
@@ -125,18 +108,18 @@ export function SearchTypeahead({
   // keystroke and the fetch for that exact term has resolved — avoids a
   // one-frame flash of the empty state while the user is still typing.
   const settled = queryEnabled && !isFetching && debouncedTerm === trimmed
-  const noMatches = settled && (products?.length ?? 0) === 0
+  const noMatches = settled && (hits?.length ?? 0) === 0
 
   const rows: Row[] = useMemo(() => {
-    const productRows: Row[] = (products ?? []).map((product) => ({
+    const productRows: Row[] = (hits ?? []).map((hit) => ({
       kind: "product",
-      product,
-      id: `${listboxId}-product-${product.id}`,
+      hit,
+      id: `${listboxId}-product-${hit.id}`,
     }))
     return showSkuRow
       ? [{ kind: "sku", sku: trimmed, id: `${listboxId}-sku` }, ...productRows]
       : productRows
-  }, [products, showSkuRow, trimmed, listboxId])
+  }, [hits, showSkuRow, trimmed, listboxId])
 
   // A stale index from a previous keystroke should never point past the end
   // of a freshly recomputed row set.
@@ -155,7 +138,7 @@ export function SearchTypeahead({
     if (row.kind === "sku") {
       router.push(`/quick-order?sku=${encodeURIComponent(row.sku)}`)
     } else {
-      router.push(`/products/${row.product.handle}`)
+      router.push(`/products/${row.hit.handle}`)
     }
   }
 
@@ -200,8 +183,25 @@ export function SearchTypeahead({
     return () => document.removeEventListener("mousedown", handlePointerDown)
   }, [isOpen])
 
+  // Screen-reader-only lifecycle announcer — separate from the *visual*
+  // loading/no-match copy inside the dropdown panel below (which is only in
+  // the DOM while `showPanel` is true, so an `aria-live` region there
+  // wouldn't reliably announce changes). This node stays permanently
+  // mounted so its text changes are what `aria-live` actually observes.
+  const statusMessage =
+    queryEnabled && isFetching
+      ? "Searching…"
+      : noMatches
+        ? "No results found"
+        : settled && rows.length > 0
+          ? `${rows.length} result${rows.length === 1 ? "" : "s"} found`
+          : ""
+
   return (
     <div ref={wrapperRef} className="relative min-w-0 flex-1">
+      <label htmlFor={inputId} className="sr-only">
+        {placeholder ?? "Search"}
+      </label>
       <Input
         id={inputId}
         type="text"
@@ -216,7 +216,6 @@ export function SearchTypeahead({
         onBlur={() => setIsOpen(false)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        aria-label="Search"
         role="combobox"
         autoComplete="off"
         aria-autocomplete="list"
@@ -227,6 +226,10 @@ export function SearchTypeahead({
         }
         className={className}
       />
+
+      <div role="status" aria-live="polite" className="sr-only">
+        {statusMessage}
+      </div>
 
       {showPanel && (
         <div className="absolute inset-x-0 top-full z-50 mt-1 overflow-hidden rounded-[var(--radius)] border border-athens-line bg-background shadow-[0_20px_30px_rgba(0,0,0,0.08)]">
@@ -264,7 +267,7 @@ export function SearchTypeahead({
                 )
               }
 
-              const amount = cheapestAmount(row.product)
+              const hit = row.hit
 
               return (
                 <li
@@ -281,9 +284,9 @@ export function SearchTypeahead({
                   )}
                 >
                   <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-[3px] bg-[var(--color-surface-alt)]">
-                    {row.product.thumbnail ? (
+                    {hit.thumbnail ? (
                       <Image
-                        src={row.product.thumbnail}
+                        src={hit.thumbnail}
                         alt=""
                         fill
                         sizes="36px"
@@ -292,11 +295,11 @@ export function SearchTypeahead({
                     ) : null}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-athens-dark">
-                    {row.product.title}
+                    {hit.title}
                   </span>
-                  {amount !== null && (
+                  {hit.price !== null && (
                     <span className="shrink-0 text-[13px] font-medium text-athens-dark">
-                      {formatINR(amount)}
+                      {formatINR(hit.price.amount)}
                     </span>
                   )}
                 </li>
@@ -312,11 +315,7 @@ export function SearchTypeahead({
           )}
 
           {noMatches && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="px-4 py-3 text-[13px] text-athens-body"
-            >
+            <div className="px-4 py-3 text-[13px] text-athens-body">
               No matches — press Enter to search all products
             </div>
           )}

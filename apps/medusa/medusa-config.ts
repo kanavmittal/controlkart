@@ -78,6 +78,17 @@ module.exports = defineConfig({
     { resolve: "./src/modules/documents" },
     { resolve: "./src/modules/quotes" },
     { resolve: "./src/modules/content" },
+    // Meilisearch product search. Unconditionally registered (unlike the
+    // Redis modules above) — the module itself degrades to a no-op when
+    // MEILISEARCH_HOST is unset, so local dev works without an instance.
+    {
+      resolve: "./src/modules/meilisearch",
+      options: {
+        host: process.env.MEILISEARCH_HOST,
+        apiKey: process.env.MEILISEARCH_API_KEY,
+        productIndexName: process.env.MEILISEARCH_PRODUCT_INDEX_NAME || "products",
+      },
+    },
     // S3-compatible file storage (Cloudflare R2 etc.) when configured; local storage otherwise
     ...(isS3Configured
       ? [

@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
+import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 import { HttpTypes } from "@medusajs/types"
 
@@ -15,10 +16,14 @@ import { CatalogToolbar } from "@/components/product/catalog-toolbar"
 import { QuickViewButton } from "@/components/product/quick-view-button"
 import { CompareCardCheckbox } from "@/components/product/compare-card-checkbox"
 import { Input } from "@/components/ui/input"
+import { searchProducts } from "@/lib/data/search"
+import { useDebouncedValue } from "@/lib/hooks/use-debounced-value"
 import type { SpecFacetDTO, SpecSortOption } from "@/lib/data/types"
 
 type Cat = { id: string; name: string; handle: string }
 type CategoryTree = Cat & { children: Cat[] }
+
+const SEARCH_DEBOUNCE_MS = 300
 
 /** `min-max` — both halves optional, mirrors `CollectionSidebar`'s own
  *  `parsePriceParam`. NEW client-side-only overlay (not a preserved
@@ -50,14 +55,42 @@ function cheapestCalculatedAmount(
   return amounts.length ? Math.min(...amounts) : null
 }
 
+/** Same substring scan the free-text search used before Meilisearch —
+ *  kept as the degraded-mode fallback (see `searched` below) and as the
+ *  instant local path when a vendor is selected with no typed query. */
+function localTextMatch(product: HttpTypes.StoreProduct, query: string): boolean {
+  const skus = (product.variants ?? []).map((v) => v.sku ?? "").join(" ")
+  const hay =
+    `${product.title} ${product.subtitle ?? ""} ${(product.metadata?.mpn as string) ?? ""} ${skus}`.toLowerCase()
+  return hay.includes(query)
+}
+
+function matchesVendor(product: HttpTypes.StoreProduct, vendor: string): boolean {
+  return product.metadata?.brand === vendor
+}
+
 /**
  * Client-side catalogue browser. Category (hierarchical), spec-facet
- * filtering and spec sort are URL-driven (server-rendered, shareable); free
- * text search runs in-memory on top of the already-filtered set, seeded from
- * `?q=` (passed down from `page.tsx` for a correct first paint — the header
- * search submits a full-page `?q=` navigation) and further editable in
- * place. A NEW `?price=<min>-<max>` overlay (read directly off the URL here)
- * is intersected against the result afterwards. Selecting a parent category
+ * filtering and spec sort are URL-driven (server-rendered, shareable) and
+ * stay completely untouched by the logic below — Meilisearch only ranks or
+ * narrows *within* the already-resolved `products` set, never expands
+ * outside it (any hit id absent from `products` is silently dropped).
+ *
+ * Free-text search (seeded from `?q=` for a correct first paint) is
+ * three-way:
+ *  - no query, no vendor: `products` as-is (today's behavior, unchanged).
+ *  - no query, vendor selected: instant local filter by
+ *    `metadata.brand === vendor` — no network call, since the full
+ *    candidate set is already in hand client-side.
+ *  - query present: debounced Meilisearch call via `searchProducts()`,
+ *    scoped by `categoryIds`/`vendor`, intersected against `products`.
+ *    `placeholderData: keepPreviousData` keeps the previous result set
+ *    visible between keystrokes instead of flashing the full/empty grid.
+ *    On a degraded response or a query error, falls back to the local
+ *    substring scan rather than showing an empty grid.
+ *
+ * A NEW `?price=<min>-<max>` overlay (read directly off the URL here) is
+ * intersected against the result afterwards. Selecting a parent category
  * aggregates its sub-categories' products.
  */
 export function ProductsBrowser({
@@ -67,6 +100,8 @@ export function ProductsBrowser({
   facets,
   sortable,
   initialQuery = "",
+  categoryIds,
+  vendor,
 }: {
   products: HttpTypes.StoreProduct[]
   categories: CategoryTree[]
@@ -74,19 +109,69 @@ export function ProductsBrowser({
   facets: SpecFacetDTO[]
   sortable: SpecSortOption[]
   initialQuery?: string
+  categoryIds: string[]
+  vendor?: string
 }) {
   const searchParams = useSearchParams()
   const [q, setQ] = useState(initialQuery)
   const query = q.trim().toLowerCase()
+  const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS)
 
-  const searched = query
-    ? products.filter((p) => {
-        const skus = (p.variants ?? []).map((v) => v.sku ?? "").join(" ")
-        const hay =
-          `${p.title} ${p.subtitle ?? ""} ${(p.metadata?.mpn as string) ?? ""} ${skus}`.toLowerCase()
-        return hay.includes(query)
-      })
-    : products
+  const byId = useMemo(
+    () => new Map(products.map((p) => [p.id, p])),
+    [products]
+  )
+
+  const searchEnabled = debouncedQuery.length > 0
+  const {
+    data: searchResult,
+    isError: searchErrored,
+  } = useQuery({
+    // `categoryIds` is a fresh array each render, but React Query hashes
+    // query keys by content (not reference), so this doesn't cause spurious
+    // cache misses/refetches.
+    queryKey: ["products-search", debouncedQuery, categoryIds, vendor],
+    enabled: searchEnabled,
+    queryFn: () =>
+      searchProducts({
+        q: debouncedQuery,
+        categoryIds,
+        vendor,
+        limit: 100,
+      }),
+    placeholderData: keepPreviousData,
+    staleTime: 10_000,
+  })
+
+  const searched = useMemo(() => {
+    if (!query) {
+      return vendor ? products.filter((p) => matchesVendor(p, vendor)) : products
+    }
+    // Local-scan fallback (degraded/errored/not-yet-fetched, see branches
+    // below) must still respect an active vendor selection — the live
+    // Meilisearch path scopes by `vendor` server-side, so the fallback has
+    // to intersect it locally too, or a brand filter would silently leak
+    // other brands' products whenever search degrades.
+    const localFallback = () =>
+      products.filter(
+        (p) => localTextMatch(p, query) && (!vendor || matchesVendor(p, vendor))
+      )
+    // Degraded (Meilisearch unconfigured/unreachable) or a network error —
+    // never worse than the pre-Meilisearch behavior.
+    if (searchErrored || searchResult?.degraded) {
+      return localFallback()
+    }
+    // In flight for a brand-new debounced value with no `placeholderData`
+    // yet (e.g. the very first search of this session) — `searchResult` is
+    // still undefined; fall back to the local scan rather than an empty
+    // flash, `keepPreviousData` covers every subsequent keystroke.
+    if (!searchResult) {
+      return localFallback()
+    }
+    return searchResult.hits
+      .map((hit) => byId.get(hit.id))
+      .filter((p): p is HttpTypes.StoreProduct => p !== undefined)
+  }, [query, vendor, products, searchErrored, searchResult, byId])
 
   const priceRange = parsePriceOverlay(searchParams.get("price"))
   const visibleProducts =
