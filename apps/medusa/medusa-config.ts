@@ -78,6 +78,7 @@ module.exports = defineConfig({
     { resolve: "./src/modules/documents" },
     { resolve: "./src/modules/quotes" },
     { resolve: "./src/modules/content" },
+    { resolve: "./src/modules/wms" },
     // Meilisearch product search. Unconditionally registered (unlike the
     // Redis modules above) — the module itself degrades to a no-op when
     // MEILISEARCH_HOST is unset, so local dev works without an instance.

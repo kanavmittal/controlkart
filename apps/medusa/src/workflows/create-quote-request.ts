@@ -5,6 +5,7 @@ import {
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
+import type { RemoteQueryFunction } from "@medusajs/framework/types"
 import { QUOTES_MODULE } from "../modules/quotes"
 import type QuotesModuleService from "../modules/quotes/service"
 
@@ -32,13 +33,17 @@ const resolveQuoteItemsStep = createStep(
       )
     }
 
-    const query = container.resolve(ContainerRegistrationKeys.QUERY)
+    const query = container.resolve<RemoteQueryFunction>(
+      ContainerRegistrationKeys.QUERY
+    )
     const { data: variants } = await query.graph({
       entity: "variant",
       fields: ["id", "sku", "product.title"],
       filters: { sku: input.items.map((i) => i.sku) },
     })
-    const bySku = new Map(variants.map((v: any) => [v.sku, v]))
+    const bySku = new Map<string, any>(
+      (variants as any[]).map((v) => [v.sku, v])
+    )
 
     return new StepResponse(
       input.items.map((item) => {

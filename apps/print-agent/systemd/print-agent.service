@@ -1,0 +1,24 @@
+[Unit]
+Description=ControlKart warehouse label print agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+EnvironmentFile=/etc/controlkart/print-agent.env
+WorkingDirectory=/opt/controlkart/print-agent
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=10
+# Give in-flight jobs (label download + print) a chance to finish before
+# systemd sends SIGKILL. The agent handles SIGTERM gracefully — see
+# src/index.ts — and exits 0 once the current job is done.
+TimeoutStopSec=30
+KillSignal=SIGTERM
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=print-agent
+
+[Install]
+WantedBy=multi-user.target

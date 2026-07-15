@@ -35,6 +35,15 @@ const templates: Record<string, TemplateFn> = {
       `<p><a href="${data.url}">Verify email</a></p>` +
       `<p>This link expires in 24 hours.</p>`,
   }),
+  // Warehouse ops alert from src/jobs/print-agent-monitor.ts
+  // (data: { key: "agent-offline" | "jobs-stuck", message: string }).
+  "wms-agent-alert": (data) => ({
+    subject: `⚠ Warehouse print alert: ${data.key}`,
+    html:
+      `<p><strong>${data.message}</strong></p>` +
+      `<p>Check the admin Print Queue page for agent last-seen and pending jobs. ` +
+      `If the Raspberry Pi is off or disconnected, labels are NOT printing.</p>`,
+  }),
 }
 
 /**
