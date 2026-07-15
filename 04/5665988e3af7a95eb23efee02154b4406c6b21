@@ -1,0 +1,456 @@
+apps/medusa/integration-tests/http/wms-auth.spec.ts
+  s_ca3f2de87619bf::t_bc40f37d571ff2 1-89
+apps/medusa/src/api/admin/wms/suppliers/preview-scan/route.ts
+  s_ca3f2de87619bf::t_46d874f4d797ac 1-39
+docs/specs/warehouse-scanning-system.md
+  s_63a429f7b45e66::t_a0dd98288fa90a 52-56
+  s_ca3f2de87619bf::t_27ceb0b2f6b283 58
+  s_ca3f2de87619bf::t_a3c0cc43719281 32
+  s_63a429f7b45e66::t_5cd7da3e2fdb5f 186
+  s_ca3f2de87619bf::t_e35ac99cf3e80b 14
+  s_ca3f2de87619bf::t_d628c3a40a19eb 193
+  s_63a429f7b45e66::t_e9fcdc22a35934 149
+  s_ca3f2de87619bf::t_55b7f3d615f423 180
+  s_ca3f2de87619bf::t_13ded56355780a 100-105
+  s_63a429f7b45e66::t_26ab5301b94a39 1-2,5-12,15-21,24-27,29-31,33-42,44-51,57,61-74,76,82-99,106-109,111-123,125-127,129-148,150-157,159-172,174-179,181-185,187-192,194-195
+  s_63a429f7b45e66::t_146561527fd86e 75,77-81
+  s_ca3f2de87619bf::t_6e1efc90a148d8 173
+  s_ca3f2de87619bf::t_8925cc3905b230 124,128
+  s_ca3f2de87619bf::t_27d41d4936f602 158
+  s_ca3f2de87619bf::t_a2ea77719479d9 3-4
+  s_ca3f2de87619bf::t_66b90ecf6d93a8 22-23
+  s_ca3f2de87619bf::t_770bdd8b26498c 28
+  s_63a429f7b45e66::t_0e358125790194 59-60
+  s_63a429f7b45e66::t_0c6727e190e4f9 110
+  s_63a429f7b45e66::t_a0363ec1f90728 13
+  s_ca3f2de87619bf::t_9b5e8d315f1dce 43
+apps/medusa/src/links/serial-unit-variant.ts
+  s_ca3f2de87619bf::t_a6d16eadfa9a50 15
+  s_ca3f2de87619bf::t_482aa6201c4a86 1-14,16-19
+apps/medusa/src/modules/wms/models/staff.ts
+  s_ca3f2de87619bf::t_dea82d6e18573e 1-10
+apps/medusa/src/workflows/receive-purchase-order.ts
+  s_ca3f2de87619bf::t_c7bb23488fba1a 76
+  s_ca3f2de87619bf::t_80c18e3021595e 1-13,15-75,77-266,271-497
+  s_ca3f2de87619bf::t_9ead6cec59722a 14
+  s_ca3f2de87619bf::t_f0719ddaa88072 267-270
+apps/medusa/src/api/wms/shipments/[id]/ship/route.ts
+  s_ca3f2de87619bf::t_87e5e8b3b80532 1-25
+apps/medusa/src/jobs/print-agent-monitor.ts
+  s_ca3f2de87619bf::t_d52e514e9d1350 1-90,98-121
+  s_ca3f2de87619bf::t_eb59d26706e9fd 91-97
+apps/medusa/src/api/admin/wms/staff/[id]/route.ts
+  s_ca3f2de87619bf::t_d6a6ac36a0185a 1-65
+apps/medusa/src/api/wms/stock-take/route.ts
+  s_ca3f2de87619bf::t_8e298cbddca643 1-43
+apps/medusa/src/workflows/stock-take.ts
+  s_ca3f2de87619bf::t_44b37b5f1ef442 1-273
+apps/warehouse-app/.gitignore
+  s_ca3f2de87619bf::t_27dc6fa95308ac 1-41
+apps/medusa/src/api/wms/print-agent/poll/route.ts
+  s_ca3f2de87619bf::t_95db17337e43ac 1-91
+apps/medusa/src/modules/wms/__tests__/wms-module.spec.ts
+  s_ca3f2de87619bf::t_079b9ffd72860e 1-54
+apps/medusa/src/admin/routes/serial-lookup/page.tsx
+  s_ca3f2de87619bf::t_32ec6b86d3b8bc 1-203
+apps/warehouse-app/src/theme.ts
+  s_ca3f2de87619bf::t_8c44b26a632d1c 1-73
+apps/medusa/src/modules/wms/lib/agent-monitor.ts
+  s_ca3f2de87619bf::t_8c8570a219b941 1-123
+apps/medusa/src/api/middlewares.ts
+  s_ca3f2de87619bf::t_044aeddeda5aa5 1-70,140,149-151,154-155
+  s_ca3f2de87619bf::t_d0126e1949244c 157-160,164-165,167
+  s_ca3f2de87619bf::t_214951d48c1604 161-163,166
+  s_ca3f2de87619bf::t_cb5ccccb084f08 81,83-136,141-148,152-153,156
+  s_ca3f2de87619bf::t_7509a78d290d3f 71-80,82
+apps/medusa/src/admin/routes/warehouse-staff/page.tsx
+  s_ca3f2de87619bf::t_ab01ee4eab0ca3 1-239
+apps/medusa/src/subscribers/order-placed-shipment.ts
+  s_ca3f2de87619bf::t_f4a8fb0e58e034 1-52
+apps/medusa/src/workflows/create-warehouse-staff.ts
+  s_ca3f2de87619bf::t_700da02241635a 1-81
+apps/medusa/src/modules/wms/lib/shift-window.ts
+  s_ca3f2de87619bf::t_17330ad60cbb3b 1-128,130-137
+  s_ca3f2de87619bf::t_3f79acd9d964f3 129
+apps/medusa/integration-tests/http/wms-pack-ship.spec.ts
+  s_ca3f2de87619bf::t_991c67c8bc15db 1-530
+apps/medusa/src/api/admin/wms/print-jobs/[id]/reprint/route.ts
+  s_ca3f2de87619bf::t_93ae595fe91130 1-37
+apps/medusa/src/api/wms/purchase-orders/[id]/route.ts
+  s_ca3f2de87619bf::t_8fb4654c49fd5e 26
+  s_ca3f2de87619bf::t_8f43095829a410 1-23,27-49
+  s_ca3f2de87619bf::t_30597481958dd0 24-25
+apps/medusa/src/modules/wms/models/agent-heartbeat.ts
+  s_ca3f2de87619bf::t_d68b840828b4a5 1-15
+apps/medusa/src/modules/resend/service.ts
+  s_ca3f2de87619bf::t_d56e6d63cdfe22 38-46
+apps/medusa/src/api/wms/print-agent/jobs/[id]/ack/route.ts
+  s_ca3f2de87619bf::t_2ec1b0b2cdbfc7 1-68
+apps/medusa/src/modules/wms/lib/tracking-read.ts
+  s_ca3f2de87619bf::t_fca7768b60f014 1-190
+apps/medusa/integration-tests/http/wms-pick.spec.ts
+  s_ca3f2de87619bf::t_c350e59dcc1007 1-41,47-213,215-291,326,328-329,332-333,335-464,466-514
+  s_ca3f2de87619bf::t_8da192b3192dd6 465
+  s_ca3f2de87619bf::t_b963848ae3157e 330-331,334
+  s_ca3f2de87619bf::t_8c34d0242bdbb4 42-46
+  s_ca3f2de87619bf::t_78713cd05aba11 214
+  s_ca3f2de87619bf::t_5e79e331c6924d 292-325,327
+apps/medusa/src/api/admin/wms/orders/[order_id]/warehouse/route.ts
+  s_ca3f2de87619bf::t_60d7999c5d7ed4 1-246
+apps/medusa/src/api/wms/shipments/[id]/pack-photo/route.ts
+  s_ca3f2de87619bf::t_e06fed756b5b44 1-108
+apps/medusa/src/workflows/create-shipment.ts
+  s_ca3f2de87619bf::t_0a7cdf665fe47f 250-263
+  s_ca3f2de87619bf::t_d0772d6c995c12 487,499,505
+  s_ca3f2de87619bf::t_0cc5137c8b14c6 53-57,68-69,77-81
+  s_ca3f2de87619bf::t_9b7a5bf7dc26b9 326-328,331-332
+  s_ca3f2de87619bf::t_b15e0bc9b2fcc9 1-52,58-67,70-76,82-210,212-217,219-249,264-325,329-330,333-486,488-498,500-504,506-550
+  s_ca3f2de87619bf::t_316a93316c4943 218
+  s_ca3f2de87619bf::t_93ffe5100610be 211
+apps/medusa/src/scripts/repoint-shipping-option.ts
+  s_ca3f2de87619bf::t_023968f2d7f92a 156-160,166-174
+  s_ca3f2de87619bf::t_00723ca53a4055 68-71
+  s_ca3f2de87619bf::t_c32defe2435eb2 1-67,72-155,161-165,175-234
+apps/medusa/src/scripts/__tests__/audit-variant-shipping-data.unit.spec.ts
+  s_ca3f2de87619bf::t_b9aad218be9692 1-108
+apps/medusa/src/modules/wms/models/supplier.ts
+  s_ca3f2de87619bf::t_a9f190d15ab86e 1-13
+apps/medusa/src/modules/wms/migrations/.snapshot-wms.json
+  s_ca3f2de87619bf::t_cca4801cfcf772 160-161,176-177,182,192-193,208-209,224-226,230,232,238,289,293,299,302,308,311,343-344,349,359-360,365,390,392,413-415,421,427,445-446,510,514,520,523,557,569,609-611,617,623,625-627,639,706,710,716,719,725,728,814,824-825,840-841,905,909,915,918,924,927,933,936,948-949,953,957,997-998,1029,1033-1034,1065-1066,1130,1134,1140,1143,1149,1152,1184-1186,1195,1198,1200-1201,1211,1216-1217,1227,1232-1233,1297,1301,1307,1310,1390-1391,1406-1407,1412,1417,1419-1427,1429-1430,1445-1446,1526,1530,1536,1539,1545,1548,1554,1557,1686,1690,1696,1699,1705,1708,1913,1923-1924,1929,1934,2004,2008,2014,2017
+  s_63a429f7b45e66::t_67fd78967808d1 345-348,350-358,361-364,366-389,391,393-412,416-420,422-426,428-444,447-509,511-513,515-519,521-522,524-554,1153-1183,1187-1194,1196-1197,1199,1202-1210,1212-1215,1218-1226,1228-1231,1234-1296,1298-1300,1302-1306,1308-1309
+  s_63a429f7b45e66::t_b9909d0818b58e 1-24,1589-1685,1687-1689,1691-1695,1697-1698,1700-1704,1706-1707,1709-1739,1891-1912,1914-1922,1925-1928,1930-1933,1935-2003,2005-2007,2009-2013,2015-2016,2018-2033
+  s_63a429f7b45e66::t_f8cabe2fbcdea4 555-556,558-568,570-608,612-616,618-622,624,628-638,640,657-705,707-709,711-715,717-718,720-724,726-727,729-813,815-823,826-839,842-904,906-908,910-914,916-917,919-923,925-926,928-932,934-935,937-947,950-952,954-956,958-960,1569-1588
+  s_ca3f2de87619bf::t_ef2195c629e63b 25-159
+  s_63a429f7b45e66::t_2efd087b4f84f1 162-175,178-181,183-191,194-207,210-223,227-229,231,233-237,239-288,290-292,294-298,300-301,303-307,309-310,312-342,961-996,999-1028,1030-1032,1035-1064,1067-1129,1131-1133,1135-1139,1141-1142,1144-1148,1150-1151,1311-1389,1392-1405,1408-1411,1413-1416,1418,1428,1431-1444,1447-1460,1477-1525,1527-1529,1531-1535,1537-1538,1540-1544,1546-1547,1549-1553,1555-1556,1558-1568
+  s_ca3f2de87619bf::t_70505e1b9ea71b 1461-1476
+  s_ca3f2de87619bf::t_cf57d8898b6f3b 641-656
+  s_ca3f2de87619bf::t_1b9bd1cf0d49e0 1740-1890
+apps/warehouse-app/src/api/__tests__/client.test.ts
+  s_ca3f2de87619bf::t_7079ce459e650a 1-4
+  s_ca3f2de87619bf::t_eca9d89dca5854 5-85
+apps/medusa/src/api/admin/wms/shift-config/[id]/route.ts
+  s_ca3f2de87619bf::t_f958f5dafc7f48 1-78
+apps/warehouse-app/app/_layout.tsx
+  s_ca3f2de87619bf::t_ad197686580cc0 15
+  s_ca3f2de87619bf::t_fb6dd5933d3a96 1-3,5-8,11-14,16-18,20-21
+  s_ca3f2de87619bf::t_dcb2ab1548c38c 4,9,19
+  s_ca3f2de87619bf::t_56e94f0f3f17d1 10
+apps/medusa/src/api/admin/wms/serials/route.ts
+  s_ca3f2de87619bf::t_bd2e896d3fcf1e 1-142
+apps/medusa/src/admin/widgets/order-warehouse-status.tsx
+  s_ca3f2de87619bf::t_069dc272f6747e 1-292
+apps/medusa/src/modules/wms/models/purchase-order.ts
+  s_ca3f2de87619bf::t_7014a61f941ec6 1-13,15-18
+  s_ca3f2de87619bf::t_cf6eb00263d5ec 14
+apps/medusa/integration-tests/http/wms-inbound-scan.spec.ts
+  s_ca3f2de87619bf::t_6affaae2bb006d 1-87,89-185
+  s_ca3f2de87619bf::t_f9c863e7b8e23c 88
+apps/medusa/src/modules/wms/lib/carrier.ts
+  s_ca3f2de87619bf::t_73c576bceee29e 1-225
+apps/medusa/src/api/admin/wms/purchase-orders/[id]/lines/[line_id]/route.ts
+  s_ca3f2de87619bf::t_86ca4b1d40aca2 1-80
+apps/medusa/src/modules/wms/migrations/Migration20260712061957.ts
+  s_ca3f2de87619bf::t_ef2195c629e63b 1-15
+apps/medusa/src/modules/wms/lib/__tests__/shift-window.unit.spec.ts
+  s_ca3f2de87619bf::t_609d6233988e69 1-171
+apps/medusa/src/api/admin/wms/purchase-orders/[id]/route.ts
+  s_ca3f2de87619bf::t_f60ff4cfd832fd 1-71
+apps/medusa/integration-tests/http/wms-suppliers.spec.ts
+  s_ca3f2de87619bf::t_d9deb816644087 1-197
+apps/warehouse-app/eslint.config.js
+  s_ca3f2de87619bf::t_2b2fc3b93c3851 1-8
+apps/medusa/src/api/wms/shipments/[id]/pick-qty/route.ts
+  s_ca3f2de87619bf::t_814ba277d011f0 1-88
+apps/warehouse-app/src/__tests__/theme.test.ts
+  s_ca3f2de87619bf::t_c8a2e35b6fa351 1-22
+apps/print-agent/package.json
+  s_ca3f2de87619bf::t_4eed5d5742deb9 1-25
+apps/print-agent/src/config.ts
+  s_ca3f2de87619bf::t_823c40f0b477fb 1-74
+apps/medusa/integration-tests/http/wms-admin-lookup.spec.ts
+  s_ca3f2de87619bf::t_1ba4b13dc2238c 1-35,41-325
+  s_ca3f2de87619bf::t_d0215f0f09a841 36-40
+apps/medusa/src/subscribers/order-canceled-shipment.ts
+  s_ca3f2de87619bf::t_19b03884b76dd4 1-47
+apps/medusa/src/workflows/create-purchase-order.ts
+  s_ca3f2de87619bf::t_d2f833d0432508 1-117,165-304
+  s_ca3f2de87619bf::t_dad4a16c0412d1 118-164
+apps/medusa/integration-tests/http/wms-receive.spec.ts
+  s_ca3f2de87619bf::t_713ce863c2cb4f 1-43,47-48,50-302
+  s_ca3f2de87619bf::t_1dcd193eeea02a 44-46,49
+apps/medusa/medusa-config.ts
+  s_ca3f2de87619bf::t_7921ae22271e19 81
+docs/retro/warehouse-pwa-retro.md
+  s_63a429f7b45e66::t_13aae2c84c7e90 1-95
+apps/medusa/src/modules/wms/lib/__tests__/barcode-template.unit.spec.ts
+  s_ca3f2de87619bf::t_c6d618a3561b34 1-109
+apps/medusa/src/modules/wms/migrations/Migration20260711230231.ts
+  s_ca3f2de87619bf::t_cca4801cfcf772 1-66
+apps/medusa/integration-tests/http/wms-purchase-orders.spec.ts
+  s_ca3f2de87619bf::t_c96e5d351cd984 1,7-19,21,23,32,36,51-256
+  s_ca3f2de87619bf::t_f39186a0124860 2-6
+  s_ca3f2de87619bf::t_5963ade7154576 20,22,24-31,33-35,37-50
+apps/medusa/src/admin/routes/purchase-orders/components/create-po-drawer.tsx
+  s_ca3f2de87619bf::t_be364f6428e82c 1-287
+apps/warehouse-app/tsconfig.json
+  s_ca3f2de87619bf::t_924a862f613bb9 6-16
+  s_ca3f2de87619bf::t_27dc6fa95308ac 1-4,17
+  s_ca3f2de87619bf::t_99fe6ca1adfe50 5
+apps/warehouse-app/app/index.tsx
+  s_ca3f2de87619bf::t_9bb2a9c1923b4d 3,6,21,36-37,57-61,63-65,70-71,73,75-78,81,96,106-107,122-123
+  s_ca3f2de87619bf::t_7ab6c7e0aee7e9 1-2,4-5,7-20,22-35,38-56,62,66-69,72,74,79-80,82-95,97-105,108-121
+apps/warehouse-app/metro.config.js
+  s_ca3f2de87619bf::t_61a8e9aee1803f 1-26
+apps/warehouse-app/src/api/client.ts
+  s_ca3f2de87619bf::t_36bd9185d35c64 1-185
+apps/medusa/src/api/admin/wms/suppliers/[id]/route.ts
+  s_ca3f2de87619bf::t_613d44f7e3d663 1-84
+apps/print-agent/jest.config.js
+  s_ca3f2de87619bf::t_053b4d7e543116 1-7
+apps/print-agent/src/drivers/types.ts
+  s_ca3f2de87619bf::t_b29f1a86111245 1-11
+apps/medusa/src/modules/wms/models/pack-record.ts
+  s_ca3f2de87619bf::t_0071d89557bd0a 1-13
+apps/medusa/src/admin/routes/print-queue/page.tsx
+  s_ca3f2de87619bf::t_1a6199b92429db 1-285
+apps/medusa/integration-tests/http/wms-print-admin.spec.ts
+  s_ca3f2de87619bf::t_dcc3ebb3f8d43e 1-392
+apps/medusa/integration-tests/http/wms-tracking-read.spec.ts
+  s_ca3f2de87619bf::t_3b117fb75af66e 1-142
+apps/medusa/src/api/wms/shipments/[id]/pick-scan/route.ts
+  s_ca3f2de87619bf::t_8d091eda2c0bdb 1-185
+apps/warehouse-app/app.json
+  s_ca3f2de87619bf::t_27dc6fa95308ac 1-2,5-7,10,15-17,19-22,24-27,39-40
+  s_ca3f2de87619bf::t_be71aea5a4c8c4 3-4,8-9,11-14,18,23,31-37
+  s_ca3f2de87619bf::t_d9966d7244b053 30
+  s_ca3f2de87619bf::t_2df84bbfc87c5c 28-29,38
+apps/print-agent/src/drivers/zebra-usb.ts
+  s_ca3f2de87619bf::t_dd872a03751859 1-29
+apps/medusa/src/modules/wms/migrations/Migration20260712054312.ts
+  s_ca3f2de87619bf::t_cf57d8898b6f3b 1-13
+apps/medusa/src/modules/wms/service.ts
+  s_ca3f2de87619bf::t_a5244d9b0d16b9 11,24
+  s_ca3f2de87619bf::t_928a1aa3d19eae 1-10,13-23,26-28
+  s_ca3f2de87619bf::t_cbadb06064a02c 12,25
+tasks/plan.md
+  s_63a429f7b45e66::t_66ad27edc2bb9c 2,6,8,13-15,17-20,22,26,28,30-48,50,58,60-62
+  s_63a429f7b45e66::t_ec9cf684e96225 1
+  s_63a429f7b45e66::t_41070c3e87c60b 3-5
+  s_63a429f7b45e66::t_c6557a358e5ab5 7
+  s_63a429f7b45e66::t_602307f352d7ba 9-12
+  s_63a429f7b45e66::t_b970dbca4664f7 16
+  s_63a429f7b45e66::t_a198cab83e7b60 21
+  s_63a429f7b45e66::t_074572700813f0 23-25
+  s_63a429f7b45e66::t_c8b017397f1336 27
+  s_63a429f7b45e66::t_29a92092601d1b 29
+  s_63a429f7b45e66::t_d676fa78785d9a 49
+  s_63a429f7b45e66::t_5dd61e1d115328 51-53,55-57
+  s_63a429f7b45e66::t_e88d5783a01089 59
+  s_63a429f7b45e66::t_000706a860fc41 63-65
+  s_ca3f2de87619bf::t_6372f6ffcfd5cc 54,66-70
+apps/medusa/src/modules/wms/index.ts
+  s_ca3f2de87619bf::t_cb8c3eca2aae76 1-8
+apps/medusa/src/admin/routes/purchase-orders/components/types.ts
+  s_ca3f2de87619bf::t_6f533d543c68ce 1-35
+docs/shiprocket-webhook.md
+  s_ca3f2de87619bf::t_38a4795a9347bd 1-95
+apps/medusa/integration-tests/http/wms-staff-admin.spec.ts
+  s_ca3f2de87619bf::t_b8ccdc04d2bc0c 1-156
+apps/warehouse-app/src/components/scanner-core.ts
+  s_ca3f2de87619bf::t_ecc80d4694bb37 1-96
+apps/medusa/src/api/admin/wms/suppliers/route.ts
+  s_ca3f2de87619bf::t_f99710afe2d851 1-79
+apps/medusa/src/api/wms/purchase-orders/route.ts
+  s_ca3f2de87619bf::t_a17026cc844e1a 1-45
+apps/print-agent/tsconfig.json
+  s_ca3f2de87619bf::t_0356674ac0bb0a 1-17,19
+  s_ca3f2de87619bf::t_6995be73517f50 18
+apps/medusa/src/api/admin/wms/shift-config/route.ts
+  s_ca3f2de87619bf::t_2013a798389bd0 1-69
+apps/medusa/src/api/admin/wms/staff/route.ts
+  s_ca3f2de87619bf::t_88ccaa979babf8 1-47
+apps/print-agent/src/drivers/mock.ts
+  s_ca3f2de87619bf::t_624f74352fb236 1-20
+apps/print-agent/systemd/print-agent.service
+  s_ca3f2de87619bf::t_94be2b419ef61e 1-24
+apps/medusa/src/admin/routes/low-stock/page.tsx
+  s_ca3f2de87619bf::t_e71a887af82d5b 1-192
+apps/warehouse-app/src/stores/__tests__/receiving-session.test.ts
+  s_ca3f2de87619bf::t_dc1b6576c5def6 1-318
+apps/print-agent/src/index.ts
+  s_ca3f2de87619bf::t_2ce7cd1b094a3c 1-88
+apps/medusa/src/api/admin/wms/low-stock/route.ts
+  s_ca3f2de87619bf::t_ad6dead412343f 1-127
+apps/medusa/src/workflows/create-quote-request.ts
+  s_ca3f2de87619bf::t_70808288888e12 8
+  s_ca3f2de87619bf::t_9c7fff8fd734ec 36-38,44-46
+apps/medusa/integration-tests/http/wms-stock-take.spec.ts
+  s_ca3f2de87619bf::t_e6f9667f4adb8c 1-226
+apps/medusa/src/scripts/create-warehouse-staff.ts
+  s_ca3f2de87619bf::t_17e871f8c67496 1-58
+apps/medusa/src/admin/routes/purchase-orders/components/line-composer.tsx
+  s_ca3f2de87619bf::t_efe433589d779d 1-170
+apps/print-agent/src/__tests__/agent.test.ts
+  s_ca3f2de87619bf::t_c159a0c43f6d34 1-388
+tasks/todo.md
+  s_ca3f2de87619bf::t_fde9a625650946 62
+  s_ca3f2de87619bf::t_d757ff7ed9a35e 67
+  s_ca3f2de87619bf::t_867b2abbe9a138 61
+  s_ca3f2de87619bf::t_c82301bc952082 65
+  s_ca3f2de87619bf::t_4dc20c1c72d265 49
+  s_ca3f2de87619bf::t_6c0272bcf82f80 70
+  s_ca3f2de87619bf::t_7093305dc86c0f 27
+  s_ca3f2de87619bf::t_a1e1990d6209d5 31
+  s_ca3f2de87619bf::t_019aac40670d0a 40
+  s_ca3f2de87619bf::t_af1475dd6d9964 43
+  s_ca3f2de87619bf::t_560ec325732a41 45-46
+  s_ca3f2de87619bf::t_7a7a6c9e252f0b 54-55
+  s_ca3f2de87619bf::t_31ace830276b3a 50
+  s_ca3f2de87619bf::t_6323d2e43e87d9 63
+  s_ca3f2de87619bf::t_f23194f5eac049 64
+  s_ca3f2de87619bf::t_d404dce5cdc6c3 73
+  s_ca3f2de87619bf::t_a1c56af28bb9ca 32
+  s_ca3f2de87619bf::t_ab13dc00bb5d80 36
+  s_63a429f7b45e66::t_879b2abfd0349e 2,4-6,8,23-25,29,33,37,41,47,52,59,68,75,82,84,86,88,90,100
+  s_ca3f2de87619bf::t_89c999412f3c14 35
+  s_ca3f2de87619bf::t_c08c032ae852b6 28
+  s_ca3f2de87619bf::t_589f7646d58d69 66
+  s_ca3f2de87619bf::t_5a4257a4fee68a 44
+  s_ca3f2de87619bf::t_c724db0e410281 79
+  s_ca3f2de87619bf::t_11ec8445793181 77-78
+  s_ca3f2de87619bf::t_5cd5c0ba47cf57 39
+  s_63a429f7b45e66::t_423f13df61821f 1
+  s_63a429f7b45e66::t_a3d8a0fe1edc71 3
+  s_63a429f7b45e66::t_adbab3fa60c929 7
+  s_63a429f7b45e66::t_050377efe92463 9-11,20-22
+  s_ca3f2de87619bf::t_a8fb57da5f3314 71-72
+  s_63a429f7b45e66::t_40a163a0e8d21c 83
+  s_63a429f7b45e66::t_79ab4b8f78a4ca 85
+  s_63a429f7b45e66::t_816ef1265f8b78 87
+  s_63a429f7b45e66::t_d230efa9118f0c 89
+  s_63a429f7b45e66::t_13f90e547dd795 91-93,97-99
+  s_63a429f7b45e66::t_01666e8d89fbaa 101-103
+  s_ca3f2de87619bf::t_08673b93e0e9a6 12-19,26,30,34,38,42,48,51,53,56-58,60,69,74,76,80-81,94-96,104-648
+apps/warehouse-app/src/components/__tests__/scanner-core.test.ts
+  s_ca3f2de87619bf::t_20a6da25e197ae 1-119
+apps/medusa/src/modules/wms/models/serial-unit.ts
+  s_ca3f2de87619bf::t_dcd5778821185f 1-24
+docs/print-agent-pi-setup.md
+  s_ca3f2de87619bf::t_cf330b8f8ea920 1-202
+apps/medusa/src/modules/wms/models/purchase-order-line.ts
+  s_ca3f2de87619bf::t_11e2cfef247baa 1-16
+apps/medusa/src/api/wms/purchase-orders/[id]/scan/route.ts
+  s_ca3f2de87619bf::t_37921e852c4ab2 1-98
+apps/medusa/src/modules/wms/models/stock-take-session.ts
+  s_ca3f2de87619bf::t_b6b5aa9b1d0469 1-18
+apps/medusa/src/workflows/pack-and-ship.ts
+  s_ca3f2de87619bf::t_7256129fdf8a70 134-139
+  s_ca3f2de87619bf::t_e0678d80b5dc67 1-133,140-368
+apps/medusa/src/modules/wms/models/print-job.ts
+  s_ca3f2de87619bf::t_1a1389852d85e8 1-16
+apps/medusa/src/links/shipment-order.ts
+  s_ca3f2de87619bf::t_b720f3ae893587 1-19
+apps/medusa/src/admin/routes/warehouse-suppliers/page.tsx
+  s_ca3f2de87619bf::t_e8add7ad6d54db 1-379
+apps/medusa/integration-tests/http/wms-shipment-create.spec.ts
+  s_ca3f2de87619bf::t_df063f87a31aae 1-70,85-466
+  s_ca3f2de87619bf::t_2f74974b879a20 71-84
+apps/medusa/src/api/admin/wms/purchase-orders/route.ts
+  s_ca3f2de87619bf::t_cdd858982fe9a3 1-79
+apps/print-agent/src/agent.ts
+  s_ca3f2de87619bf::t_9298ea42ea8464 1-230
+apps/warehouse-app/jest.config.js
+  s_ca3f2de87619bf::t_3090d187a4dde7 1-3
+apps/medusa/src/api/admin/wms/purchase-orders/[id]/lines/route.ts
+  s_ca3f2de87619bf::t_a3d3f5acb99b1c 1-50
+apps/print-agent/src/drivers/cups.ts
+  s_ca3f2de87619bf::t_fc61794acd46ee 1-57
+apps/medusa/integration-tests/http/wms-print-queue.spec.ts
+  s_ca3f2de87619bf::t_e0f45e97864306 1-302
+apps/medusa/.env.test
+  s_ca3f2de87619bf::t_71cec60f6e60c8 1-6
+apps/medusa/src/scripts/audit-variant-shipping-data.ts
+  s_ca3f2de87619bf::t_347427369ee87a 1-194
+apps/warehouse-app/src/auth/AuthContext.tsx
+  s_ca3f2de87619bf::t_a31cfecdc61645 1-88
+apps/medusa/src/api/wms/me/route.ts
+  s_ca3f2de87619bf::t_0e6ac6787ad1d5 1-24
+apps/medusa/src/admin/routes/purchase-orders/components/po-status.tsx
+  s_ca3f2de87619bf::t_20caf179d4b9f4 1-33
+apps/medusa/src/admin/routes/purchase-orders/page.tsx
+  s_ca3f2de87619bf::t_6ccba40cb3e38a 1-3,5-53,55-159
+  s_ca3f2de87619bf::t_3d6a78f87091fa 54
+  s_ca3f2de87619bf::t_84d23b6a293cd6 4
+apps/medusa/src/modules/wms/lib/__tests__/carrier.unit.spec.ts
+  s_ca3f2de87619bf::t_2b235f967e9725 1-237
+apps/warehouse-app/package.json
+  s_ca3f2de87619bf::t_876a55403c59c3 33,35-38
+  s_ca3f2de87619bf::t_2df84bbfc87c5c 19,22-23,28-30
+  s_ca3f2de87619bf::t_d9966d7244b053 16,18,20-21,24,26
+  s_ca3f2de87619bf::t_27dc6fa95308ac 1,3,15,17,25,27,31-32,34,39,41
+  s_ca3f2de87619bf::t_5805ea932c961f 2,4-14,40
+apps/medusa/src/modules/wms/lib/__tests__/agent-monitor.unit.spec.ts
+  s_ca3f2de87619bf::t_2abcee0b38c7bd 1-178
+apps/medusa/src/api/wms/shipments/[id]/verify-awb/route.ts
+  s_ca3f2de87619bf::t_d0f82c9d8784de 1-66
+apps/medusa/src/api/wms/shipments/by-awb/[awb]/route.ts
+  s_ca3f2de87619bf::t_688a095e2df459 1-180
+apps/warehouse-app/src/stores/receiving-session.ts
+  s_ca3f2de87619bf::t_19c6a7a15931f1 1-23,27-299,303-306,310-313,315-316,318-337,339,341-342,345-351,353-362,364-366,368-399
+  s_ca3f2de87619bf::t_5f6c29d84e780f 26
+  s_ca3f2de87619bf::t_36d83281ae1185 24-25
+  s_ca3f2de87619bf::t_58f807f1aa3bc4 300-302,307-309,314,317
+  s_ca3f2de87619bf::t_d4a9054c7e43b5 338,340,343-344,352,363,367
+apps/warehouse-app/src/components/Scanner.tsx
+  s_ca3f2de87619bf::t_3e0eaa172abd7c 371
+  s_ca3f2de87619bf::t_efa6e160b41f22 359
+  s_ca3f2de87619bf::t_acaec4bfe05749 1-358,360-370,372-451
+apps/medusa/src/modules/wms/migrations/Migration20260712070146.ts
+  s_ca3f2de87619bf::t_70505e1b9ea71b 1-13
+apps/medusa/src/api/admin/wms/print-jobs/route.ts
+  s_ca3f2de87619bf::t_99c26b31898dcf 1-99
+apps/medusa/src/modules/wms/models/shipment.ts
+  s_ca3f2de87619bf::t_8ec3acd7597d3b 1-13,21-23
+  s_ca3f2de87619bf::t_a95ec68b0c4e72 14-20
+apps/medusa/src/modules/wms/models/shift-config.ts
+  s_ca3f2de87619bf::t_3b672b1009104a 1-14
+apps/medusa/src/admin/routes/purchase-orders/[id]/page.tsx
+  s_ca3f2de87619bf::t_2f02120a97b40f 2-353
+  s_ca3f2de87619bf::t_0fc9498abc4e7f 1
+apps/medusa/src/modules/wms/migrations/Migration20260712055200.ts
+  s_ca3f2de87619bf::t_1b9bd1cf0d49e0 1-15
+apps/medusa/src/api/wms/purchase-orders/[id]/receive/route.ts
+  s_ca3f2de87619bf::t_084f3ef33e86d4 1-5,7-32,36-45
+  s_ca3f2de87619bf::t_72018b51c17f71 33-35
+  s_ca3f2de87619bf::t_ca07ece9b3aefd 6
+apps/warehouse-app/app/login.tsx
+  s_ca3f2de87619bf::t_7b8dfbf1e4ab3e 1-177
+apps/medusa/src/modules/wms/lib/barcode-template.ts
+  s_ca3f2de87619bf::t_82bc65af0745fe 1-208
+pnpm-lock.yaml
+  s_ca3f2de87619bf::t_04bcc8bb74a670 30,36,42,48,58,97,102-119,130,148,202-271,282-284,484-494,521-526,549-552,567-578,600-622,693-764,771-830,843-878,885-890,1179-1180,1182-1184,1186-1193,1195-1196,1198-1199,1201-1202,1204-1205,1207-1208,1210-1211,1213-1219,1221-1222,1224-1226,1228-1230,1232-1233,1235-1237,1239-1240,1242-1252,1254-1257,1259-1447,1688-1691,1716-1719,1724-1727,1744-1747,1807-1809,2769-2771,2889-2901,2916-2924,2952-2960,3002-3010,3129-3137,3254-3266,3286-3298,3338-3350,3417-3425,3439-3451,3544-3552,3567-3584,3599-3609,3622-3630,3674-3766,4241-4270,4292-4294,4316-4318,4352-4354,4410-4417,4439-4441,4667-4682,4691-4693,4717-4725,4759-4761,4773-4780,4789-4792,4833-4835,4879-4881,4950-4979,4985-4999,5016-5018,5034-5037,5066-5076,5093-5096,5171-5178,5197-5200,5224-5234,5253-5256,5336-5338,5347-5349,5357-5359,5364-5367,5390-5393,5398-5400,5405-5408,5443-5446,5490-5492,5536-5538,5544-5553,5571-5574,5631-5633,5637-5640,5755-5757,5766-5776,5842-5845,5869-5871,5932-5941,5988-5993,6016-6021,6090-6093,6122-6123,6125-6127,6129-6138,6140-6144,6146-6147,6149-6153,6155-6160,6162-6167,6169-6172,6174-6177,6179-6182,6184-6185,6187-6191,6193-6197,6199-6202,6204-6205,6208-6209,6211-6213,6215,6218-6219,6221-6240,6242,6244-6410,6414-6416,6438-6445,6473-6475,6488-6490,6619-6622,6653-6656,6682-6686,6691-6694,6763-6789,6798-6805,6822-6825,6830-6833,6859-6862,6881-6885,6975-6977,7109-7112,7117-7119,7289-7292,7301-7309,7314-7327,7344-7347,7401-7409,7428-7430,7456-7467,7575-7578,7594-7596,7723-7725,7732-7735,7767-7769,7790-7793,7822-7824,7910-7912,7920-7923,7935-7992,8106-8109,8122-8125,8140-8144,8195-8197,8236-8238,8283-8286,8312-8315,8332-8341,8385-8388,8403-8406,8419-8422,8431-8434,8503-8506,8657-8660,8665-8668,8780-8783,8788-8791,8805-8815,8838-8840,8852-8858,8862-8864,8914-8916,8930-8935,8963-8965,8969-8971,8984-9054,9117-9121,9126-9129,9157-9160,9182-9191,9196-9206,9277-9279,9307-9309,9324-9327,9392-9399,9435-9438,9447-9449,9465-9468,9489-9492,9519-9524,9532-9535,9565-9575,9583-9586,9604-9606,9614-9626,9630-9632,9636-9639,9655-9658,9663-9666,9675-9678,9720-9723,9748-9751,9772-9774,9799-9802,9822-9824,9831-9834,9857-9865,9870-9874,9885-9887,9923-9929,9933-9936,9956-9982,10035-10038,10043-10046,10082-10091,10119-10134,10171-10174,10201-10203,10214-10218,10241-10245,10258-10261,10270-10275,10316-10318,10323-10326,10330-10332,10342-10364,10410-10412,10431-10454,10459-10462,10467-10470,10475-10489,10511-10515,10571-10576,10592-10596,10599-10600,10997-11014,11046-11054,11077-11084,11098,11101,11103-11105,11107,11112,11117,11122,11127,11132,11137,11142,11147,11152,11157,11162,11167,11172-11202,11217-11304,11313-11381,11392-11435,11447-11452,11723-12105,12444-12445,12506-12544,12549-12550,12578-12579,12702-12706,12721,12724,12726,12734-12735,12763,12774,12779,12781,12783,12785,12788,12790,12792,12794,12796,12798,12801,12803,12805,12807,12810,12812,12819,12821,12823,12825,12830,12832,12838,12840,12846,12848,12890,12892,12896,12898,12900,12902,12981,12986,13000,13009,13011,13013,13015,13021,13023,13025,13030,13033,13035,13037,13046,13067,13083,13085,13087,13089,13099,13101,13103,13105,13117,13119,13121,13123,13125,13127,13132,13134,13136,13141-13188,13190-13193,13260,13262,13264,13266,13272,13274,13295,13297,13299,13301,13304,13306,13311,13313,13315,13317,13319,13321,13323,13325,13327,13329,13331,13333,13335,13337,13339,13341,13343,13345,13347,13349,13366,13368,13375-13376,13381,13383,13385,13390,13392,13397,13455,13457,13490,13492,13496,13498,14177-14178,14293-14304,14316-14327,14353-14364,14431-14452,14459-14464,14502-14514,14541-14546,14567-14577,14622-14635,14769-14778,14797-14815,14832-14849,14895-14913,15001-15014,15030-15045,15154-15165,15179-15200,15212-15363,15365-15367,15369-15373,15375,15377-15392,15394-15396,15398-15406,15408-15410,15412-15417,15419,15421-15427,15429-15431,15433-15436,15438,15556,15558-15559,15839-15876,15898-15899,15934-15935,15981-15986,16039-16046,16075-16076,16109-16124,16137-16148,16158-16166,16176-16179,16192-16203,16221-16235,16247-16257,16376,16384,16392-16401,16412-16416,16437-16440,16445,16447,16478-16479,16490-16493,16498-16501,16535-16538,16612-16613,16697-16740,16760-16811,16824-16829,16840-16841,16898-16909,16931-16934,17020-17030,17068-17069,17096-17116,17131-17134,17224-17227,17236-17237,17242-17246,17251-17255,17273-17274,17277-17278,17281-17282,17312-17313,17338-17346,17382-17385,17415-17429,17456-17457,17460-17467,17480-17485,17530-17531,17536-17537,17613-17614,17621-17628,17686-17687,17708-17711,17851-17875,17915,17930-17949,17979-18007,18031-18041,18142-18143,18189-18439,18573-18574,18589-18590,18611-18624,18669-18670,18675-18676,18797-18798,18830-18831,18857-18865,18868-18869,19025-19050,19057-19064,19083-19090,19098-19104,19129-19132,19147-19150,19257-19258,19370-19371,19374-19375,19566-19584,19616-19646,19654-19660,19673-19687,19697-19723,19754-19760,19902-19918,19949-19962,19982-20016,20139-20140,20154-20160,20251-20252,20257-20260,20298-20299,20316-20317,20344-20345,20512,20516,20518-20519,20535-20536,20541-20544,20551-20724,20937-20938,20945-20946,20959-20960,21020-21021,21046-21048,21067,21095-21096,21120-21126,21147-21154,21203-21206,21221-21224,21242-21246,21262-21270,21363-21366,21504-21509,21512-21513,21532,21538,21595-21600,21607-21613,21626-21633,21669-21672,21681-21689,21692-21695,21801-21808,21815-21819,21827-21830,21853-21854,21857-21858,21883-21997,22008-22015,22038-22048,22079-22092,22097-22098,22129-22133,22164-22171,22181-22195,22320-22321,22339-22340,22359-22363,22458-22463,22520-22521,22540-22541,22566-22567,22648-22649,22684-22693,22698-22699,22726-22734,22739-22740,22753-22756,22763-22779,22782-22783,22789-22790,22805-22806,22809-22810,22818-22822,22901-22904,22921-22924,22942-22943,22969-22972,22992-22993,22996-22997,23002,23021,23036-23047,23054-23061,23072-23073,23101-23109,23112-23115,23126-23129,23132-23151,23177-23197,23229-23230,23233-23236,23289-23293,23323-23333,23387-23388,23438-23442,23450-23460,23469-23476,23489-23490,23501-23502,23507-23515,23531,23540-23542,23546-23549,23554-23555,23564-23580,23661-23662,23689-23692,23698-23702,23705-23706,23709-23719,23741-23742,23791-23794,23804-23808
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "045665988e3af7a95eb23efee02154b4406c6b21",
+  "prompts": {},
+  "sessions": {
+    "s_63a429f7b45e66": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0033898f-5b5f-4309-a01c-ffb737ab6a90",
+        "model": "unknown"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    },
+    "s_ca3f2de87619bf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e62d314-898d-4044-a81a-79ef2e70416b",
+        "model": "claude-fable-5"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
