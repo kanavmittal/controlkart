@@ -151,7 +151,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       category.description ||
       `Buy genuine Selec ${category.name} with GST invoice and pan-India shipping from ControlKart.`,
-    alternates: { canonical: `/categories/${handle}` },
+    // Canonicalize to the category's stored handle (not the requested casing),
+    // so a case-variant URL doesn't read as duplicate content.
+    alternates: { canonical: `/categories/${category.handle}` },
   }
 }
 

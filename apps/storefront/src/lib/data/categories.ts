@@ -1,6 +1,7 @@
 import { HttpTypes } from "@medusajs/types"
 import { storeFetch } from "../medusa"
 import type { SpecFacetsResponse } from "./types"
+import { matchCategoryHandle } from "./category-handle"
 
 export type StoreCategory = HttpTypes.StoreProductCategory
 
@@ -46,7 +47,8 @@ export async function getCategoryTree(): Promise<
     .map((c) => ({ ...c, children: byParent.get(c.id) ?? [] }))
 }
 
-export async function getCategoryByHandle(handle: string) {
+/** Raw exact (case-sensitive) handle lookup — mirrors Medusa's `?handle=` filter. */
+async function queryCategoryByHandle(handle: string) {
   const { product_categories } = await storeFetch<{
     product_categories: StoreCategory[]
   }>("/store/product-categories", {
@@ -61,6 +63,25 @@ export async function getCategoryByHandle(handle: string) {
     tags: ["categories"],
   })
   return product_categories[0] ?? null
+}
+
+/**
+ * Resolve a category by its URL handle. Tries an exact match first (fast path,
+ * one request), then falls back to a CASE-INSENSITIVE match — admin handles can
+ * carry uppercase (e.g. "single_phase_Input") and Medusa's handle filter is
+ * case-sensitive, so a differently-cased URL would otherwise 404. The fallback
+ * finds the canonical handle from the full list and re-queries with its exact
+ * value, so the caller always gets the complete category payload. See
+ * [[category-handle.ts]] for the matcher + its regression tests.
+ */
+export async function getCategoryByHandle(handle: string) {
+  const exact = await queryCategoryByHandle(handle)
+  if (exact) return exact
+
+  const all = await listCategories()
+  const match = matchCategoryHandle(all, handle)
+  if (!match?.handle || match.handle === handle) return null
+  return queryCategoryByHandle(match.handle)
 }
 
 /** Flattens a category's nested `category_children` tree into a flat list. */
