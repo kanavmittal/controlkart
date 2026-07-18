@@ -1,7 +1,9 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useEffect, useRef } from "react"
 import {
   BadgeCheck,
   CheckCircle2,
@@ -15,6 +17,7 @@ import {
 import { useCustomer, useAuthMutations } from "@/lib/hooks/use-customer"
 import { useOrders } from "@/lib/hooks/use-orders"
 import { isEmailVerified } from "@/lib/customer"
+import { safeRedirect } from "@/lib/redirect"
 import { formatINR, formatDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
@@ -83,9 +86,40 @@ function formatOrderStatus(status: string | undefined): string {
 export function AccountView() {
   const { customer, isLoading } = useCustomer()
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get("redirect") ?? undefined
+  const redirectTo = safeRedirect(searchParams.get("redirect"))
   const error = searchParams.get("error") ?? undefined
   const verify = searchParams.get("verify") ?? undefined
+  const cardColRef = useRef<HTMLDivElement>(null)
+
+  // "Tall sidebar" sticky behavior for the auth card column (desktop only):
+  // the column is position:sticky and its `top` is set from its measured
+  // height — shorter than the viewport → pinned centered; taller → pinned by
+  // its bottom edge just above the viewport bottom, so no part of the form is
+  // ever clipped out of reach while scrolling (unlike a naive
+  // top-1/2 + -translate-y-1/2 centering, which cuts the top off tall cards).
+  useEffect(() => {
+    const col = cardColRef.current
+    if (!col) return
+    const mq = window.matchMedia("(min-width: 1024px)")
+    const apply = () => {
+      if (!mq.matches) {
+        col.style.removeProperty("top")
+        return
+      }
+      const h = col.offsetHeight
+      const vh = window.innerHeight
+      col.style.top =
+        h <= vh - 48 ? `${Math.round((vh - h) / 2)}px` : `${vh - h - 24}px`
+    }
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(col)
+    window.addEventListener("resize", apply)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("resize", apply)
+    }
+  }, [customer, isLoading])
 
   if (isLoading) {
     return (
@@ -99,15 +133,64 @@ export function AccountView() {
     return (
       <>
         <Breadcrumbs crumbs={[{ label: "Account" }]} />
-        <div className="athens-container py-12">
-          <div className="mx-auto max-w-md">
-            <h1 className="athens-page-title">Sign In</h1>
-            <p className="mt-2 text-sm text-athens-body">
-              An account is required to purchase. Sign in or create an account
-              in under a minute.
-            </p>
-            <div className="mt-8">
-              <AuthForms redirectTo={redirectTo} errorMessage={error} />
+        <div className="bg-athens-band">
+          <div className="athens-container grid items-start gap-10 py-10 md:py-14 lg:min-h-[calc(100vh+24rem)] lg:max-w-6xl lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+            {/* Brand panel (desktop only) */}
+            <div className="relative hidden min-h-[560px] overflow-hidden rounded-2xl lg:sticky lg:top-10 lg:block">
+              <Image
+                src="/marketing/home/athens_toolset.jpg"
+                alt="Professional tools from ControlKart"
+                fill
+                priority
+                className="object-cover"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-athens-dark/90 via-athens-dark/40 to-athens-dark/10"
+                aria-hidden
+              />
+              <div className="absolute inset-x-0 bottom-0 p-8">
+                <p className="text-2xl font-semibold tracking-tight text-white">
+                  ControlKart
+                </p>
+                <p className="mt-2 max-w-sm text-sm leading-relaxed text-white/80">
+                  Industrial tools, PLCs and drives — genuine stock at trade
+                  prices, dispatched fast across India.
+                </p>
+                <ul className="mt-5 space-y-2">
+                  {[
+                    "GST invoicing on every order",
+                    "Same-day dispatch on stocked items",
+                    "Dedicated support for trade accounts",
+                  ].map((point) => (
+                    <li
+                      key={point}
+                      className="flex items-center gap-2 text-sm text-white/85"
+                    >
+                      <CheckCircle2
+                        className="size-4 shrink-0 text-white"
+                        aria-hidden
+                      />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Auth card */}
+            <div
+              ref={cardColRef}
+              className="mx-auto w-full max-w-md lg:sticky lg:mx-0 lg:justify-self-end"
+            >
+              <h1 className="athens-page-title">Welcome to ControlKart</h1>
+              <p className="mt-2 text-sm text-athens-body">
+                An account is required to purchase. Sign in or create an
+                account in under a minute.
+              </p>
+              <div className="mt-8">
+                <AuthForms redirectTo={redirectTo} errorMessage={error} />
+              </div>
             </div>
           </div>
         </div>

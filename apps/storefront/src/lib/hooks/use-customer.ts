@@ -90,10 +90,39 @@ export function useAuthMutations() {
     mutationFn: () =>
       sdk.client.fetch<{
         sent: boolean
+        send_failed?: boolean
         verify_url?: string
         already_verified?: boolean
       }>("/store/auth/send-verification", { method: "POST" }),
   })
 
-  return { login, register, logout, resendVerification }
+  /**
+   * Asks the backend to email a reset link. Callers should show a generic
+   * confirmation regardless of outcome (unknown emails must not be
+   * distinguishable from registered ones).
+   */
+  const requestPasswordReset = useMutation({
+    mutationFn: (email: string) =>
+      sdk.auth.resetPassword("customer", "emailpass", { identifier: email }),
+  })
+
+  /** Consumes the 15-minute token from the reset email and sets a new password. */
+  const resetPassword = useMutation({
+    mutationFn: (v: { password: string; token: string }) =>
+      sdk.auth.updateProvider(
+        "customer",
+        "emailpass",
+        { password: v.password },
+        v.token
+      ),
+  })
+
+  return {
+    login,
+    register,
+    logout,
+    resendVerification,
+    requestPasswordReset,
+    resetPassword,
+  }
 }

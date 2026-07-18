@@ -129,7 +129,7 @@ module.exports = defineConfig({
                   api_key: process.env.RESEND_API_KEY,
                   from:
                     process.env.EMAIL_FROM ||
-                    "ControlKart <onboarding@resend.dev>",
+                    "ControlKart <noreply@controlkart.com>",
                 },
               }
             : {

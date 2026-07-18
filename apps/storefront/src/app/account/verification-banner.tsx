@@ -47,7 +47,14 @@ export function VerificationBanner({
       )}
       {data?.verify_url && (
         <p className="mt-1 break-all font-mono text-xs text-athens-body">
-          Dev link:{" "}
+          {data.send_failed ? (
+            <>
+              We couldn&apos;t send the email right now — verify directly with
+              this link:{" "}
+            </>
+          ) : (
+            <>Dev link: </>
+          )}
           <a href={data.verify_url} className="text-athens-blue underline">
             {data.verify_url}
           </a>

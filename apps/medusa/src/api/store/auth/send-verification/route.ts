@@ -1,5 +1,8 @@
 import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { Modules } from "@medusajs/framework/utils"
+import {
+  ContainerRegistrationKeys,
+  Modules,
+} from "@medusajs/framework/utils"
 import {
   buildVerifyUrl,
   issueVerificationToken,
@@ -29,14 +32,28 @@ export const POST = async (
   const verifyUrl = buildVerifyUrl(token)
 
   const notificationService = req.scope.resolve(Modules.NOTIFICATION)
-  await notificationService.createNotifications([
-    {
-      to: customer.email,
-      channel: "email",
-      template: "verify-email",
-      data: { url: verifyUrl },
-    },
-  ])
+  try {
+    await notificationService.createNotifications([
+      {
+        to: customer.email,
+        channel: "email",
+        template: "verify-email",
+        data: { url: verifyUrl },
+      },
+    ])
+  } catch (error) {
+    // Delivery is down (e.g. unverified Resend sender domain) — don't strand
+    // the user on an unverifiable account: hand the link back to the
+    // authenticated account owner so they can still verify.
+    const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
+    logger.error(
+      `[auth] Verification email to ${customer.email} failed to send: ${
+        (error as Error).message
+      }`
+    )
+    res.json({ sent: false, send_failed: true, verify_url: verifyUrl })
+    return
+  }
 
   res.json({
     sent: true,

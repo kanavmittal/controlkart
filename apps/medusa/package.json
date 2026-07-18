@@ -33,6 +33,8 @@
     "@medusajs/icons": "^2.15.3",
     "@medusajs/medusa": "2.15.3",
     "@medusajs/ui": "^4.1.15",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "@sam-ael/medusa-plugin-shiprocket": "^0.2.1",
     "@uiw/react-md-editor": "^4.1.1",
     "medusa-plugin-razorpay-v2": "^0.1.4",

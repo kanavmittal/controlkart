@@ -8,6 +8,10 @@ import {
   ProviderSendNotificationResultsDTO,
 } from "@medusajs/framework/types"
 import { Resend, CreateEmailOptions } from "resend"
+import * as React from "react"
+import { render } from "@react-email/render"
+import VerifyEmail from "./emails/verify-email"
+import PasswordReset from "./emails/password-reset"
 
 type ResendOptions = {
   channels: string[]
@@ -19,22 +23,25 @@ type InjectedDependencies = {
   logger: Logger
 }
 
-type RenderedEmail = { subject: string; html: string }
-type TemplateFn = (data: Record<string, unknown>) => RenderedEmail
+type EmailTemplate = {
+  subject: string
+  component: React.ComponentType<{ url: string }>
+}
 
 /**
- * Email templates keyed by the `template` passed to
- * `notificationModuleService.createNotifications({ template })`. Plain HTML
- * (no React Email dependency) — these are simple transactional emails.
+ * Branded React Email templates keyed by the `template` passed to
+ * `notificationModuleService.createNotifications({ template })`. The components
+ * live in ./emails and are rendered to HTML + plain text at send time.
  */
-const templates: Record<string, TemplateFn> = {
-  "verify-email": (data) => ({
+const templates: Record<string, EmailTemplate> = {
+  "verify-email": {
     subject: "Verify your ControlKart account",
-    html:
-      `<p>Please verify your email to complete registration.</p>` +
-      `<p><a href="${data.url}">Verify email</a></p>` +
-      `<p>This link expires in 24 hours.</p>`,
-  }),
+    component: VerifyEmail,
+  },
+  "password-reset": {
+    subject: "Reset your ControlKart password",
+    component: PasswordReset,
+  },
 }
 
 /**
@@ -73,35 +80,56 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
   async send(
     notification: ProviderSendNotificationDTO
   ): Promise<ProviderSendNotificationResultsDTO> {
-    const render = templates[notification.template]
-    if (!render) {
-      this.logger.error(
+    const template = templates[notification.template]
+    if (!template) {
+      // Throw (not just log): returning {} makes the Notification module mark
+      // the email as SUCCESS when nothing was ever sent.
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
         `No Resend template for "${notification.template}". ` +
           `Known templates: ${Object.keys(templates).join(", ")}`
       )
-      return {}
     }
 
-    const { subject, html } = render(
-      (notification.data ?? {}) as Record<string, unknown>
-    )
+    const { subject, component } = template
+    const element = React.createElement(component, {
+      ...(notification.data as { url: string }),
+    })
+    // Ship both HTML and a plain-text fallback — a text part measurably
+    // improves inbox placement (spam filters penalise HTML-only mail).
+    const [html, text] = await Promise.all([
+      render(element),
+      render(element, { plainText: true }),
+    ])
 
     const emailOptions: CreateEmailOptions = {
       from: this.options.from,
       to: [notification.to],
       subject,
       html,
+      text,
     }
 
     const { data, error } = await this.resendClient.emails.send(emailOptions)
 
     if (error || !data) {
-      this.logger.error(
-        `Resend failed to send "${notification.template}": ${
-          error ? JSON.stringify(error) : "unknown error"
-        }`
+      const detail = error ? JSON.stringify(error) : "unknown error"
+      // The default onboarding@resend.dev sender is test-only: Resend rejects
+      // mail to any address except the account owner's with a 403.
+      const domainHint = /testing domain|verify a domain|only send to your own/i.test(
+        detail
       )
-      return {}
+        ? ` Hint: the "${this.options.from}" sender is restricted to the Resend ` +
+          `account owner's email. Verify your domain at ` +
+          `https://resend.com/domains and set EMAIL_FROM to an address on it.`
+        : ""
+      this.logger.error(
+        `Resend failed to send "${notification.template}": ${detail}${domainHint}`
+      )
+      throw new MedusaError(
+        MedusaError.Types.UNEXPECTED_STATE,
+        `Resend failed to send "${notification.template}" email: ${detail}`
+      )
     }
 
     return { id: data.id }
