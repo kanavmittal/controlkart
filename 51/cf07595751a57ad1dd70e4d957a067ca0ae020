@@ -1,0 +1,36 @@
+apps/storefront/src/lib/data/category-handle.ts
+  s_a7e672fccc8c83::t_1ff09aa4caa85d 1-33
+apps/storefront/vitest.config.ts
+  s_a7e672fccc8c83::t_6e0b9248fc0e68 1-15
+apps/storefront/src/lib/data/category-handle.test.ts
+  s_a7e672fccc8c83::t_f1f5c19a519b11 1-111
+apps/storefront/package.json
+  s_a7e672fccc8c83::t_38f0cfd92f2c56 40-41
+  s_a7e672fccc8c83::t_31b779bb6fd711 9-10
+apps/storefront/src/lib/data/categories.ts
+  s_a7e672fccc8c83::t_75de22be3b9794 50-51,68-84
+  s_a7e672fccc8c83::t_1c43a7026c5d20 4
+  s_a7e672fccc8c83::t_f49bd653340888 85-86
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_a7e672fccc8c83::t_d7ad00c279f75e 154-156
+apps/storefront/tsconfig.json
+  s_a7e672fccc8c83::t_e2431d8a2f116f 40-42
+pnpm-lock.yaml
+  s_a7e672fccc8c83::t_59d4932dbd08eb 189-191,4032-4060,4231-4234,4413-4416,4461-4464,4498-4501,4869-4872,5104-5106,5279-5281,5314-5317,6601-6603,7294-7300,8056-8058,8133-8135,8146-8148,8352-8357,8362-8373,8658-8662,8694-8718,8764-8768,13565-13604,13796-13797,14039-14040,14086-14093,14141-14142,14510-14511,14766-14767,15029-15032,15074-15075,16666-16667,17566-17569,18570-18571,18628-18629,18639-18640,18879-18882,18888-18893,19221-19238,19249-19283,19352-19356
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "51cf07595751a57ad1dd70e4d957a067ca0ae020",
+  "prompts": {},
+  "sessions": {
+    "s_a7e672fccc8c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ea92990-c46a-45d8-941a-4f45e5a0f0be",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
