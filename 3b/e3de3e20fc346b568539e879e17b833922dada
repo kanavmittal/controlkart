@@ -1,0 +1,26 @@
+apps/storefront/src/lib/cart-store.ts
+  s_a7e672fccc8c83::t_65d4f61e147bb6 37-54
+apps/storefront/src/lib/hooks/use-customer.ts
+  s_a7e672fccc8c83::t_17562e478dd781 87
+  s_a7e672fccc8c83::t_329a14768a6aa2 39-47,54
+  s_a7e672fccc8c83::t_1bc0b75b56b31c 6
+apps/storefront/src/app/auth/google/callback/page.tsx
+  s_a7e672fccc8c83::t_1df6fe4cacbb74 7
+  s_a7e672fccc8c83::t_27bc4153943a1e 96-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "3be3de3e20fc346b568539e879e17b833922dada",
+  "prompts": {},
+  "sessions": {
+    "s_a7e672fccc8c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ea92990-c46a-45d8-941a-4f45e5a0f0be",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
