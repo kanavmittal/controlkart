@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Loader2, XCircle } from "lucide-react"
 import { sdk } from "@/lib/sdk"
+import { transferCartToCustomer } from "@/lib/cart-store"
 import { Card, CardContent } from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -91,6 +92,10 @@ export default function GoogleCallbackPage() {
             /* non-fatal */
           }
         }
+
+        // Hand any pre-login cart to this customer so checkout doesn't operate
+        // on a cart still bound to a prior (possibly deleted) customer.
+        await transferCartToCustomer()
 
         window.location.href = readRedirect()
       } catch (err) {

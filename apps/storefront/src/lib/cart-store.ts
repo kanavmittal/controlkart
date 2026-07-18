@@ -34,3 +34,21 @@ export async function getOrCreateCartId(regionId?: string): Promise<string> {
   setCartId(cart.id)
   return cart.id
 }
+
+/**
+ * Associate the current localStorage cart with the just-authenticated customer.
+ * Medusa's cart-transfer sets the cart's `customer_id` to the logged-in
+ * customer, which both links a pre-login (guest) cart to the account AND repairs
+ * a cart whose previous customer no longer exists — without this, updating such
+ * a cart at checkout 404s ("Customer with id … was not found"). Best-effort:
+ * a transfer failure must never block sign-in.
+ */
+export async function transferCartToCustomer(): Promise<void> {
+  const cartId = getCartId()
+  if (!cartId) return
+  try {
+    await sdk.store.cart.transferCart(cartId)
+  } catch {
+    /* cart missing/not transferable — leave it; not worth blocking login */
+  }
+}

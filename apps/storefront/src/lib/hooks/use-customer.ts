@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { sdk } from "@/lib/sdk"
 import { queryKeys } from "@/lib/query-keys"
+import { transferCartToCustomer } from "@/lib/cart-store"
 
 const CUSTOMER_FIELDS = "id,email,first_name,last_name,phone,metadata"
 
@@ -35,13 +36,22 @@ export function useAuthMutations() {
   const syncCustomer = () =>
     queryClient.invalidateQueries({ queryKey: queryKeys.customer })
 
+  // After sign-in, hand the pre-login cart to the customer (see
+  // transferCartToCustomer) before refreshing customer/cart state, so checkout
+  // operates on a cart owned by the now-authenticated customer.
+  const onAuthSuccess = async () => {
+    await transferCartToCustomer()
+    queryClient.invalidateQueries({ queryKey: ["cart"] })
+    syncCustomer()
+  }
+
   const login = useMutation({
     mutationFn: (v: { email: string; password: string }) =>
       sdk.auth.login("customer", "emailpass", {
         email: v.email,
         password: v.password,
       }),
-    onSuccess: syncCustomer,
+    onSuccess: onAuthSuccess,
   })
 
   const register = useMutation({
@@ -74,7 +84,7 @@ export function useAuthMutations() {
         /* non-fatal */
       }
     },
-    onSuccess: syncCustomer,
+    onSuccess: onAuthSuccess,
   })
 
   const logout = useMutation({
