@@ -1,0 +1,62 @@
+apps/medusa/src/modules/resend/emails/verify-email.tsx
+  s_a7e672fccc8c83::t_9de0e82114fc6d 1-64
+apps/medusa/.env.template
+  s_a7e672fccc8c83::t_6b7e7e4b7d2baa 27-29,31
+  s_a7e672fccc8c83::t_e47c3d07530585 19-22,25
+apps/medusa/package.json
+  s_a7e672fccc8c83::t_5accaee378f72c 36-37
+apps/medusa/src/modules/resend/service.ts
+  s_a7e672fccc8c83::t_bea5d71dc4edbc 83-88,94-103,110
+  s_a7e672fccc8c83::t_bf6f7859dc3b0d 11-14,26-29,32-34,36-37,39-44
+  s_a7e672fccc8c83::t_91be59d0492d62 116-125,127-131
+apps/medusa/medusa-config.ts
+  s_a7e672fccc8c83::t_3b009d59a9d0d0 132
+apps/medusa/src/modules/resend/emails/brand-layout.tsx
+  s_a7e672fccc8c83::t_9de8e6fd178d8d 1-113
+apps/medusa/src/modules/resend/emails/password-reset.tsx
+  s_a7e672fccc8c83::t_49bc764b5e3dc9 1-65
+apps/medusa/.gitignore
+  s_a7e672fccc8c83::t_be39028a438265 5
+apps/medusa/.env.production.template
+  s_a7e672fccc8c83::t_bf9092efb171a1 50-52,55
+  s_a7e672fccc8c83::t_8dbd652326f51c 58-65
+  s_a7e672fccc8c83::t_634f95968d4fc6 56-57
+apps/medusa/tsconfig.json
+  s_a7e672fccc8c83::t_50ca2c25f061ff 20-27
+pnpm-lock.yaml
+  s_a7e672fccc8c83::t_a4dbc10022b6f8 40-45,60,2994-3179,3352-3354,4931-4943,5021-5024,5673-5676,5683-5688,6371-6373,6593-6597,7161-7163,7229-7231,7429-7433,7894-7896,12482-12614,12742-12746,14399-14416,14486-14487,15446-15453,15458-15466,16336-16337,16518-16519,17311-17315,17366-17367,17533-17534,18025,18029-18030,18162-18165
+apps/medusa/src/api/store/auth/send-verification/route.ts
+  s_a7e672fccc8c83::t_09022ac5f07519 2-5,35-56
+apps/medusa/src/subscribers/password-reset.ts
+  s_a7e672fccc8c83::t_35d1065ec2dbc2 1-60
+apps/storefront/src/app/account/account-view.tsx
+  s_a7e672fccc8c83::t_55d5d28012ae0c 3,6,20,89,92-122,136-193
+apps/storefront/src/app/account/auth-forms.tsx
+  s_a7e672fccc8c83::t_4d1b129a4db6a1 4,16-18,21-32,36-188,197,258-261,263-268,270-287,290-301,304-305,307-322,326,330,332-333,345,347,351-363,366-367,373-377,385-387,390,399,401,412,414,427,429,433-445,451,454-455,458-460,465-471,476,485-486
+apps/storefront/src/app/account/verification-banner.tsx
+  s_a7e672fccc8c83::t_5c37186ea8310b 50-57
+apps/storefront/src/app/reset-password/page.tsx
+  s_a7e672fccc8c83::t_aa847495b572ca 1-17
+apps/storefront/src/app/reset-password/reset-password-view.tsx
+  s_a7e672fccc8c83::t_0cb01e27d8b0e6 1-203
+apps/storefront/src/lib/hooks/use-customer.ts
+  s_a7e672fccc8c83::t_543a3432e23f85 93,99-127
+apps/storefront/src/lib/redirect.ts
+  s_a7e672fccc8c83::t_6aab52bc0da9d0 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "4a673e06615b378af9febdb8116f69e24b165ebd",
+  "prompts": {},
+  "sessions": {
+    "s_a7e672fccc8c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ea92990-c46a-45d8-941a-4f45e5a0f0be",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
