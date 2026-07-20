@@ -1,0 +1,125 @@
+apps/storefront/src/components/ui/button.tsx
+  s_eea97c0c774f85::t_d2ef7bec0cedc3 92-93,100-105
+apps/storefront/src/lib/data/india-geo.ts
+  s_eea97c0c774f85::t_e1b00b647fd31a 1-873
+apps/storefront/src/app/account/auth-forms.tsx
+  s_eea97c0c774f85::t_9634fa480eb6fa 219-224,228
+  s_eea97c0c774f85::t_bb0bc7d8cfe458 472-486
+  s_eea97c0c774f85::t_6274f3f25a5fbd 198
+apps/storefront/src/app/account/addresses/address-manager.tsx
+  s_eea97c0c774f85::t_02b14cca3ec77b 181-184
+  s_eea97c0c774f85::t_4ee0fdee268a9e 195,200
+  s_eea97c0c774f85::t_63646b36686011 74,76-77,83-95
+  s_eea97c0c774f85::t_20605a117d1777 223-229
+  s_eea97c0c774f85::t_8390e6d81ad284 3,9-13
+  s_eea97c0c774f85::t_c84c771d52c73f 118,123-136,139
+  s_eea97c0c774f85::t_3030962ad125f7 96-98
+apps/storefront/src/lib/gst.ts
+  s_eea97c0c774f85::t_7fc0e445ce7e4d 1-54
+apps/storefront/src/components/ui/combobox.tsx
+  s_eea97c0c774f85::t_4efa5fc9687419 1-108
+apps/storefront/src/app/checkout/checkout-address-form.tsx
+  s_eea97c0c774f85::t_49907916d063db 77
+  s_eea97c0c774f85::t_a2353fa985fbc5 130-144
+  s_eea97c0c774f85::t_169c1b4f87df92 370,373-376
+  s_eea97c0c774f85::t_0122c5f42565e0 32
+apps/medusa/src/api/store/orders/[id]/invoice/route.ts
+  s_8aacdf16a9d4a1::t_f035b3d4b4e248 73-75
+  s_8aacdf16a9d4a1::t_129a8a366aae21 48
+apps/storefront/src/config/info-pages.ts
+  s_8aacdf16a9d4a1::t_0750c3da2cfc5c 29,33-39
+  s_8aacdf16a9d4a1::t_59859ecfe1b54f 112-117
+  s_8aacdf16a9d4a1::t_99eb9eb8307dc6 148-150
+apps/storefront/src/app/order-confirmed/[id]/page.tsx
+  s_8aacdf16a9d4a1::t_f5f0829e76bfb0 36
+apps/medusa/.env.production.template
+  s_8aacdf16a9d4a1::t_527afbc9141027 30-34
+apps/storefront/src/config/site.ts
+  s_8aacdf16a9d4a1::t_eda9530ce20e26 140,142-146
+  s_8aacdf16a9d4a1::t_fbe33b101fb626 123
+  s_8aacdf16a9d4a1::t_8dc841e5f9ef4e 41
+apps/storefront/src/components/address/address-fields.tsx
+  s_eea97c0c774f85::t_7d0e02567a9716 1-11,13-16,27,29-41,45-57,63,68,71-100,125,127-137,140,160,165,168-173,176-191,216-257
+apps/storefront/src/lib/gst.test.ts
+  s_eea97c0c774f85::t_fe3182772f70fe 1-48
+apps/storefront/src/lib/hooks/use-addresses.ts
+  s_eea97c0c774f85::t_cb8fc3b0cfcfd3 23
+apps/medusa/.env.template
+  s_8aacdf16a9d4a1::t_9c9e492435f11a 52-56
+apps/medusa/src/scripts/seed.ts
+  s_8aacdf16a9d4a1::t_13cd1734b71736 618
+  s_8aacdf16a9d4a1::t_615460a5e8699b 133,140,142-143,145-146
+  s_8aacdf16a9d4a1::t_5d550de066c83d 94-95,98
+apps/medusa/src/api/store/tax-config/route.ts
+  s_eea97c0c774f85::t_936addbe2d1e2a 1-48
+apps/medusa/src/scripts/set-tax-exclusive.ts
+  s_eea97c0c774f85::t_55cabd0dd436ed 1-40
+apps/storefront/src/app/account/orders/[id]/order-detail-view.tsx
+  s_eea97c0c774f85::t_626b4e9b52759c 14,338-346
+apps/storefront/src/app/cart/cart-view.tsx
+  s_eea97c0c774f85::t_3591cd937b9f02 11,135-142,144
+apps/storefront/src/app/checkout/checkout-view.tsx
+  s_eea97c0c774f85::t_74a0e9c89ac0b4 15,188-195,197
+apps/storefront/src/app/quick-order/quick-order-form.tsx
+  s_eea97c0c774f85::t_e3889bc0f4f1d0 25,280
+apps/storefront/src/components/cart/cart-drawer.tsx
+  s_eea97c0c774f85::t_dfd8d294062d19 15,65-73
+apps/storefront/src/components/home/featured-product.tsx
+  s_eea97c0c774f85::t_fe602a87efaf5d 11,166
+apps/storefront/src/components/home/product-comparison.tsx
+  s_eea97c0c774f85::t_ed7a00c1deca0f 39,171
+apps/storefront/src/components/home/product-lists.tsx
+  s_eea97c0c774f85::t_90f3ef9436bb3a 28,88
+apps/storefront/src/components/layout/search-typeahead.tsx
+  s_eea97c0c774f85::t_6ed9201b05ebdb 18,445
+apps/storefront/src/components/product/buy-box.tsx
+  s_eea97c0c774f85::t_164dfc82a1acde 12,15-17,94,113-115,199-216
+apps/storefront/src/components/product/compare-table.tsx
+  s_eea97c0c774f85::t_b2ff326a93f8e1 14,226
+apps/storefront/src/components/product/product-card.tsx
+  s_eea97c0c774f85::t_8a7efb5cb31584 7,194
+apps/storefront/src/components/product/quick-view-dialog.tsx
+  s_eea97c0c774f85::t_644fe99cc9b800 20,212
+apps/storefront/src/components/shared/ex-tax-price.tsx
+  s_eea97c0c774f85::t_0ac480a881c8d8 1-90
+apps/storefront/src/components/shared/price-breakdown.tsx
+  s_eea97c0c774f85::t_d3aa6add9aebe0 1-175
+apps/storefront/src/components/shared/price.tsx
+  s_eea97c0c774f85::t_51489a88cbaefc 3,14-15,111
+apps/storefront/src/components/shared/tax-note.tsx
+  s_eea97c0c774f85::t_35e0252fb0e9e4 1-21
+apps/storefront/src/lib/hooks/use-orders.ts
+  s_eea97c0c774f85::t_6c73823f4f2a7c 11
+apps/storefront/src/lib/hooks/use-tax-config.ts
+  s_eea97c0c774f85::t_0734bc92cba8bd 1-78
+apps/storefront/src/lib/query-keys.ts
+  s_eea97c0c774f85::t_5a99239a3eab4f 15
+apps/storefront/src/lib/sdk.ts
+  s_eea97c0c774f85::t_266411ea85b76b 21-24,26
+apps/storefront/src/lib/tax.ts
+  s_eea97c0c774f85::t_985cb7b08fa736 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "549b368c7c71494569add1677965051be2e05196",
+  "prompts": {},
+  "sessions": {
+    "s_8aacdf16a9d4a1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "83e57ffb-32a3-41ec-9d24-3b9b9075ffdb",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    },
+    "s_eea97c0c774f85": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bd98137d-acbb-40b3-a86a-bb6153648ddd",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
