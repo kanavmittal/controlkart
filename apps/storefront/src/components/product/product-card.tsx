@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 import type { HttpTypes } from "@medusajs/types"
 
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
 import { cn } from "@/lib/utils"
@@ -191,11 +191,10 @@ export function ProductCard({
           <p className="text-[13px] text-[var(--color-athens-body)]">{modelCount} models</p>
         ) : null}
 
-        <Price
+        <ExTaxPrice
           amount={cheapestPrice?.calculated_amount ?? null}
           originalAmount={cheapestPrice?.original_amount ?? null}
           from={priceFrom}
-          taxNote
           className="mt-auto"
         />
       </div>

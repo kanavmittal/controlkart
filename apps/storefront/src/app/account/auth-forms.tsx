@@ -195,6 +195,7 @@ export function AuthForms({
 }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin")
   const [forgotOpen, setForgotOpen] = useState(false)
+  const [mismatch, setMismatch] = useState(false)
   const { login, register } = useAuthMutations()
   const formId = useId()
 
@@ -215,10 +216,16 @@ export function AuthForms({
   async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
+    const password = String(form.get("password") ?? "")
+    if (password !== String(form.get("confirm_password") ?? "")) {
+      setMismatch(true)
+      return
+    }
+    setMismatch(false)
     try {
       await register.mutateAsync({
         email: String(form.get("email") ?? ""),
-        password: String(form.get("password") ?? ""),
+        password,
         first_name: String(form.get("first_name") ?? ""),
         last_name: String(form.get("last_name") ?? ""),
         phone: String(form.get("phone") ?? "") || undefined,
@@ -460,6 +467,21 @@ export function AuthForms({
                 </p>
                 {register.error && (
                   <FieldError>{errorMessageOf(register.error)}</FieldError>
+                )}
+              </Field>
+              <Field data-invalid={mismatch}>
+                <FieldLabel htmlFor={`${formId}-signup-confirm`}>
+                  Confirm Password
+                </FieldLabel>
+                <PasswordInput
+                  id={`${formId}-signup-confirm`}
+                  name="confirm_password"
+                  invalid={mismatch}
+                  autoComplete="new-password"
+                  minLength={8}
+                />
+                {mismatch && (
+                  <FieldError>Passwords don&apos;t match.</FieldError>
                 )}
               </Field>
               <p className="flex items-start gap-2 text-xs text-athens-body">

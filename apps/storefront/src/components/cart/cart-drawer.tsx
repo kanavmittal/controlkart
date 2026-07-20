@@ -12,7 +12,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { PriceBreakdown } from "@/components/shared/price-breakdown"
 import { formatINR } from "@/lib/format"
 import { useCart } from "@/lib/hooks/use-cart"
 import { cn } from "@/lib/utils"
@@ -62,25 +62,15 @@ export function CartDrawer() {
             </div>
 
             <div className="border-t border-[var(--color-athens-line)] p-4">
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm font-medium text-[var(--color-athens-dark)]">
-                  Subtotal
-                </span>
-                <Price amount={cart?.item_total} taxNote />
-              </div>
-              {(cart?.discount_total ?? 0) > 0 ? (
-                <div className="mt-1 flex items-baseline justify-between">
-                  <span className="text-xs font-medium text-[var(--color-athens-success)]">
-                    Discount
-                  </span>
-                  <span className="text-xs font-medium text-[var(--color-athens-success)]">
-                    −{formatINR(cart?.discount_total)}
-                  </span>
-                </div>
-              ) : null}
-              <p className="mt-1 text-xs text-[var(--color-athens-body)]">
-                Shipping calculated at checkout.
-              </p>
+              <PriceBreakdown
+                compact
+                itemSubtotal={cart?.item_subtotal}
+                originalItemTotal={cart?.original_item_total}
+                discountTotal={cart?.discount_total}
+                taxTotal={cart?.tax_total}
+                total={cart?.total}
+                shippingNote="Calculated at checkout"
+              />
 
               <div className="mt-4 flex flex-col gap-2">
                 <Link

@@ -24,13 +24,12 @@ function parseAddr(form: FormData, prefix: "" | "billing_"): CartAddressInput {
   return {
     first_name: s("first_name"),
     last_name: s("last_name"),
-    company: s("company") || undefined,
     address_1: s("address_1"),
     address_2: s("address_2") || undefined,
     city: s("city"),
     province: s("province"),
     postal_code: s("postal_code"),
-    country_code: "in",
+    country_code: s("country_code") || "in",
     phone: s("phone"),
   }
 }
@@ -75,6 +74,7 @@ export function CheckoutAddressForm({
 }) {
   const { setCheckout } = useCheckout()
   const { save } = useAddresses()
+  const [formError, setFormError] = useState<string | null>(null)
 
   const defaultShipping =
     savedAddresses.find((a) => a.is_default_shipping) ?? savedAddresses[0]
@@ -126,6 +126,21 @@ export function CheckoutAddressForm({
       : billingMode !== "new"
         ? customerAddressToCart(savedAddresses.find((a) => a.id === billingMode)!)
         : parseAddr(form, "billing_")
+
+    // Country/State/District are custom comboboxes, so enforce "required" for
+    // any address being entered fresh (saved addresses are already complete).
+    const shippingIncomplete =
+      shippingMode === "new" &&
+      (!shipping.country_code || !shipping.province || !shipping.city)
+    const billingIncomplete =
+      !billingSame &&
+      billingMode === "new" &&
+      (!billing.country_code || !billing.province || !billing.city)
+    if (shippingIncomplete || billingIncomplete) {
+      setFormError("Select a country, state, and district for the address.")
+      return
+    }
+    setFormError(null)
 
     try {
       await setCheckout.mutateAsync({
@@ -352,12 +367,13 @@ export function CheckoutAddressForm({
         </FieldDescription>
       </Field>
 
-      {setCheckout.error && (
+      {(formError || setCheckout.error) && (
         <Alert variant="destructive" className="sm:col-span-2">
           <AlertDescription>
-            {setCheckout.error instanceof Error
-              ? setCheckout.error.message
-              : "Could not save the address. Please check the fields and retry."}
+            {formError ??
+              (setCheckout.error instanceof Error
+                ? setCheckout.error.message
+                : "Could not save the address. Please check the fields and retry.")}
           </AlertDescription>
         </Alert>
       )}

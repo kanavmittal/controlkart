@@ -91,10 +91,11 @@ export default async function seedControlKartData({ container }: ExecArgs) {
     },
   })
 
-  // Tax-inclusive INR pricing: storefront shows MRP, GST broken out at checkout
+  // Tax-EXCLUSIVE INR pricing (B2B): catalog prices are base rates ex-GST,
+  // the 18% GST from the `in` tax region is added on top at checkout
   await createPricePreferencesWorkflow(container).run({
     input: [
-      { attribute: "currency_code", value: "inr", is_tax_inclusive: true },
+      { attribute: "currency_code", value: "inr", is_tax_inclusive: false },
     ],
   })
 
@@ -129,20 +130,20 @@ export default async function seedControlKartData({ container }: ExecArgs) {
     ],
   })
 
-  logger.info("Seeding stock location (Mumbai warehouse)...")
+  logger.info("Seeding stock location (Faridabad warehouse)...")
   const { result: stockLocationResult } = await createStockLocationsWorkflow(
     container
   ).run({
     input: {
       locations: [
         {
-          name: "ControlKart Mumbai Warehouse",
+          name: "ControlKart Faridabad Warehouse",
           address: {
-            address_1: "Plot 12, MIDC Industrial Area, Andheri East",
-            city: "Mumbai",
+            address_1: "House No. E40-37, Ground Floor, BPTP Elite Floor, Block-E, Sector-85",
+            city: "Faridabad",
             country_code: "IN",
-            postal_code: "400093",
-            province: "Maharashtra",
+            postal_code: "121002",
+            province: "Haryana",
           },
         },
       ],
@@ -614,7 +615,7 @@ export default async function seedControlKartData({ container }: ExecArgs) {
       slug: "controlkart-authorized-selec-distributor",
       excerpt:
         "ControlKart now stocks the full Selec MiBRX modular PLC range with pan-India shipping, GST invoicing and technical support.",
-      body: "ControlKart is now an authorized distributor of Selec Controls, one of India's leading manufacturers of industrial automation products.\n\nWe are starting with the complete MiBRX modular PLC range - including the 6M sized base modules, display modules and IO cards - all held in stock at our Mumbai warehouse for fast pan-India dispatch.\n\nEvery order ships with a GST invoice, and our engineering team can help you select the right configuration for your application.",
+      body: "ControlKart is now an authorized distributor of Selec Controls, one of India's leading manufacturers of industrial automation products.\n\nWe are starting with the complete MiBRX modular PLC range - including the 6M sized base modules, display modules and IO cards - all held in stock at our Faridabad warehouse for fast pan-India dispatch.\n\nEvery order ships with a GST invoice, and our engineering team can help you select the right configuration for your application.",
       seo_title: "ControlKart - Authorized Selec Controls Distributor in India",
       seo_description:
         "ControlKart stocks Selec MiBRX modular PLCs with pan-India shipping, GST invoicing and engineering support.",

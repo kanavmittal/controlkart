@@ -11,7 +11,7 @@ import { useOrder } from "@/lib/hooks/use-orders"
 import { formatINR, formatDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
-import { Price } from "@/components/shared/price"
+import { PriceBreakdown } from "@/components/shared/price-breakdown"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -335,32 +335,15 @@ export function OrderDetailView() {
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-3">
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="text-athens-body">Subtotal (incl. GST)</span>
-                  <Price
-                    amount={order.item_total}
-                    className="text-sm leading-none font-normal text-athens-dark"
-                  />
-                </div>
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="text-athens-body">Shipping</span>
-                  <Price
-                    amount={order.shipping_total}
-                    className="text-sm leading-none font-normal text-athens-dark"
-                  />
-                </div>
-                {shippingMethod && (
-                  <div className="text-xs text-athens-body">
-                    {shippingMethod.name}
-                  </div>
-                )}
-                <div className="flex items-baseline justify-between border-t border-athens-line pt-3 text-base font-semibold">
-                  <span className="text-athens-dark">Total</span>
-                  <Price
-                    amount={order.total}
-                    className="text-base leading-none font-semibold text-athens-dark"
-                  />
-                </div>
+                <PriceBreakdown
+                  itemSubtotal={order.item_subtotal}
+                  originalItemTotal={order.original_item_total}
+                  discountTotal={order.discount_total}
+                  shippingTotal={order.shipping_total}
+                  taxTotal={order.tax_total}
+                  total={order.total}
+                  shippingDetail={shippingMethod?.name}
+                />
               </CardContent>
             </Card>
           </aside>

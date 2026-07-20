@@ -20,6 +20,7 @@ export type AddressBody = {
   postal_code?: string
   country_code?: string
   phone?: string
+  metadata?: Record<string, unknown>
   is_default_shipping?: boolean
   is_default_billing?: boolean
 }

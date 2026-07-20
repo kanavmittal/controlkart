@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query"
 import { ChevronRight, Loader2 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
+import { TaxNote } from "@/components/shared/tax-note"
 import { formatINR } from "@/lib/format"
 import { searchProducts, type SearchHit } from "@/lib/data/search"
 import { useDebouncedValue } from "@/lib/hooks/use-debounced-value"
@@ -441,9 +442,7 @@ export function SearchTypeahead({
                           {hit.price !== null && (
                             <span className="mt-0.5 block text-[15px] font-semibold text-athens-dark">
                               {formatINR(hit.price.amount)}{" "}
-                              <span className="text-[12px] font-normal text-athens-body">
-                                incl. GST
-                              </span>
+                              <TaxNote className="text-[12px] font-normal text-athens-body" />
                             </span>
                           )}
                         </span>

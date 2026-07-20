@@ -17,7 +17,7 @@ import { resolveDownloadUrl } from "@/components/product/download-utils"
 import type { SpecValueDTO, ProductDocumentDTO } from "@/lib/data/types"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { cn } from "@/lib/utils"
 
@@ -209,7 +209,7 @@ function QuickViewContent({
           {live.isLoading ? (
             <div className="h-7 w-24 animate-pulse rounded bg-[var(--color-athens-band)]" />
           ) : (
-            <Price amount={price} originalAmount={originalPrice} taxNote />
+            <ExTaxPrice amount={price} originalAmount={originalPrice} />
           )}
           {live.isLoading ? null : (
             <StockPill availableQuantity={stock} canBackorder={canBackorder} />

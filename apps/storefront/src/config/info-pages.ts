@@ -26,11 +26,17 @@ export const infoPages: Record<string, InfoPage> = {
 <h2>Sales &amp; Support</h2>
 <p>
   Phone: <!-- TODO(content): support phone number --><br />
-  Email: <!-- TODO(content): support email address --><br />
+  Email: <a href="mailto:support@controlkart.com">support@controlkart.com</a><br />
   Hours: Mon-Sat 9:30am-6:30pm IST <!-- TODO(content): confirm hours -->
 </p>
 <h2>Registered Office</h2>
-<p><!-- TODO(content): registered address line 1 --><br /><!-- TODO(content): city, state, PIN --></p>
+<p>
+  Kleanair Equipments<br />
+  House No. E40-37, Ground Floor, BPTP Elite Floor,<br />
+  Block-E, Sector-85,<br />
+  Faridabad, Haryana - 121002<br />
+  GSTIN: 06AIYPM2986R1ZW
+</p>
 <h2>Bulk orders &amp; quotes</h2>
 <p>For multi-line or project orders, use <a href="/quick-order">Quick Order</a> to add several SKUs at once, or submit a <a href="/request-quote">Request a Quote</a> and our team will get back to you with pricing and lead times.</p>
 `.trim(),
@@ -103,7 +109,12 @@ export const infoPages: Record<string, InfoPage> = {
 <p>You may request access to, correction of, or deletion of your personal data (subject to statutory record-keeping requirements) by contacting us — see <a href="/pages/contact-us">Contact Us</a>.</p>
 <h2>Grievance Officer</h2>
 <p>In accordance with the Information Technology Act, 2000 and rules made thereunder, the contact details of our Grievance Officer are:</p>
-<p><!-- TODO(content): Grievance Officer name, designation, address, email, phone --></p>
+<p>
+  Kleanair Equipments<br />
+  House No. E40-37, Ground Floor, BPTP Elite Floor, Block-E, Sector-85, Faridabad, Haryana - 121002<br />
+  Email: <a href="mailto:support@controlkart.com">support@controlkart.com</a>
+  <!-- TODO(content): Grievance Officer name, designation, phone -->
+</p>
 <h2>Changes to this policy</h2>
 <p>We may update this policy from time to time; the latest version will always be available on this page.</p>
 `.trim(),
@@ -134,9 +145,9 @@ export const infoPages: Record<string, InfoPage> = {
 <p>These Terms and Conditions govern your use of the ControlKart website and any orders placed through it. By using this website or placing an order, you agree to be bound by these Terms.</p>
 <h2>Company information</h2>
 <p>
-  <!-- TODO(content): legal entity name --><br />
-  <!-- TODO(content): registered address --><br />
-  GSTIN: <!-- TODO(content) --><br />
+  Kleanair Equipments<br />
+  House No. E40-37, Ground Floor, BPTP Elite Floor, Block-E, Sector-85, Faridabad, Haryana - 121002<br />
+  GSTIN: 06AIYPM2986R1ZW<br />
   CIN: <!-- TODO(content), if applicable -->
 </p>
 <h2>Products &amp; pricing</h2>

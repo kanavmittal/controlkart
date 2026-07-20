@@ -8,7 +8,7 @@ const ORDER_LIST_FIELDS =
   "id,display_id,status,total,currency_code,created_at,*items"
 const ORDER_DETAIL_FIELDS =
   "id,display_id,status,created_at,updated_at,email,currency_code," +
-  "item_total,item_subtotal,item_tax_total,shipping_total,shipping_tax_total," +
+  "item_total,item_subtotal,original_item_total,item_tax_total,shipping_total,shipping_tax_total," +
   "tax_total,discount_total,total,metadata," +
   "*items,*items.variant,*items.variant.product," +
   "*shipping_address,*billing_address,*shipping_methods,*fulfillments"

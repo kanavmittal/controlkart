@@ -1,5 +1,6 @@
 import { formatINR } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import { TaxNote } from "./tax-note"
 
 interface PriceProps {
   amount: number | null | undefined
@@ -10,7 +11,8 @@ interface PriceProps {
   currencyCode?: string
   /** Prefixes the current price with "From " (multi-variant / range price). */
   from?: boolean
-  /** Shows a small "incl. GST" note next to the current price. */
+  /** Shows a small "incl. GST"/"excl. GST" note next to the current price
+   *  (label from the backend tax config via `TaxNote`). */
   taxNote?: boolean
   /** Renders a small "-N%" pill after the price when on sale. Default true —
    *  every `<Price>` consumer gets the indicator automatically; pass `false`
@@ -106,7 +108,7 @@ export function Price({
         {from ? <span className="mr-1 text-sm font-normal text-[var(--color-athens-body)]">From</span> : null}
         {formatINR(amount)}
         {taxNote ? (
-          <span className="ml-1 text-[11px] font-normal text-[var(--color-athens-body)]">incl. GST</span>
+          <TaxNote className="ml-1 text-[11px] font-normal text-[var(--color-athens-body)]" />
         ) : null}
       </span>
       {onSale && showDiscountPercent && discountPercent ? (

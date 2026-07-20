@@ -33,7 +33,7 @@ export default async function OrderConfirmedPage({
           <p className="text-sm leading-relaxed text-athens-body">
             Thank you for your order. A confirmation with your GST invoice
             details will be emailed to you. Your order will be dispatched
-            from our Mumbai warehouse within 24-48 hours.
+            from our Faridabad warehouse within 24-48 hours.
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
             <Link

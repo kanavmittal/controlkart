@@ -45,7 +45,7 @@ export const GET = async (
     throw new MedusaError(MedusaError.Types.NOT_FOUND, "Order not found")
   }
 
-  const companyState = (process.env.COMPANY_STATE || "Maharashtra")
+  const companyState = (process.env.COMPANY_STATE || "Haryana")
     .trim()
     .toLowerCase()
   const shipState = (order.shipping_address?.province || "")
@@ -70,9 +70,9 @@ export const GET = async (
       display_id: order.display_id,
       date: order.created_at,
       seller: {
-        name: "ControlKart",
-        gstin: process.env.COMPANY_GSTIN || null,
-        state: process.env.COMPANY_STATE || "Maharashtra",
+        name: process.env.COMPANY_NAME || "Kleanair Equipments",
+        gstin: process.env.COMPANY_GSTIN || "06AIYPM2986R1ZW",
+        state: process.env.COMPANY_STATE || "Haryana",
       },
       buyer: {
         email: order.email,

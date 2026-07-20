@@ -25,7 +25,7 @@ import Link from "next/link"
 import type { HttpTypes } from "@medusajs/types"
 
 import { SectionHeading } from "@/components/shared/section-heading"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
 
 export interface ProductListColumnData {
@@ -85,7 +85,7 @@ function CompactProductRow({ product }: { product: HttpTypes.StoreProduct }) {
         <span className="line-clamp-2 text-[14px] leading-[18px] text-[var(--color-athens-dark)] group-hover:underline">
           {product.title}
         </span>
-        <Price
+        <ExTaxPrice
           amount={cheapestPrice?.calculated_amount ?? null}
           originalAmount={cheapestPrice?.original_amount ?? null}
           from={priceFrom}

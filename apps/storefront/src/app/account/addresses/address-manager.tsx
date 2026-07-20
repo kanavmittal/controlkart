@@ -1,11 +1,16 @@
 "use client"
 
+import { useState } from "react"
 import { AlertCircle, Loader2, MapPin, Pencil, Trash2 } from "lucide-react"
 
 import { useAddresses, type AddressBody } from "@/lib/hooks/use-addresses"
 import type { CustomerAddress } from "@/lib/address-utils"
 import { formatAddressLabel } from "@/lib/address-utils"
-import { AddressFields } from "@/components/address/address-fields"
+import { isValidGstin } from "@/lib/gst"
+import {
+  AddressFields,
+  type AddressFieldValues,
+} from "@/components/address/address-fields"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -61,16 +66,33 @@ function buildAddressBody(form: FormData): AddressBody {
     address_name: str("address_name"),
     first_name: str("first_name"),
     last_name: str("last_name"),
-    company: str("company"),
     address_1: str("address_1"),
     address_2: str("address_2"),
     city: str("city"),
     province: str("province"),
     postal_code: str("postal_code"),
-    country_code: "in",
+    country_code: str("country_code") ?? "in",
     phone: str("phone"),
+    // GST lives in address metadata; "" when cleared so reads treat it as unset.
+    metadata: { gstin: (str("gstin") ?? "").toUpperCase() },
     is_default_shipping: form.get("is_default_shipping") === "on",
     is_default_billing: form.get("is_default_billing") === "on",
+  }
+}
+
+/** Map a saved address onto the form's field values (GST comes from metadata). */
+function toFieldValues(a: CustomerAddress): AddressFieldValues {
+  return {
+    first_name: a.first_name,
+    last_name: a.last_name,
+    address_1: a.address_1,
+    address_2: a.address_2,
+    city: a.city,
+    province: a.province,
+    postal_code: a.postal_code,
+    country_code: a.country_code,
+    phone: a.phone,
+    gstin: (a.metadata?.gstin as string | undefined) ?? "",
   }
 }
 
@@ -93,13 +115,28 @@ export function AddressManager({
   onEditingChange: (value: CustomerAddress | "new" | null) => void
 }) {
   const { save, remove } = useAddresses()
+  const [formError, setFormError] = useState<string | null>(null)
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
+    const body = buildAddressBody(form)
+
+    // Country/State/District are custom comboboxes, so enforce "required" here.
+    if (!body.country_code || !body.province || !body.city) {
+      setFormError("Select a country, state, and district.")
+      return
+    }
+    const gstin = String(form.get("gstin") ?? "").trim()
+    if (gstin && !isValidGstin(gstin)) {
+      setFormError("Enter a valid GSTIN or leave the GST field blank.")
+      return
+    }
+    setFormError(null)
+
     const id = editing && editing !== "new" ? editing.id : undefined
     try {
-      await save.mutateAsync({ id, body: buildAddressBody(form) })
+      await save.mutateAsync({ id, body })
       onEditingChange(null)
     } catch {
       /* surfaced via save.error below */
@@ -141,7 +178,10 @@ export function AddressManager({
       <Dialog
         open={editing !== null}
         onOpenChange={(open) => {
-          if (!open) onEditingChange(null)
+          if (!open) {
+            setFormError(null)
+            onEditingChange(null)
+          }
         }}
       >
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
@@ -152,12 +192,12 @@ export function AddressManager({
               </DialogTitle>
             </DialogHeader>
 
-            {save.error && (
+            {(formError || save.error) && (
               <Alert variant="destructive">
                 <AlertCircle aria-hidden />
                 <AlertTitle>Couldn&apos;t save address</AlertTitle>
                 <AlertDescription>
-                  {errorMessageOf(save.error)}
+                  {formError ?? errorMessageOf(save.error)}
                 </AlertDescription>
               </Alert>
             )}
@@ -180,7 +220,13 @@ export function AddressManager({
               </Field>
 
               <AddressFields
-                values={editing === "new" || !editing ? undefined : editing}
+                key={editing === "new" || !editing ? "new" : editing.id}
+                showGst
+                values={
+                  editing === "new" || !editing
+                    ? undefined
+                    : toFieldValues(editing)
+                }
               />
 
               <Field orientation="horizontal" className="sm:col-span-2">

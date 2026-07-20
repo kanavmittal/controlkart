@@ -11,7 +11,7 @@ import { queryKeys } from "@/lib/query-keys"
 import { useRegion } from "@/lib/hooks/use-region"
 import type { SpecValueDTO } from "@/lib/data/types"
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { StockPill } from "@/components/shared/stock-pill"
 import {
   Empty,
@@ -223,7 +223,7 @@ export function CompareTable() {
             const { amount, originalAmount, from } = derivePrice(product)
             return (
               <div key={product.id} className="py-[15px]">
-                <Price amount={amount} originalAmount={originalAmount} from={from} taxNote />
+                <ExTaxPrice amount={amount} originalAmount={originalAmount} from={from} />
               </div>
             )
           })}

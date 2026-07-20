@@ -11,8 +11,8 @@ import { useCustomer } from "@/lib/hooks/use-customer"
 import { useAddresses } from "@/lib/hooks/use-addresses"
 import { useCartId } from "@/components/providers/cart-provider"
 import { isEmailVerified } from "@/lib/customer"
-import { formatINR } from "@/lib/format"
 import { Price } from "@/components/shared/price"
+import { PriceBreakdown } from "@/components/shared/price-breakdown"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -185,44 +185,16 @@ export function CheckoutView() {
                 ))}
               </div>
 
-              <div className="flex items-baseline justify-between text-sm">
-                <span className="text-athens-body">Subtotal (incl. GST)</span>
-                <Price
-                  amount={cart.item_total}
-                  className="text-sm leading-none font-normal text-athens-dark"
-                />
-              </div>
-              <div className="flex items-baseline justify-between text-sm">
-                <span className="text-athens-body">GST included</span>
-                <Price
-                  amount={cart.tax_total}
-                  className="text-sm leading-none font-normal text-athens-dark"
-                />
-              </div>
-              <div className="flex items-baseline justify-between text-sm">
-                <span className="text-athens-body">Shipping</span>
-                <Price
-                  amount={cart.shipping_total}
-                  className="text-sm leading-none font-normal text-athens-dark"
-                />
-              </div>
-              {(cart.discount_total ?? 0) > 0 ? (
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="text-athens-success">Discount</span>
-                  <span className="text-sm leading-none font-normal text-athens-success">
-                    −{formatINR(cart.discount_total)}
-                  </span>
-                </div>
-              ) : null}
-              <div className="flex items-baseline justify-between border-t border-athens-line pt-3 text-base font-semibold">
-                <span className="text-athens-dark">Total</span>
-                <Price
-                  amount={cart.total}
-                  className="text-base leading-none font-semibold text-athens-dark"
-                />
-              </div>
+              <PriceBreakdown
+                itemSubtotal={cart.item_subtotal}
+                originalItemTotal={cart.original_item_total}
+                discountTotal={cart.discount_total}
+                shippingTotal={cart.shipping_total}
+                taxTotal={cart.tax_total}
+                total={cart.total}
+              />
               <p className="text-xs text-athens-body">
-                All prices include GST.
+                All prices shown exclusive of GST.
               </p>
             </CardContent>
           </Card>

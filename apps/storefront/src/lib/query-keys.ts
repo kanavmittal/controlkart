@@ -12,6 +12,7 @@ export const DYNAMIC_QUERY_OPTIONS = {
 /** Central query-key registry — keeps invalidation correct and collision-free. */
 export const queryKeys = {
   region: ["region"] as const,
+  taxConfig: ["tax-config"] as const,
   productLive: (productId: string, regionId?: string) =>
     ["product-live", productId, regionId] as const,
   productSpecs: (productId: string, variantId?: string) =>

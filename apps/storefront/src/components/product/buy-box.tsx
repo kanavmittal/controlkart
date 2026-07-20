@@ -9,9 +9,12 @@ import { Box, CreditCard, Minus, Plus, Settings, Truck, type LucideIcon } from "
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { useCart } from "@/lib/hooks/use-cart"
+import { useTaxConfig } from "@/lib/hooks/use-tax-config"
+import { taxOnTop } from "@/lib/tax"
+import { formatINR } from "@/lib/format"
 import { useCartDrawer } from "@/components/cart/cart-drawer-context"
 import { useProductLive } from "@/lib/hooks/use-product-live"
 import { useProductSelection } from "@/components/providers/product-selection-provider"
@@ -88,6 +91,7 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
   const queryClient = useQueryClient()
   const { addItem } = useCart()
   const { openDrawer } = useCartDrawer()
+  const { priceIncludesTax, taxRate, taxLabel } = useTaxConfig()
 
   // Live price + stock (browser fetch, uncached).
   const live = useProductLive(product.id)
@@ -106,6 +110,9 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
         ? variant.calculated_price?.original_amount
         : live.originalPriceByVariant[variant.id]) ?? null
     : null
+  // GST charged on top of the ex-tax base price (tax-exclusive backend) —
+  // rendered under the price block below.
+  const gstOnTop = taxOnTop(price, taxRate)
   const purchasable = variant
     ? live.purchasableByVariant[variant.id] ?? false
     : false
@@ -189,12 +196,24 @@ export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxPro
         {live.isLoading ? (
           <div className="h-7 w-28 animate-pulse rounded bg-[var(--color-athens-band)]" />
         ) : (
-          <Price
-            amount={price}
-            originalAmount={originalPrice}
-            variant="stacked"
-            gstNote="Inclusive of GST"
-          />
+          <>
+            <ExTaxPrice
+              amount={price}
+              originalAmount={originalPrice}
+              variant="stacked"
+            />
+            {/* B2B: prices are ex-GST — show the GST charged on top of the
+                base rate (base × rate/100, NOT the inclusive portion). Only
+                when the backend is tax-exclusive; the stacked note above
+                ("Exclusive of GST") states the mode, this line states the
+                amount. */}
+            {!priceIncludesTax && gstOnTop !== null && gstOnTop > 0 ? (
+              <div className="mt-1 text-xs text-[var(--color-athens-body)]">
+                + {formatINR(gstOnTop)} {taxLabel}
+                {taxRate !== null ? ` (${taxRate}%)` : ""}
+              </div>
+            ) : null}
+          </>
         )}
         <p className="mt-1 text-xs text-[var(--color-athens-body)]">HSN: {hsn}</p>
       </div>

@@ -18,9 +18,12 @@ export const sdk = new Medusa({
   auth: { type: "jwt", jwtTokenStorageMethod: "local" },
 })
 
-/** Cart fields for the client cart query (mirrors the old server CART_FIELDS). */
+/** Cart fields for the client cart query (mirrors the old server CART_FIELDS).
+ *  The trailing totals fields are `.computed()` DML properties — they come
+ *  back even when unlisted, but are listed explicitly since `PriceBreakdown`
+ *  consumes them (same names as Medusa's own `defaultStoreCartFields`). */
 export const CART_FIELDS =
-  "*items,*items.variant,*items.variant.product,*shipping_methods,*shipping_address,*billing_address,*payment_collection,*payment_collection.payment_sessions"
+  "*items,*items.variant,*items.variant.product,*shipping_methods,*shipping_address,*billing_address,*payment_collection,*payment_collection.payment_sessions,total,item_total,item_subtotal,original_item_total,item_tax_total,tax_total,discount_total,shipping_total"
 
 /**
  * Card fields for the home featured grid — mirrors the server `PRODUCT_FIELDS`

@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { ChevronRight, Loader2, Minus, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 import { StockPill } from "@/components/shared/stock-pill"
 import { useCart } from "@/lib/hooks/use-cart"
 import { useCartDrawer } from "@/components/cart/cart-drawer-context"
@@ -163,11 +163,10 @@ function FeaturedProductContent({
 
             <div className="mb-5 border-t border-[var(--color-athens-line)]" />
 
-            <Price
+            <ExTaxPrice
               amount={cheapestPrice?.calculated_amount ?? null}
               originalAmount={cheapestPrice?.original_amount ?? null}
               from={priceFrom}
-              taxNote
               className="mb-6"
             />
 

@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Price } from "@/components/shared/price"
+import { ExTaxPrice } from "@/components/shared/ex-tax-price"
 
 // The `/store/quick-order` endpoint (apps/medusa/src/api/store/quick-order/route.ts)
 // actually returns the resolved product on each variant (title/handle/thumbnail) even
@@ -277,7 +277,7 @@ export function QuickOrderForm() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Price amount={unitPrice} />
+                          <ExTaxPrice amount={unitPrice} />
                         </TableCell>
                         <TableCell>
                           <Input

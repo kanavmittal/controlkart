@@ -38,7 +38,7 @@ export const headerMast: HeaderMastConfig = {
   searchPlaceholder: "Search by product, brand or part number",
   searchButtonLabel: "Search",
   phone: "+91 00000 00000", // TODO(content): confirm support phone number
-  supportEmail: "support@controlkart.example", // TODO(content): confirm support email
+  supportEmail: "support@controlkart.com",
 };
 
 // Brand tiles for the header's "Shop By Brand" mega-menu panel. Links route
@@ -120,7 +120,7 @@ export const footerFeatures: FooterFeature[] = [
 // clone's `productDetail` fixture wording pending real ControlKart copy.
 export const pdpContent: PdpContentConfig = {
   shipping:
-    "Dispatched within 2-3 business days from our Mumbai warehouse. Pan-India delivery via our logistics partner; delivery timelines vary by pincode serviceability.", // TODO(content): confirm dispatch SLA and warehouse location
+    "Dispatched within 2-3 business days from our Faridabad warehouse. Pan-India delivery via our logistics partner; delivery timelines vary by pincode serviceability.", // TODO(content): confirm dispatch SLA
   warranty:
     "Covered by the manufacturer's standard warranty against manufacturing defects. Contact our support team with your invoice for warranty claims.", // TODO(content): confirm warranty duration per brand
   shipsCaption: "Usually ships within 24 hours", // TODO(content): confirm actual dispatch SLA shown on the PDP stock bar (mirrors `shipping` above but as a short caption)
@@ -137,11 +137,13 @@ export const pdpContent: PdpContentConfig = {
 
 export const footer: FooterConfig = {
   logoText: "ControlKart",
+  // Legal entity = Kleanair Equipments; ControlKart is its brand/storefront.
   address: [
-    "ControlKart Industrial Supplies Pvt. Ltd.", // TODO(content): confirm registered legal entity name
-    "Address line 1, Address line 2", // TODO(content): registered address
-    "City, State - PIN", // TODO(content): registered address
-    "GSTIN: 00AAAAA0000A0Z0", // TODO(content): confirm GSTIN
+    "Kleanair Equipments",
+    "House No. E40-37, Ground Floor, BPTP Elite Floor,",
+    "Block-E, Sector-85,",
+    "Faridabad, Haryana - 121002",
+    "GSTIN: 06AIYPM2986R1ZW",
   ],
   hours: [
     "Mon-Sat 9:30am-6:30pm IST", // TODO(content): confirm support hours
