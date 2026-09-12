@@ -17,6 +17,7 @@ type ResendOptions = {
   channels: string[]
   api_key: string
   from: string
+  reply_to?: string
 }
 
 type InjectedDependencies = {
@@ -104,6 +105,7 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
 
     const emailOptions: CreateEmailOptions = {
       from: this.options.from,
+      ...(this.options.reply_to ? { replyTo: this.options.reply_to } : {}),
       to: [notification.to],
       subject,
       html,

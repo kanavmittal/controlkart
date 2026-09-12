@@ -3,7 +3,7 @@
 # (Coolify: set "Base Directory" = / and "Dockerfile Location" = apps/medusa/Dockerfile)
 
 # ---------- build stage ----------
-FROM node:20-slim AS build
+FROM node:22-bookworm-slim AS build
 RUN apt-get update && apt-get install -y --no-install-recommends python3 build-essential \
   && rm -rf /var/lib/apt/lists/*
 RUN corepack enable
@@ -21,21 +21,25 @@ COPY apps/medusa apps/medusa
 WORKDIR /repo/apps/medusa
 RUN pnpm run build
 
+# Assemble an isolated production dependency tree from the workspace lockfile.
+RUN pnpm --filter @controlkart/medusa deploy --legacy --prod /production
+
 # ---------- production (runtime) stage ----------
-FROM node:20-slim AS production
-RUN corepack enable
-ENV NODE_ENV=production
+FROM node:22-bookworm-slim AS production
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production OTEL_SDK_DISABLED=true
 WORKDIR /app
 
 # The build output is a standalone Medusa app with its own package.json.
-COPY --from=build /repo/apps/medusa/.medusa/server ./
-COPY --from=build /repo/apps/medusa/static/brands ./static/brands
-# --legacy-peer-deps: medusa-plugin-razorpay-v2 declares a stale peer
-# (@medusajs/admin-sdk@2.12.3) vs our 2.15.3. pnpm allows this locally via
-# strict-peer-dependencies=false; npm needs this flag to match.
-RUN npm install --omit=dev --legacy-peer-deps
+COPY --from=build --chown=node:node /repo/apps/medusa/.medusa/server ./
+COPY --from=build --chown=node:node /repo/apps/medusa/static/brands ./static/brands
+COPY --from=build --chown=node:node /production/node_modules ./node_modules
+RUN chown node:node /app
+USER node
 
 EXPOSE 9000
-# Run DB migrations, then boot. (Single-instance safe. For multi-instance, move
-# `medusa db:migrate` to a one-off release command and start with `npm run start`.)
-CMD ["sh", "-c", "npx medusa db:migrate && npm run start"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:9000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+# Migrations run once as a release operation after a database backup.
+CMD ["npm", "run", "start"]

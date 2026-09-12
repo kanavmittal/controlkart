@@ -78,7 +78,7 @@ interface BuyBoxProps {
  * immediately, same as before.
  */
 export function BuyBox({ product, infoBox, highlights, shipsCaption }: BuyBoxProps) {
-  const variants = product.variants ?? []
+  const variants = useMemo(() => product.variants ?? [], [product.variants])
   // Selected variant lives in shared PDP context so the (T26) gallery and
   // this buy column — separate subtrees — stay in sync.
   const { selectedVariantId: variantId, setSelectedVariantId: setVariantId } =

@@ -2,6 +2,17 @@ import { loadEnv, defineConfig } from "@medusajs/framework/utils"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
+if (process.env.NODE_ENV === "production") {
+  for (const name of ["JWT_SECRET", "COOKIE_SECRET"]) {
+    if (!process.env[name] || process.env[name]!.length < 32) {
+      throw new Error(`${name} must contain at least 32 characters in production`)
+    }
+  }
+  if (process.env.DATABASE_SSL === "false") {
+    throw new Error("Production database connections require verified TLS")
+  }
+}
+
 const isS3Configured = !!process.env.S3_BUCKET
 
 module.exports = defineConfig({
@@ -130,6 +141,7 @@ module.exports = defineConfig({
                   from:
                     process.env.EMAIL_FROM ||
                     "ControlKart <noreply@controlkart.com>",
+                  reply_to: process.env.EMAIL_REPLY_TO,
                 },
               }
             : {

@@ -16,5 +16,16 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.18.3"
+  "packageManager": "pnpm@10.18.3",
+  "pnpm": {
+    "overrides": {
+      "lodash": "4.18.1",
+      "postcss": "8.5.28",
+      "@mikro-orm/cli": "6.6.14",
+      "@mikro-orm/core": "6.6.14",
+      "@mikro-orm/knex": "6.6.14",
+      "@mikro-orm/migrations": "6.6.14",
+      "@mikro-orm/postgresql": "6.6.14"
+    }
+  }
 }

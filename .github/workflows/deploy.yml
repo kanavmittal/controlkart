@@ -21,14 +21,30 @@ concurrency:
 env:
   REGISTRY: ghcr.io
   OWNER: kanavmittal # GHCR namespace (must be lowercase)
-  MEDUSA_APP_ID: 2xOxyyW_3lD7SVJJ9NKjK
-  STOREFRONT_APP_ID: P7itsf66-VfKT3t6nMjYZ
+  MEDUSA_APP_ID: ${{ vars.MEDUSA_APP_ID }}
+  STOREFRONT_APP_ID: ${{ vars.STOREFRONT_APP_ID }}
   # NEXT_PUBLIC_* are inlined into the storefront bundle at build time (public values).
   NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://api.controlkart.com
-  NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_7afdeb02f3fbb75a6ed68650163998815210776a222fa107ceb290b613a20f74
+  NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}
   NEXT_PUBLIC_BASE_URL: https://controlkart.com
 
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm --filter @controlkart/storefront lint
+      - run: pnpm --filter @controlkart/storefront test
+      - run: pnpm --filter @controlkart/medusa test:unit
+      - run: node scripts/audit-production.cjs
+
   changes:
     runs-on: ubuntu-latest
     outputs:
@@ -46,15 +62,19 @@ jobs:
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - '.npmrc'
+              - '.dockerignore'
+              - '.github/workflows/deploy.yml'
             storefront:
               - 'apps/storefront/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - '.npmrc'
+              - '.dockerignore'
+              - '.github/workflows/deploy.yml'
 
   medusa:
-    needs: changes
+    needs: [changes, quality]
     if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.medusa == 'true' }}
     runs-on: ubuntu-latest
     permissions:
@@ -75,21 +95,22 @@ jobs:
           target: production
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.OWNER }}/controlkart-medusa:latest
             ${{ env.REGISTRY }}/${{ env.OWNER }}/controlkart-medusa:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Trigger Dokploy deploy (medusa)
-        run: |
-          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
-            -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"applicationId\":\"${MEDUSA_APP_ID}\"}")
-          echo "Dokploy deploy (medusa) -> HTTP $code"
-          [ "$code" -ge 200 ] && [ "$code" -lt 300 ]
+        if: ${{ vars.DOKPLOY_DEPLOY_ENABLED == 'true' }}
+        env:
+          APPLICATION_ID: ${{ env.MEDUSA_APP_ID }}
+          DOCKER_IMAGE: ghcr.io/kanavmittal/controlkart-medusa:${{ github.sha }}
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+          DOKPLOY_API_TOKEN: ${{ secrets.DOKPLOY_API_TOKEN }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: bash scripts/deploy-dokploy.sh
 
   storefront:
-    needs: changes
+    needs: [changes, quality]
     if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.storefront == 'true' }}
     runs-on: ubuntu-latest
     permissions:
@@ -114,15 +135,16 @@ jobs:
             NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${{ env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}
             NEXT_PUBLIC_BASE_URL=${{ env.NEXT_PUBLIC_BASE_URL }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.OWNER }}/controlkart-storefront:latest
             ${{ env.REGISTRY }}/${{ env.OWNER }}/controlkart-storefront:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Trigger Dokploy deploy (storefront)
-        run: |
-          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
-            -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"applicationId\":\"${STOREFRONT_APP_ID}\"}")
-          echo "Dokploy deploy (storefront) -> HTTP $code"
-          [ "$code" -ge 200 ] && [ "$code" -lt 300 ]
+        if: ${{ vars.DOKPLOY_DEPLOY_ENABLED == 'true' }}
+        env:
+          APPLICATION_ID: ${{ env.STOREFRONT_APP_ID }}
+          DOCKER_IMAGE: ghcr.io/kanavmittal/controlkart-storefront:${{ github.sha }}
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+          DOKPLOY_API_TOKEN: ${{ secrets.DOKPLOY_API_TOKEN }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: bash scripts/deploy-dokploy.sh

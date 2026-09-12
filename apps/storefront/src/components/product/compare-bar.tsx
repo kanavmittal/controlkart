@@ -24,7 +24,7 @@ const COMPARE_BAR_FIELDS = "id,title,thumbnail"
  * later task (see T25 note in the plan).
  */
 export function CompareBar() {
-  const { ids, count, remove, clear } = useCompare()
+  const { ids, count, clear } = useCompare()
 
   const { data: products } = useQuery({
     queryKey: ["compare-bar-products", ids],

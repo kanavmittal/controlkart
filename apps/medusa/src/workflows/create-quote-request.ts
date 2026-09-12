@@ -7,6 +7,7 @@ import {
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { QUOTES_MODULE } from "../modules/quotes"
 import type QuotesModuleService from "../modules/quotes/service"
+import type { Query } from "@medusajs/framework"
 
 type QuoteRequestInput = {
   customer_id?: string | null
@@ -32,13 +33,13 @@ const resolveQuoteItemsStep = createStep(
       )
     }
 
-    const query = container.resolve(ContainerRegistrationKeys.QUERY)
+    const query = container.resolve<Query>(ContainerRegistrationKeys.QUERY)
     const { data: variants } = await query.graph({
       entity: "variant",
       fields: ["id", "sku", "product.title"],
       filters: { sku: input.items.map((i) => i.sku) },
     })
-    const bySku = new Map(variants.map((v: any) => [v.sku, v]))
+    const bySku = new Map(variants.map((variant) => [variant.sku, variant]))
 
     return new StepResponse(
       input.items.map((item) => {

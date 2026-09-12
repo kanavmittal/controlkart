@@ -8,7 +8,7 @@
 #   --build-arg NEXT_PUBLIC_BASE_URL=https://yourdomain.in
 
 # ---------- build stage ----------
-FROM node:20-slim AS build
+FROM node:22-bookworm-slim AS build
 RUN corepack enable
 WORKDIR /repo
 
@@ -30,15 +30,18 @@ WORKDIR /repo/apps/storefront
 RUN pnpm run build
 
 # ---------- production (runtime) stage ----------
-FROM node:20-slim AS production
+FROM node:22-bookworm-slim AS production
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 
 # Next standalone traces to the monorepo root; server.js lands under apps/storefront/.
-COPY --from=build /repo/apps/storefront/.next/standalone ./
-COPY --from=build /repo/apps/storefront/.next/static ./apps/storefront/.next/static
-COPY --from=build /repo/apps/storefront/public ./apps/storefront/public
+COPY --from=build --chown=node:node /repo/apps/storefront/.next/standalone ./
+COPY --from=build --chown=node:node /repo/apps/storefront/.next/static ./apps/storefront/.next/static
+COPY --from=build --chown=node:node /repo/apps/storefront/public ./apps/storefront/public
+USER node
 
 EXPOSE 3000
 ENV PORT=3000 HOSTNAME=0.0.0.0
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["node", "apps/storefront/server.js"]

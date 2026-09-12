@@ -25,39 +25,39 @@
     "setup:brands": "medusa exec ./src/scripts/setup-brand-assets.ts"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@medusajs/admin-sdk": "2.15.3",
     "@medusajs/cli": "2.15.3",
     "@medusajs/framework": "2.15.3",
-    "@medusajs/icons": "^2.15.3",
+    "@medusajs/icons": "^2.21.0",
     "@medusajs/medusa": "2.15.3",
-    "@medusajs/ui": "^4.1.15",
+    "@medusajs/ui": "^4.2.4",
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.1.0",
     "@sam-ael/medusa-plugin-shiprocket": "^0.2.1",
-    "@uiw/react-md-editor": "^4.1.1",
+    "@uiw/react-md-editor": "^4.1.2",
     "medusa-plugin-razorpay-v2": "^0.1.4",
     "meilisearch": "0.56.0",
-    "resend": "^6.14.0"
+    "resend": "^6.28.0"
   },
   "devDependencies": {
     "@medusajs/test-utils": "2.15.3",
-    "@swc/core": "^1.7.28",
-    "@swc/jest": "^0.2.36",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^20.12.11",
-    "@types/react": "^18.3.2",
-    "@types/react-dom": "^18.2.25",
+    "@swc/core": "^1.16.2",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.19.43",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "jest": "^29.7.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.14",
-    "yalc": "^1.0.0-pre.53"
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "yalc": "1.0.0-pre.53"
   },
   "engines": {
     "node": ">=20"
