@@ -1,0 +1,19 @@
+.gitignore
+  s_69340527fcf666::t_cc50e0a562cd9c 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7bca6d2050fe7ae48ba12cc4353a39bd837c3391",
+  "prompts": {},
+  "sessions": {
+    "s_69340527fcf666": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a097a7-aa7d-7ec0-8abc-a6035b08091f",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Kanav Mittal <33971670+kanavmittal@users.noreply.github.com>"
+    }
+  }
+}
