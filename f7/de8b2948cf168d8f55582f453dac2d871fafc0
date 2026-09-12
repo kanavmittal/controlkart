@@ -1,0 +1,247 @@
+apps/storefront/src/app/robots.ts
+  s_742c0c0b86a95f::t_e50c2abf721a6a 2
+apps/storefront/src/components/home/simple-collection-list.tsx
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 41
+  s_742c0c0b86a95f::t_9d2f20f583aa58 17-18,27-28,47
+apps/storefront/.gitignore
+  s_742c0c0b86a95f::t_37370ded76792e 18
+docs/brands.md
+  s_742c0c0b86a95f::t_4b66c95f529286 1-47
+apps/storefront/src/app/icon.svg
+  s_742c0c0b86a95f::t_05fab6abaf7a06 1
+docs/storefront-badges.md
+  s_742c0c0b86a95f::t_6edd35892ab9d9 1-45
+apps/storefront/src/components/home/product-lists.tsx
+  s_742c0c0b86a95f::t_d52ed6bede4803 62-63,81
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 118
+apps/storefront/src/components/home/popular-categories.tsx
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 46
+  s_742c0c0b86a95f::t_afba4f91579329 20-21,31,52,61-62,72,77
+apps/storefront/src/lib/data/brands.test.ts
+  s_742c0c0b86a95f::t_bf85f618b2a5e6 1-24
+apps/storefront/src/components/layout/site-header.tsx
+  s_742c0c0b86a95f::t_2c8d30f832e5e7 50,53-57,59-60
+  s_742c0c0b86a95f::t_17a96d5c857b9a 4,31-32,37,43
+  s_742c0c0b86a95f::t_d4a9af8d402fa1 1,47,72
+apps/storefront/src/app/account/account-view.tsx
+  s_742c0c0b86a95f::t_b80a44f54fe3a5 141-142,145
+apps/storefront/src/app/layout.tsx
+  s_742c0c0b86a95f::t_05fab6abaf7a06 25-30,35,58-63
+  s_742c0c0b86a95f::t_e50c2abf721a6a 15
+apps/storefront/src/app/sitemap.ts
+  s_742c0c0b86a95f::t_05fab6abaf7a06 12-29,47-48,50
+  s_742c0c0b86a95f::t_e50c2abf721a6a 5
+apps/storefront/public/marketing/selec/sources.json
+  s_742c0c0b86a95f::t_95e0ac31a111ca 124,134
+  s_742c0c0b86a95f::t_79320865258713 1-115,125,135
+  s_742c0c0b86a95f::t_2e517d7e0adf7b 116-123,126-133,136
+apps/storefront/src/components/home/video-background.tsx
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 1,10-15,17
+apps/storefront/next.config.ts
+  s_742c0c0b86a95f::t_dea978b87244c4 4-5
+apps/storefront/src/components/shared/site-logo.tsx
+  s_742c0c0b86a95f::t_bec4bd78675c02 12
+  s_742c0c0b86a95f::t_17a96d5c857b9a 1-11,13-18
+apps/storefront/src/app/categories/page.tsx
+  s_742c0c0b86a95f::t_b2230c24d2f2ba 16,41-42,77,97
+  s_742c0c0b86a95f::t_95e0ac31a111ca 84
+  s_742c0c0b86a95f::t_5cf45d2ae5806c 2,107
+apps/storefront/src/lib/config.ts
+  s_742c0c0b86a95f::t_e50c2abf721a6a 13-14
+  s_742c0c0b86a95f::t_05fab6abaf7a06 10
+apps/storefront/src/components/shared/brand-cover.tsx
+  s_742c0c0b86a95f::t_d1523e4f07454a 8-12
+  s_742c0c0b86a95f::t_34c369bc47bb46 1-7,13-18
+apps/storefront/src/app/manifest.ts
+  s_742c0c0b86a95f::t_05fab6abaf7a06 1-10
+apps/storefront/src/components/home/promo-tiles-row.tsx
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 55,60
+  s_742c0c0b86a95f::t_6ca67a72e9f4b2 19-20,27-28,62
+apps/storefront/src/components/home/featured-collection.tsx
+  s_742c0c0b86a95f::t_80b379ca2142c6 27,32
+  s_742c0c0b86a95f::t_b329106c5cabbb 37
+  s_742c0c0b86a95f::t_b80a44f54fe3a5 44,47,55
+  s_ba4f92302b01a5::t_5959477c8dcd0f 1-2,18,23,25-26
+apps/storefront/src/app/categories/[handle]/page.tsx
+  s_742c0c0b86a95f::t_bec4bd78675c02 281
+  s_742c0c0b86a95f::t_05fab6abaf7a06 300
+  s_742c0c0b86a95f::t_b2230c24d2f2ba 4-5,322-336
+  s_742c0c0b86a95f::t_5bebd260fd8f50 1,310,340
+apps/storefront/src/components/layout/mega-menu.tsx
+  s_742c0c0b86a95f::t_d8f59eddecb440 92,97-98
+  s_742c0c0b86a95f::t_72042f23d29f7d 13,90,93-96,99-100
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 28,128
+  s_742c0c0b86a95f::t_c139f8cf5e8ef1 10,20,140-141,144,150,177,182,249,274,286,297
+apps/medusa/src/admin/widgets/product-badges.tsx
+  s_742c0c0b86a95f::t_956f221540679d 1-6
+apps/medusa/src/admin/routes/brands/page.tsx
+  s_742c0c0b86a95f::t_4b66c95f529286 50
+  s_742c0c0b86a95f::t_ad5f90b1104183 1-49,51-87
+apps/storefront/src/components/home/sliding-panels.tsx
+  s_742c0c0b86a95f::t_b80a44f54fe3a5 90,111,116
+  s_742c0c0b86a95f::t_3b0d98422e8143 46,55,117
+apps/storefront/src/config/category-images.ts
+  s_742c0c0b86a95f::t_b2230c24d2f2ba 1-39
+apps/medusa/src/utils/__tests__/badge-route.unit.spec.ts
+  s_742c0c0b86a95f::t_d52ed6bede4803 1-49
+apps/storefront/src/components/home/hero-slideshow.tsx
+  s_742c0c0b86a95f::t_b825f1d0ff3a8f 18,20-22,29,32
+  s_742c0c0b86a95f::t_916fcd6a08c3ad 17,34,36
+apps/medusa/src/api/admin/products/[id]/brand/route.ts
+  s_742c0c0b86a95f::t_ad5f90b1104183 1-14
+apps/storefront/src/app/products/page.tsx
+  s_742c0c0b86a95f::t_d1523e4f07454a 20,22
+  s_742c0c0b86a95f::t_38361c3d8445ce 1-2,44,76-83,97
+apps/storefront/src/components/layout/header-search.tsx
+  s_742c0c0b86a95f::t_b61ef1b6a6481f 74,76,84,111
+  s_742c0c0b86a95f::t_3a0e52bc52ec71 48
+  s_742c0c0b86a95f::t_d1523e4f07454a 3-4,16-18,34-45
+  s_742c0c0b86a95f::t_8121d43276a83e 49,65
+apps/storefront/src/components/layout/site-footer.tsx
+  s_742c0c0b86a95f::t_17a96d5c857b9a 3,39
+apps/medusa/src/admin/widgets/product-brand.tsx
+  s_742c0c0b86a95f::t_ad5f90b1104183 1-29
+apps/storefront/src/components/layout/mobile-menu.tsx
+  s_742c0c0b86a95f::t_17a96d5c857b9a 5,76
+  s_742c0c0b86a95f::t_d1523e4f07454a 57
+  s_742c0c0b86a95f::t_f9a68a9c8b6f89 23-24,35,46,81,93-94
+apps/storefront/src/config/site.ts
+  s_742c0c0b86a95f::t_2c8d30f832e5e7 39
+apps/medusa/src/admin/widgets/category-badges.tsx
+  s_742c0c0b86a95f::t_956f221540679d 1-6
+apps/storefront/src/app/social-image/route.tsx
+  s_742c0c0b86a95f::t_05fab6abaf7a06 1-12
+apps/storefront/src/app/products/products-browser.tsx
+  s_742c0c0b86a95f::t_3a0e52bc52ec71 184-190,193,195,204,210,220
+  s_742c0c0b86a95f::t_d1523e4f07454a 222
+  s_742c0c0b86a95f::t_88fd3a1bd5f0e2 65
+apps/storefront/src/app/products/[handle]/page.tsx
+  s_742c0c0b86a95f::t_e50c2abf721a6a 20
+  s_742c0c0b86a95f::t_05fab6abaf7a06 101,145
+apps/storefront/src/config/home.ts
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 11-13,41,46,49,65,73,78,81,93,99,104,109,114,119,132,137,141-142,145-147,150-152,155-157,160-162,165-167,172,177,180-182,186-187,190-192,197,200-202,243,256,263,267,270,277,284,295-296,299-301,304-306,311,314-316,319-321,326,340,347-351,369,385,400,436
+  s_742c0c0b86a95f::t_2e517d7e0adf7b 50,217
+  s_742c0c0b86a95f::t_1ba30fcba252df 6
+apps/storefront/src/components/home/also-popular.tsx
+  s_742c0c0b86a95f::t_4932ddb9dd3b56 31,47
+  s_742c0c0b86a95f::t_1f9d90817882db 18-22,24-26,33,37,39-40,42-43
+  s_742c0c0b86a95f::t_bdd223b04f3214 15-17
+  s_742c0c0b86a95f::t_7a8cc404938630 27
+  s_742c0c0b86a95f::t_5d0831a34b7d28 1-2,8-9,12-14,45
+apps/storefront/src/config/types.ts
+  s_742c0c0b86a95f::t_7c5cf68d6a4588 191
+apps/medusa/src/admin/components/storefront-badges-editor.tsx
+  s_742c0c0b86a95f::t_956f221540679d 1-83
+apps/storefront/src/lib/data/content.ts
+  s_742c0c0b86a95f::t_05fab6abaf7a06 4,9
+docs/seo-launch.md
+  s_742c0c0b86a95f::t_bec4bd78675c02 1-24
+apps/storefront/src/components/shared/product-badges.tsx
+  s_742c0c0b86a95f::t_d52ed6bede4803 103,106,108,115
+  s_742c0c0b86a95f::t_375be677ab82fa 5,12-26,76,79,93
+apps/storefront/src/app/resources/[slug]/page.tsx
+  s_742c0c0b86a95f::t_e50c2abf721a6a 6
+  s_742c0c0b86a95f::t_05fab6abaf7a06 43,85
+apps/storefront/.env.production.template
+  s_742c0c0b86a95f::t_e50c2abf721a6a 14
+apps/storefront/src/app/auth/layout.tsx
+  s_742c0c0b86a95f::t_05fab6abaf7a06 1-3
+apps/medusa/.gitignore
+  s_742c0c0b86a95f::t_c825350d3e342d 5-6
+apps/medusa/Dockerfile
+  s_742c0c0b86a95f::t_c326740c64170e 32
+apps/medusa/package.json
+  s_742c0c0b86a95f::t_0aa5b4a42b86c2 24-25
+apps/medusa/src/api/admin/brands/route.ts
+  s_742c0c0b86a95f::t_6b19b332f65b11 1-18
+apps/medusa/src/api/admin/product-categories/[id]/badges/route.ts
+  s_742c0c0b86a95f::t_5a449c93fefe55 1-3
+apps/medusa/src/api/admin/products/[id]/badges/route.ts
+  s_742c0c0b86a95f::t_e97ac85e928b30 1-3
+apps/medusa/src/api/store/brands/route.ts
+  s_742c0c0b86a95f::t_80b486253369c2 1-5
+apps/medusa/src/scripts/setup-brand-assets.ts
+  s_742c0c0b86a95f::t_9f051f6a7eeb24 1-19
+apps/medusa/src/scripts/setup-homepage-featured.ts
+  s_742c0c0b86a95f::t_7c1fed7c4c5dde 1-18
+apps/medusa/src/utils/__tests__/brand-directory.unit.spec.ts
+  s_742c0c0b86a95f::t_03165723570e71 1-32
+apps/medusa/src/utils/__tests__/load-brands.unit.spec.ts
+  s_742c0c0b86a95f::t_1bc509c2e1df8a 1-13
+apps/medusa/src/utils/__tests__/storefront-badges.unit.spec.ts
+  s_742c0c0b86a95f::t_80f018fdf410e2 1-24
+apps/medusa/src/utils/badge-route.ts
+  s_742c0c0b86a95f::t_31cd4eef0e73b3 1-24
+apps/medusa/src/utils/brand-directory.ts
+  s_742c0c0b86a95f::t_876b71b5d35dd7 1-54
+apps/medusa/src/utils/load-brands.ts
+  s_742c0c0b86a95f::t_492fb9cdacf4c5 1-16
+apps/medusa/src/utils/storefront-badges.ts
+  s_742c0c0b86a95f::t_ad4fff33aca786 1-32
+apps/medusa/static/brands/SOURCES.md
+  s_742c0c0b86a95f::t_913ab568034997 1-6
+apps/storefront/public/marketing/selec/README.md
+  s_742c0c0b86a95f::t_f7319a5a02c9b7 1-11
+apps/storefront/src/app/brands/page.tsx
+  s_742c0c0b86a95f::t_e2b9046aa1010f 14,23-24,46,52,56-57,61-62,64,71
+apps/storefront/src/app/page.tsx
+  s_742c0c0b86a95f::t_121af77ada23ee 4,8-9,12-13,16-19,25,27
+apps/storefront/src/components/home/blog-posts.tsx
+  s_742c0c0b86a95f::t_b641ccb7557a7a 34
+apps/storefront/src/components/home/featured-product.tsx
+  s_742c0c0b86a95f::t_788e538c715d8f 3-4,158
+apps/storefront/src/components/home/filters-bar.tsx
+  s_742c0c0b86a95f::t_3570b3ef3c48aa 10,46,53,58,69-72
+apps/storefront/src/components/home/media-with-text.tsx
+  s_742c0c0b86a95f::t_3a3d435cf6a685 29
+apps/storefront/src/components/home/shop-by-brand.tsx
+  s_742c0c0b86a95f::t_d0c14273305195 12,14-16,18,21,24,37-38,43
+apps/storefront/src/components/product/product-summary.tsx
+  s_742c0c0b86a95f::t_11b2a0a42190f1 1,18,34,46
+apps/storefront/src/components/product/quick-view-dialog.tsx
+  s_742c0c0b86a95f::t_d862660a766a46 3-4,206
+apps/storefront/src/components/shared/product-badges.test.ts
+  s_742c0c0b86a95f::t_5366aef81a92e2 1-36
+apps/storefront/src/config/info-pages.ts
+  s_742c0c0b86a95f::t_c45099ea8c29d5 17
+apps/storefront/src/lib/data/brands.ts
+  s_742c0c0b86a95f::t_2e73cc86ac6808 1-27
+apps/storefront/src/lib/data/categories.ts
+  s_742c0c0b86a95f::t_60ac99287f7f9b 10,17,62
+apps/storefront/src/lib/data/category-badges.ts
+  s_742c0c0b86a95f::t_7909a1e67db957 1-10
+apps/storefront/src/lib/data/featured-products.test.ts
+  s_742c0c0b86a95f::t_0b64eff2a87b65 1-26
+apps/storefront/src/lib/data/featured-products.ts
+  s_742c0c0b86a95f::t_d253d649815590 1-14
+apps/storefront/src/lib/data/products.ts
+  s_742c0c0b86a95f::t_8da68b24bfb3f9 10,25
+apps/storefront/tsconfig.json
+  s_742c0c0b86a95f::t_6bf6a853ff724f 32,36-38
+docs/homepage.md
+  s_742c0c0b86a95f::t_2143e418c39c41 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f7de8b2948cf168d8f55582f453dac2d871fafc0",
+  "prompts": {},
+  "sessions": {
+    "s_742c0c0b86a95f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a076d1-2a85-7bb1-93a2-72320d3dbae6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    },
+    "s_ba4f92302b01a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f51e0aef-5e1f-4378-8212-4da5841881b0",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "sanyajain21 <sanya.jain@porteight.io>"
+    }
+  }
+}
