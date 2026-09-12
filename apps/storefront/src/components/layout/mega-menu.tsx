@@ -7,15 +7,17 @@ import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { helpCenterMenu, mainNav, navEnd } from "@/config/site"
-import { megaMenuBrands } from "@/config/site"
+import type { StoreBrand } from "@/lib/data/brands"
 import type { MainNavItem, MegaMenuColumn, NavLink } from "@/config/types"
 import type { StoreCategory } from "@/lib/data/categories"
+import { getCategoryImage } from "@/config/category-images"
 
 /** The shape `getCategoryTree()` (`lib/data/categories.ts`) resolves — same
  * tree shape `MobileMenu` (T10) consumes. */
 export type MegaMenuCategory = StoreCategory & { children: StoreCategory[] }
 
 interface MegaMenuProps {
+  brands: StoreBrand[]
   categoryTree: MegaMenuCategory[]
 }
 
@@ -23,7 +25,7 @@ interface MegaMenuProps {
 // export exists for this (plan T9: "fine to hardcode one image + link");
 // asset lives in the T5 marketing placeholder set.
 const CATEGORY_FEATURE_TILE = {
-  image: "/marketing/home/athens-hero-02a.jpg",
+  image: "/marketing/selec/plcs.jpg",
   heading: "Built for industrial floors",
   text: "Browse the full catalog of controls & automation parts",
   href: "/categories",
@@ -85,8 +87,17 @@ function CategoryMegaMenu({ categoryTree }: { categoryTree: MegaMenuCategory[] }
             <div key={group.title}>
               <Link
                 href={group.href}
-                className="mb-3 block text-[15px] font-medium text-athens-dark hover:underline"
+                className="mb-3 flex items-center gap-2 text-[15px] font-medium text-athens-dark hover:underline"
               >
+                <span className="relative size-14 shrink-0 overflow-hidden rounded bg-[#f5f6f7]">
+                  <Image
+                    src={getCategoryImage(group.href.split("/").pop() ?? "") ?? "/marketing/selec/automation-hero.jpg"}
+                    alt=""
+                    fill
+                    sizes="56px"
+                    className="object-contain p-1.5"
+                  />
+                </span>
                 {group.title}
               </Link>
               <ul>
@@ -114,7 +125,7 @@ function CategoryMegaMenu({ categoryTree }: { categoryTree: MegaMenuCategory[] }
           alt={CATEGORY_FEATURE_TILE.heading}
           fill
           sizes="280px"
-          className="object-cover"
+          className="object-contain bg-[#f5f6f7] pb-24 p-3"
         />
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
         <div className="absolute bottom-0 left-0 p-4">
@@ -126,21 +137,17 @@ function CategoryMegaMenu({ categoryTree }: { categoryTree: MegaMenuCategory[] }
   )
 }
 
-// The `megaMenuBrands` config (config/site.ts) has no logo asset yet
-// (`{ name, href }` only — see plan "Open items flagged: brand links go to
-// /products?q=<brand>"), so brand tiles render as bordered logotype cards
-// rather than images, matching the clone's grid layout without inventing
-// image assets.
-function BrandMegaMenu() {
+// Shared backend directory supplies the logo and filtered destination.
+function BrandMegaMenu({ brands }: { brands: StoreBrand[] }) {
   return (
     <div className="grid grid-cols-6 gap-4">
-      {megaMenuBrands.map((brand) => (
+      {brands.map((brand) => (
         <Link
           key={brand.name}
           href={brand.href}
           className="flex h-14 items-center justify-center rounded-[5px] px-2 text-center ring-1 ring-athens-line transition-shadow hover:ring-athens-dark"
         >
-          <span className="text-[14px] font-semibold text-athens-dark">{brand.name}</span>
+          {brand.logo_url ? <Image src={brand.logo_url} alt={brand.name} width={150} height={48} className="h-10 w-full object-contain" /> : <span className="text-[14px] font-semibold text-athens-dark">{brand.name}</span>}
         </Link>
       ))}
     </div>
@@ -167,10 +174,12 @@ function SimpleDropdown({ links }: { links: NavLink[] }) {
 function NavItem({
   item,
   categoryTree,
+  brands,
   openMenu,
   setOpenMenu,
 }: {
   item: MainNavItem
+  brands: StoreBrand[]
   categoryTree: MegaMenuCategory[]
   openMenu: string | null
   setOpenMenu: (label: string | null) => void
@@ -237,7 +246,7 @@ function NavItem({
                 {item.label === "Shop By Category" ? (
                   <CategoryMegaMenu categoryTree={categoryTree} />
                 ) : (
-                  <BrandMegaMenu />
+                  <BrandMegaMenu brands={brands} />
                 )}
               </div>
             </div>
@@ -262,7 +271,7 @@ function NavItem({
  * `nav` is `relative` so the panels (`absolute left-0 right-0 top-full`)
  * anchor to the bar, not the trigger.
  */
-export function MegaMenu({ categoryTree }: MegaMenuProps) {
+export function MegaMenu({ categoryTree, brands }: MegaMenuProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
 
   return (
@@ -274,6 +283,7 @@ export function MegaMenu({ categoryTree }: MegaMenuProps) {
               key={item.label}
               item={item}
               categoryTree={categoryTree}
+              brands={brands}
               openMenu={openMenu}
               setOpenMenu={setOpenMenu}
             />
@@ -284,6 +294,7 @@ export function MegaMenu({ categoryTree }: MegaMenuProps) {
               key={item.label}
               item={item}
               categoryTree={categoryTree}
+              brands={brands}
               openMenu={openMenu}
               setOpenMenu={setOpenMenu}
             />

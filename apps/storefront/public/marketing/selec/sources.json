@@ -1,0 +1,136 @@
+{
+  "plcs": {
+    "page": "https://www.selec.com/pro-series/PLC-Modular-MiBRX",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-05-05-16-13-38/283c1fcf885f200e9ed2b9e35595038c_DIN%20RAIL%20GROUP%20IAMGE%202.jpg",
+    "description": "MiBRX - Rail Mount Micro Modular PLC",
+    "file": "plcs.jpg"
+  },
+  "plc-accessories": {
+    "page": "https://www.selec.com/pro-series/PLC-Modular-MiBRX",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-11-17-17-28-25/145d4b16060fa66a69b8872e20d159dd_MiBRX%20IO%20CARDS.jpg",
+    "description": "MiBRX PLC - IO Cards",
+    "file": "plc-accessories.jpg"
+  },
+  "panel-mounted-plcs": {
+    "page": "https://www.selec.com/pro-series/PLC-Modular-MiBRX",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-05-11-15-35-05/416c8dedcb5fe2fa7e5eadd59cf10f79_PANEL%20MOUNT%20GROUP.jpg",
+    "description": "MiBRX - Panel Mount Micro Modular PLC",
+    "file": "panel-mounted-plcs.jpg"
+  },
+  "plc-displays": {
+    "page": "https://www.selec.com/pro-series/PLC-Modular-MiBRX",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-05-10-14-21-37/190f27085d397508a58bc3ff1aa87430_MiBRX%20IND%20DSP%20GROUP%20%282%29.jpg",
+    "description": "MiBRX PLC - Independent Display",
+    "file": "plc-displays.jpg"
+  },
+  "fixed-io-plcs": {
+    "page": "https://www.selec.com/pro-series/plc-fixed-io",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2025-04-21-15-36-23/a29d3afb81302cb3259d1ee1b7ab6a11_DIGIX%20SERIES.jpg",
+    "description": "Fixed IO Rail Mount PLC",
+    "file": "fixed-io-plcs.jpg"
+  },
+  "hmis": {
+    "page": "https://www.selec.com/pro-series/hmi",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-33-02/820b97f719c5f022fe09a575f6c6940b_7%20inch%20%20hmi%20%282%29.jpg",
+    "description": "7 INCH HMI",
+    "file": "hmis.jpg"
+  },
+  "vfds": {
+    "page": "https://www.selec.com/pro-series/drives",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-12-21-15-40-59/344ceee92aa0b91930fb8ed2f9ad52a9_THREE%20PHASE%20DRIVE.jpg",
+    "description": "THREE PHASE AC DRIVE",
+    "file": "vfds.jpg"
+  },
+  "relay-modules": {
+    "page": "https://www.selec.com/pro-series/relay-modules",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-41-43/1d74562a86b58b3e0e3fdfd75fa6ee8a_RS485%20OPERATED%20%282%29.jpg",
+    "description": "RS485 Operated Relay Module",
+    "file": "relay-modules.jpg"
+  },
+  "communication-accessories": {
+    "page": "https://www.selec.com/pro-series/industrial-communication-accessories",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-34-02/1cbef7b0297450d9471da60f4dc4f741_SERIAL%20TO%20ETHERNET%20%282%29.jpg",
+    "description": "Serial To Ethernet Converter",
+    "file": "communication-accessories.jpg"
+  },
+  "timers-counters": {
+    "page": "https://www.selec.com/pro-series/digital-timers",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-10-11-15-01-55/246a5fdcecbb1fc0842aa0461f136d68_013d23a22452d37cc62cf7d9b7258d14_Multifuction.jpg",
+    "description": "Multifunction Digital Timers",
+    "file": "timers-counters.jpg"
+  },
+  "counters": {
+    "page": "https://www.selec.com/pro-series/counters",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-23-19/8e8c3c27cda13b013bc1828bf8861e6b_COUNTERS-%20PROGRAMMABLE%20%20PRESET%20%282%29.jpg",
+    "description": "Programmable/Preset Counters",
+    "file": "counters.jpg"
+  },
+  "temperature-controllers": {
+    "page": "https://www.selec.com/pro-series/temperature-controllers",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-10-05-15-10-41/d0bf2f77f2f7c11898802d83acf219f8_DTC%20GROUP%20IMAGE.jpg",
+    "description": "Digital Temperature Controllers",
+    "file": "temperature-controllers.jpg"
+  },
+  "power-supplies": {
+    "page": "https://www.selec.com/pro-series/power-supplies",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/c0de791ccec93e6cc88fd8482e2894ae/photos/2023-02-23-11-55-55/084be848fb8e2e3e4466240b624327a9_RPS%20PRODUCT%20GROUP.jpg",
+    "description": "DIN Rail Mount Power Supply",
+    "file": "power-supplies.jpg"
+  },
+  "panel-meters": {
+    "page": "https://www.selec.com/pro-series/digital-panel-meters",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-10-32-20/104c5ac1692450f735922b21c08bbec0_Volt%20Amp%20Freq-1.JPG",
+    "description": "Digital VAF Meters",
+    "file": "panel-meters.jpg"
+  },
+  "protection-devices": {
+    "page": "https://www.selec.com/pro-series/line-monitoring",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/68d12666f5a6c2e90e4128179bc0cc89/photos/2021-03-27-14-57-54/20aa7ebcc0da77792c8a978d14c3743a_Webshop%20_%20Digital%20voltage%20protection%20%20relay.jpg",
+    "description": "Digital Voltage Protection Relay",
+    "file": "protection-devices.jpg"
+  },
+  "motor-protection": {
+    "page": "https://www.selec.com/pro-series/motor-protection",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-18-20/bacea4e2e502c3cc82d47b939d6fef0e_DIGITAL%20MOTOR%20PROTECTION%20RELAY%20%282%29.JPG",
+    "description": "Digital Motor Protection Relay",
+    "file": "motor-protection.jpg"
+  },
+  "earth-leakage": {
+    "page": "https://www.selec.com/pro-series/earth-leakage",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-12-17-07/eba132e96237f2ffe3cb8b171c491a73_Digital%20Earth%20Leakage%20Relay%20%282%29.jpg",
+    "description": "Digital Earth Leakage Relay",
+    "file": "earth-leakage.jpg"
+  },
+  "energy-meters": {
+    "page": "https://www.selec.com/pro-series/energy-meters",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-08-27-10-33-19/22efe43c8883c0da90138015ff883840_CT%20operated%20em%20%282%29.JPG",
+    "description": "CT Operated Energy Meters",
+    "file": "energy-meters.jpg"
+  },
+  "current-transformers": {
+    "page": "https://www.selec.com/pro-series/current-transformers",
+    "source": "https://webshop.selec.com/apps/estore-in/usermedia/formsStorage/2501f12583d4dfee0a67184870536d36/photos/2021-11-22-14-28-12/1b971be561039e40a74835d1ca9bc0ea_Split%20Core%20CT.jpg",
+    "description": "Split Core CT",
+    "file": "current-transformers.jpg"
+  },
+  "automation-hero": {
+    "file": "automation-hero.jpg",
+    "method": "Built-in image_gen compositing from official Selec category photographs",
+    "references": [
+      "plcs.jpg",
+      "hmis.jpg",
+      "vfds.jpg"
+    ],
+    "prompt": "Create a photorealistic wide 3:1 ecommerce marketing cover for ControlKart, an industrial Selec distributor. Use the attached official Selec category photographs as reference inputs. Compose one recognizable MiBRX modular PLC from image 1, a touchscreen operator panel from image 2 and one variable frequency drive from image 3 on a low graphite studio plinth, arranged in the RIGHT 55% of the frame. Preserve the recognizable physical design, proportions, displays, controls and brand marks of the referenced equipment, do not invent new product features. Background a refined dark navy industrial studio with subtle blue rim lighting, realistic grounding shadows and beautifully illuminated light grey equipment. LEFT 45% is clean dark navy negative space for website HTML headline. No added text, headings, labels, slogans, graphic logos, badges, watermarks or wiring. This is a category marketing cover, not a replacement catalog product photo. High quality restrained commercial photography, crisp readable silhouettes. Output wide landscape."
+  },
+  "panel-hero": {
+    "file": "panel-hero.jpg",
+    "method": "Built-in image_gen compositing from official Selec category photographs",
+    "references": [
+      "energy-meters.jpg",
+      "protection-devices.jpg",
+      "power-supplies.jpg"
+    ],
+    "prompt": "Use case: compositing. Asset: very wide 3:1 ecommerce hero for industrial Selec distributor ControlKart. Reference 1 is official Selec energy meters, reference 2 official voltage monitoring relays, reference 3 official DIN rail power supplies. Arrange one front-facing EM368 energy meter, two voltage monitoring relays, and one 120W Selec DIN rail power supply on a clean dark graphite studio shelf on RIGHT HALF of frame. Faithfully preserve each reference equipment physical design, brand lettering, displays, proportions, buttons, terminals. Scene subtle dark navy blue industrial studio backdrop, soft cool rim light, realistic grounded product photography. LEFT HALF must be empty dark navy space for HTML headline. Keep all equipment within frame. No added text, captions, badges, labels, watermark, decorative logos, wiring or additional equipment. Elegant high contrast photographic marketing cover. Landscape, widest format."
+  }
+}

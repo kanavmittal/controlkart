@@ -2,12 +2,30 @@ import type { MetadataRoute } from "next"
 import { listProducts } from "@/lib/data/products"
 import { listCategories } from "@/lib/data/categories"
 import { listPosts } from "@/lib/data/content"
-import { BASE_URL } from "@/lib/config"
+import { SEO_BASE_URL as BASE_URL } from "@/lib/config"
 import { infoPages } from "@/config/info-pages"
 
 // ISR: regenerated periodically; falls back to static pages if the backend is
 // briefly unreachable at build/runtime. Always current for search engines.
 export const revalidate = 3600
+
+async function allProducts() {
+  const items = []
+  for (let offset = 0; ; offset += 100) {
+    const { products, count } = await listProducts({ limit: 100, offset })
+    items.push(...products)
+    if (!products.length || offset + products.length >= count) return items
+  }
+}
+
+async function allPosts() {
+  const items = []
+  for (let offset = 0; ; offset += 100) {
+    const { posts, count } = await listPosts({ limit: 100, offset })
+    items.push(...posts)
+    if (!posts.length || offset + posts.length >= count) return items
+  }
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
@@ -26,10 +44,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   try {
-    const [{ products }, categories, { posts }] = await Promise.all([
-      listProducts({ limit: 100 }),
+    const [products, categories, posts] = await Promise.all([
+      allProducts(),
       listCategories(),
-      listPosts({ limit: 100 }),
+      allPosts(),
     ])
 
     return [

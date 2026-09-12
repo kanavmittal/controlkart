@@ -7,14 +7,14 @@ export type StoreCategory = HttpTypes.StoreProductCategory
 
 /** Fields needed to render the category hierarchy (parent + nested children). */
 const CATEGORY_TREE_FIELDS =
-  "id,name,handle,description,parent_category_id,category_children.id,category_children.name,category_children.handle"
+  "id,name,handle,metadata,description,parent_category_id,category_children.id,category_children.name,category_children.handle,category_children.metadata"
 
 export async function listCategories() {
   const { product_categories } = await storeFetch<{
     product_categories: StoreCategory[]
   }>("/store/product-categories", {
     query: { fields: CATEGORY_TREE_FIELDS, limit: 200 },
-    revalidate: 300,
+    revalidate: 60,
     tags: ["categories"],
   })
   return product_categories
@@ -59,7 +59,7 @@ async function queryCategoryByHandle(handle: string) {
         ",parent_category.id,parent_category.name,parent_category.handle",
       include_descendants_tree: "true",
     },
-    revalidate: 300,
+    revalidate: 60,
     tags: ["categories"],
   })
   return product_categories[0] ?? null

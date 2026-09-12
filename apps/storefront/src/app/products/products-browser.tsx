@@ -62,7 +62,7 @@ function localTextMatch(product: HttpTypes.StoreProduct, query: string): boolean
 }
 
 function matchesVendor(product: HttpTypes.StoreProduct, vendor: string): boolean {
-  return product.metadata?.brand === vendor
+  return typeof product.metadata?.brand === "string" && product.metadata.brand.trim().toLowerCase() === vendor.trim().toLowerCase()
 }
 
 /**
@@ -181,13 +181,18 @@ export function ProductsBrowser({
         })
       : searched
 
+  const categoryHref = (handle?: string) => {
+    const params = new URLSearchParams()
+    if (vendor) params.set("vendor", vendor)
+    if (handle) params.set("category", handle)
+    return params.size ? `/products?${params}` : "/products"
+  }
+
   const categoryLinks: CollectionSidebarCategoryLink[] = [
     {
-      // Category link hrefs are clean (`?category=<handle>` only) so
-      // switching category drops `?specs=`/`?sort=`/`?price=`/`?q=` — those
-      // don't necessarily carry over between categories, same as before.
+      // Retain the manufacturer while switching categories; clear category-specific filters.
       label: "All Products",
-      href: "/products",
+      href: categoryHref(),
       active: !activeCategoryHandle,
     },
     ...categories.map((top) => {
@@ -196,13 +201,13 @@ export function ProductsBrowser({
       )
       return {
         label: top.name,
-        href: `/products?category=${top.handle}`,
+        href: categoryHref(top.handle),
         active: activeCategoryHandle === top.handle,
         defaultExpanded: activeCategoryHandle === top.handle || childActive,
         children: top.children.length
           ? top.children.map((child) => ({
               label: child.name,
-              href: `/products?category=${child.handle}`,
+              href: categoryHref(child.handle),
               active: activeCategoryHandle === child.handle,
             }))
           : undefined,
@@ -212,9 +217,9 @@ export function ProductsBrowser({
 
   return (
     <div className="athens-container py-10 md:py-14">
-      <h1 className="athens-page-title">All Products</h1>
+      <h1 className="athens-page-title">{vendor ? `${vendor} Products` : "All Products"}</h1>
       <p className="mt-2 text-[15px] text-athens-body">
-        Selec PLCs, HMIs, timers, meters and accessories — live stock,
+        Industrial PLCs, HMIs, timers, meters and accessories — live stock,
         GST-inclusive pricing, pan-India shipping.
       </p>
 

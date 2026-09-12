@@ -1,5 +1,7 @@
 "use client"
 
+import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
+
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -201,6 +203,7 @@ function QuickViewContent({
         <DialogTitle className="text-xl leading-tight font-medium text-[var(--color-athens-dark)]">
           {product.title}
         </DialogTitle>
+        <ProductBadges badges={deriveProductBadges(product)} className="mt-3" />
         {product.subtitle && (
           <p className="-mt-2 text-sm text-[var(--color-athens-body)]">{product.subtitle}</p>
         )}

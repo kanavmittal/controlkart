@@ -31,7 +31,7 @@ export function BlogPosts({ posts }: BlogPostsProps) {
   if (!posts.length) return null
 
   return (
-    <section className="athens-container my-[60px]">
+    <section className="athens-container my-10 md:my-[60px]">
       <SectionHeading
         title="From the blog"
         actionLabel="All resources"

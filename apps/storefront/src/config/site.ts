@@ -18,7 +18,6 @@ import type {
   FooterFeature,
   HeaderMastConfig,
   MainNavItem,
-  MegaMenuBrandLink,
   PdpContentConfig,
   SimpleMenu,
 } from "./types";
@@ -37,24 +36,9 @@ export const headerMast: HeaderMastConfig = {
   logoText: "ControlKart",
   searchPlaceholder: "Search by product, brand or part number",
   searchButtonLabel: "Search",
-  phone: "+91 00000 00000", // TODO(content): confirm support phone number
+  phone: "+91 98739 01927",
   supportEmail: "support@controlkart.com",
 };
-
-// Brand tiles for the header's "Shop By Brand" mega-menu panel. Links route
-// through the in-memory product search (brand is a `product.metadata.brand`
-// string, not a facet endpoint — see plan "Open items flagged"), matching
-// the `/brands` page's own link strategy (T58).
-// TODO(content): confirm these names match live `metadata.brand` values
-// exactly (case/punctuation) once the catalog is seeded.
-export const megaMenuBrands: MegaMenuBrandLink[] = [
-  { name: "Siemens", href: "/products?q=Siemens" },
-  { name: "Schneider Electric", href: "/products?q=Schneider%20Electric" },
-  { name: "ABB", href: "/products?q=ABB" },
-  { name: "L&T", href: "/products?q=L%26T" },
-  { name: "Havells", href: "/products?q=Havells" },
-  { name: "Mitsubishi Electric", href: "/products?q=Mitsubishi%20Electric" },
-];
 
 // Primary nav bar (left-aligned). "Shop By Category" opens the live
 // category mega-menu (T9) — its href is inert ("#") because the menu itself

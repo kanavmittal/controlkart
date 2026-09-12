@@ -16,13 +16,16 @@
  * `@/config/types`); video tiles autoplay muted + looped, matching the clone.
  */
 
+import { getCategoryBadges } from "@/lib/data/category-badges";
+import { ProductBadges } from "@/components/shared/product-badges";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { promoTiles } from "@/config/home";
 
-export function PromoTilesRow() {
+export async function PromoTilesRow() {
+  const badges = await getCategoryBadges();
   // Sits on the same #f8f8f8 band as the deals section below (30px top
   // padding, no bottom gap) — matches the clone's section wrapper exactly.
   return (
@@ -49,25 +52,14 @@ export function PromoTilesRow() {
                   alt={tile.title}
                   fill
                   sizes="(max-width: 749px) 100vw, (max-width: 989px) 50vw, 33vw"
-                  className="object-cover"
+                  className="bg-[#f5f6f7] object-contain pb-[210px] pt-6 px-5"
                 />
               ) : null}
               <div
                 aria-hidden
-                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_40%,rgba(0,0,0,0.75)_100%)]"
+                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,28,48,0)_30%,rgba(13,28,48,0.96)_62%)]"
               />
-              {tile.flag ? (
-                <div className="absolute left-[30px] top-0 rounded-b-[2px] bg-[#004FC7] px-4 py-2.5 text-center text-white">
-                  <span className="block text-[13px] leading-[1.3]">
-                    {tile.flag.top}
-                  </span>
-                  <span className="block text-[15px] font-medium leading-[1.3]">
-                    {tile.flag.bottom}
-                  </span>
-                </div>
-              ) : (
-                <div className="absolute left-[30px] top-0 h-2 w-[42px] bg-[#004FC7]" />
-              )}
+              <ProductBadges badges={badges[tile.href] ?? []} className="absolute left-[30px] right-[30px] top-4" />
               <div className="absolute bottom-0 left-0 right-0 p-[30px]">
                 <h3 className="mb-2 text-[24px] font-medium leading-[1.3] text-white">
                   {tile.title}

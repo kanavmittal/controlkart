@@ -1,3 +1,4 @@
+import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
 import Link from "next/link"
 import type { HttpTypes } from "@medusajs/types"
 
@@ -14,7 +15,7 @@ interface ProductSummaryProps {
  * `metadata.brand` for the eyebrow (clone renders vendor as plain text; ours
  * links to `/brands` per the post-review fix — brand is a
  * `product.metadata.brand` string, not a facet endpoint, same "link to a
- * search/browse surface" pattern as `megaMenuBrands`/`/brands`),
+ * search/browse surface" pattern as the brand directory),
  * `metadata.mpn` (falling back to the first variant's SKU, same fallback
  * `quick-view-dialog.tsx` uses) for the SKU/MPN line. No rating stars
  * (omitted storewide per plan decision #2). No client state — `buy-box.tsx`
@@ -30,7 +31,7 @@ export function ProductSummary({ product }: ProductSummaryProps) {
     <div>
       {brand ? (
         <Link
-          href="/brands"
+          href={`/products?vendor=${encodeURIComponent(brand)}`}
           className="mb-1 inline-block text-[13px] text-[var(--color-athens-body)] hover:text-[var(--color-athens-dark)] hover:underline"
         >
           {brand}
@@ -42,6 +43,7 @@ export function ProductSummary({ product }: ProductSummaryProps) {
       {mpn ? (
         <p className="mt-2 text-[13px] text-[var(--color-athens-body)]">SKU: {mpn}</p>
       ) : null}
+      <ProductBadges badges={deriveProductBadges(product)} className="mt-3" />
       <hr className="my-5 border-0 border-t border-[var(--color-athens-line)]" />
     </div>
   )

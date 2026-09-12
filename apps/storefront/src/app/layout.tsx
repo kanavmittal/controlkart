@@ -12,7 +12,7 @@ import { QuickViewProvider } from "@/components/providers/quick-view-provider"
 import { CompareProvider } from "@/components/product/compare-context"
 import { CompareBar } from "@/components/product/compare-bar"
 import { Toaster } from "@/components/ui/sonner"
-import { BASE_URL, STORE_NAME, STORE_TAGLINE } from "@/lib/config"
+import { SEO_BASE_URL as BASE_URL, STORE_NAME, STORE_TAGLINE } from "@/lib/config"
 import { getCategoryTree } from "@/lib/data/categories"
 
 export const metadata: Metadata = {
@@ -22,10 +22,17 @@ export const metadata: Metadata = {
     template: `%s | ${STORE_NAME}`,
   },
   description: STORE_TAGLINE,
+  applicationName: STORE_NAME,
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/branding/icon-192.png", sizes: "192x192", type: "image/png" }],
+    apple: [{ url: "/branding/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/social-image"] },
   openGraph: {
     siteName: STORE_NAME,
     type: "website",
     locale: "en_IN",
+    images: [{ url: "/social-image", width: 1200, height: 630, alt: "ControlKart — Selec industrial automation components" }],
   },
   robots: { index: true, follow: true },
 }
@@ -48,6 +55,12 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org", "@graph": [
+            { "@type": "Organization", "@id": `${BASE_URL}/#organization`, name: STORE_NAME, url: BASE_URL, logo: `${BASE_URL}/branding/controlkart-logo.png`, telephone: "+919873901927" },
+            { "@type": "WebSite", "@id": `${BASE_URL}/#website`, name: STORE_NAME, url: BASE_URL, publisher: { "@id": `${BASE_URL}/#organization` } },
+          ],
+        }).replace(/</g, "\\u003c") }} />
         <QueryProvider>
           <CartProvider>
             <QuickViewProvider>

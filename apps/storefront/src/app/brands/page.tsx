@@ -11,7 +11,7 @@ import {
   EmptyTitle,
   EmptyDescription,
 } from "@/components/ui/empty"
-import { brands } from "@/config/brands"
+import { listBrands } from "@/lib/data/brands"
 
 export const metadata: Metadata = {
   title: "Shop by Brand",
@@ -20,21 +20,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/brands" },
 }
 
-/**
- * /brands index (NEW route, T58). Grid of brand logo cards, structured
- * after the clone's shop-by-brand page (`my-clone/src/app/pages/shop-by-brand/page.tsx`):
- * bordered card, logo media block, centered label below. Ported to the
- * card idiom already established by `app/categories/page.tsx` (border +
- * `--radius` token) rather than the clone's literal inset-shadow classes.
- *
- * Link strategy (plan "Brand links" decision): `brand` is a
- * `product.metadata.brand` string, not a facet/collection endpoint, so
- * cards link to `/products?q=<brand name>` (the existing `?q=` search
- * seeding contract) rather than each config entry's own `href` field
- * (which today just points back at `/brands` as a placeholder — see
- * `config/brands.ts`).
- */
-export default function BrandsPage() {
+export default async function BrandsPage() {
+  const brands = await listBrands().catch(() => []);
   return (
     <>
       <Breadcrumbs crumbs={[{ label: "Brands" }]} />
@@ -56,29 +43,32 @@ export default function BrandsPage() {
         ) : (
           <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
             {brands.map((brand) => {
-              const href = `/products?q=${encodeURIComponent(brand.name)}`
+              const href = brand.href
 
               return (
                 <div key={brand.name}>
                   <Link
                     href={href}
+                    aria-label={brand.name}
                     className="group block overflow-hidden rounded-[var(--radius)] border border-border bg-white p-3 transition-colors hover:border-athens-dark"
                   >
                     <div className="relative aspect-[950/435] overflow-hidden rounded-[calc(var(--radius)-2px)] bg-athens-band">
-                      <Image
-                        src={brand.logo}
+                      {brand.cover_url || brand.logo_url ? <Image
+                        src={(brand.cover_url || brand.logo_url)!}
                         alt={brand.name}
                         fill
                         sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                        className="object-cover"
-                      />
+                        className={brand.cover_url ? "object-cover" : "object-contain p-5"}
+                      /> : <span className="flex h-full items-center justify-center text-xl font-semibold">{brand.name}</span>}
                     </div>
+                    {brand.logo_url && <Image src={brand.logo_url} alt={brand.name} width={160} height={60} className="mx-auto mt-3 h-12 object-contain" />}
                   </Link>
                   <p className="mt-3 text-center text-sm text-athens-body">
                     <Link href={href} className="hover:text-athens-dark hover:underline">
                       {brand.name}
                     </Link>
                   </p>
+                  <p className="mt-1 text-center text-xs text-athens-body">{brand.product_count} products</p>
                 </div>
               )
             })}

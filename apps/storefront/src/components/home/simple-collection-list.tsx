@@ -14,6 +14,8 @@
  * field to the config.
  */
 
+import { getCategoryBadges } from "@/lib/data/category-badges"
+import { ProductBadges } from "@/components/shared/product-badges"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -22,7 +24,8 @@ import { simpleCollections } from "@/config/home"
 
 const HEADING = "You might also need"
 
-export function SimpleCollectionList() {
+export async function SimpleCollectionList() {
+  const badges = await getCategoryBadges()
   return (
     <section className="athens-container my-[60px]">
       <SectionHeading title={HEADING} />
@@ -35,12 +38,13 @@ export function SimpleCollectionList() {
                 alt={item.title}
                 fill
                 sizes="(min-width: 1024px) 14vw, (min-width: 768px) 25vw, 50vw"
-                className="object-cover"
+                className="object-contain bg-[#f5f6f7] p-1"
               />
             </div>
             <p className="mt-3 text-center text-[15px] text-[var(--color-athens-body)] group-hover:text-[var(--color-athens-dark)] group-hover:underline">
               {item.title}
             </p>
+            <ProductBadges badges={badges[item.href] ?? []} className="mt-2 justify-center" />
           </Link>
         ))}
       </div>

@@ -14,7 +14,7 @@ export const infoPages: Record<string, InfoPage> = {
     title: "About Us",
     html: `
 <p>ControlKart supplies industrial automation and control components — PLCs, contactors, relays, VFDs, switchgear, and panel-building hardware — to OEMs, panel builders, system integrators, and MSMEs across India.</p>
-<p>We stock genuine parts from leading manufacturers including Siemens, Schneider Electric, ABB, and Mitsubishi Electric, backed by manufacturer warranties, GST-compliant invoicing, and support for bulk and institutional orders.</p>
+<p>Browse the brands in our current catalog for genuine industrial components, with GST-compliant invoicing and support for bulk and institutional orders.</p>
 <p>Whether you need a single contactor for a repair or a bill of materials for a new control panel, our team can help you find the right part and, for larger orders, put together a formal quote.</p>
 <!-- TODO(content): confirm company history / founding year / registered entity details -->
 `.trim(),

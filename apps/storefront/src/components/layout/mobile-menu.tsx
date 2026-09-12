@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { SiteLogo } from "@/components/shared/site-logo"
 import { Menu, ShoppingCart, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { helpCenterMenu, mainNav, navEnd } from "@/config/site"
+import type { StoreBrand } from "@/lib/data/brands"
+import { HeaderSearch } from "./header-search"
 import type { StoreCategory } from "@/lib/data/categories"
 
 /** The shape `getCategoryTree()` (`lib/data/categories.ts`) resolves: top-level
@@ -29,6 +32,7 @@ import type { StoreCategory } from "@/lib/data/categories"
 export type MobileMenuCategory = StoreCategory & { children?: StoreCategory[] }
 
 interface MobileMenuProps {
+  brands: StoreBrand[]
   categories: MobileMenuCategory[]
 }
 
@@ -39,7 +43,7 @@ interface MobileMenuProps {
  * (fetched server-side by the layout in T14) — this component does no data
  * fetching itself.
  */
-export function MobileMenu({ categories }: MobileMenuProps) {
+export function MobileMenu({ categories, brands }: MobileMenuProps) {
   const [open, setOpen] = React.useState(false)
   const close = React.useCallback(() => setOpen(false), [])
 
@@ -50,7 +54,7 @@ export function MobileMenu({ categories }: MobileMenuProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="border-none md:hidden"
+            className="border-none min-[990px]:hidden"
             aria-label="Open menu"
           />
         }
@@ -69,11 +73,12 @@ export function MobileMenu({ categories }: MobileMenuProps) {
             onClick={close}
             className="font-heading text-lg font-semibold text-foreground"
           >
-            ControlKart
+            <SiteLogo />
           </Link>
         </SheetHeader>
 
         <nav className="flex flex-1 flex-col overflow-y-auto pb-4">
+          <div className="p-3"><HeaderSearch brands={brands} /></div>
           {/* Category tree */}
           <Accordion multiple className="border-b border-border px-2 py-1">
             {categories.map((category) => (
@@ -84,6 +89,8 @@ export function MobileMenu({ categories }: MobileMenuProps) {
               />
             ))}
           </Accordion>
+
+          <div className="space-y-2 border-b px-4 py-3"><p className="text-sm font-semibold">Brands</p>{brands.map((brand) => <Link key={brand.name} href={brand.href} onClick={close} className="block py-1 text-sm">{brand.name}</Link>)}</div>
 
           {/* Static primary + end nav from config/site.ts (skip inert "#"
            * entries — those open desktop-only hover menus; "Help Center"'s

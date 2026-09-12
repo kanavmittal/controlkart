@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { SearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SearchTypeahead } from "./search-typeahead";
-import { headerMast, megaMenuBrands } from "@/config/site";
+import { headerMast } from "@/config/site";
+
+import type { StoreBrand } from "@/lib/data/brands";
 
 const ALL_BRANDS = "All Brands";
 
@@ -28,12 +31,22 @@ const ALL_BRANDS = "All Brands";
 // string-prepended into `q` like the old pre-Meilisearch implementation.
 // The typeahead's own suggestion rows navigate directly to
 // `/products/<handle>` or `/quick-order?sku=`, independent of this submit.
-export function HeaderSearch() {
-  const [brand, setBrand] = useState(ALL_BRANDS);
-  const [term, setTerm] = useState("");
+export function HeaderSearch({ brands }: { brands: StoreBrand[] }) {
+  return <Suspense fallback={<HeaderSearchForm brands={brands} />}><SearchWithParams brands={brands} /></Suspense>;
+}
+
+function SearchWithParams({ brands }: { brands: StoreBrand[] }) {
+  const params = useSearchParams();
+  return <HeaderSearchForm key={params.toString()} brands={brands} initialBrand={params.get("vendor") || ALL_BRANDS} initialQuery={params.get("q") || ""} />;
+}
+
+function HeaderSearchForm({ brands, initialBrand = ALL_BRANDS, initialQuery = "" }: { brands: StoreBrand[]; initialBrand?: string; initialQuery?: string }) {
+  const [brand, setBrand] = useState(initialBrand);
+  const [term, setTerm] = useState(initialQuery);
 
   const trimmed = term.trim();
-  const vendor = brand === ALL_BRANDS ? undefined : brand;
+  const selectedBrand = brands.find((option) => option.name.toLowerCase() === brand.trim().toLowerCase())?.name || ALL_BRANDS;
+  const vendor = selectedBrand === ALL_BRANDS ? undefined : selectedBrand;
 
   return (
     <form
@@ -49,7 +62,7 @@ export function HeaderSearch() {
       <input type="hidden" name="q" value={trimmed} />
       {vendor ? <input type="hidden" name="vendor" value={vendor} /> : null}
 
-      <Select value={brand} onValueChange={(value) => setBrand(value as string)}>
+      <Select value={selectedBrand} onValueChange={(value) => setBrand(value as string)}>
         <SelectTrigger
           aria-label="Brand"
           // min-h-full (not h-full): the shared trigger's variant-prefixed
@@ -58,9 +71,9 @@ export function HeaderSearch() {
           // makes the trigger — and its dashed border-r divider — span the
           // full h-11 row instead of anchoring 32px-tall at the top.
           // Content width (no fixed w-[150px]) matches the reference design.
-          className="hidden min-h-full shrink-0 gap-1.5 rounded-none border-0 border-r border-dashed border-athens-line bg-transparent px-4 text-[15px] text-athens-dark [&>svg:last-child]:hidden sm:flex"
+          className="flex max-w-[120px] sm:max-w-none min-h-full shrink-0 gap-1.5 rounded-none border-0 border-r border-dashed border-athens-line bg-transparent px-4 text-[15px] text-athens-dark [&>svg:last-child]:hidden"
         >
-          <SelectValue className="flex-none" />
+          <SelectValue className="min-w-0 truncate" />
           <span
             aria-hidden="true"
             className="ml-1 h-0 w-0 shrink-0 border-x-4 border-t-[5px] border-x-transparent border-t-athens-dark"
@@ -68,7 +81,7 @@ export function HeaderSearch() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={ALL_BRANDS}>{ALL_BRANDS}</SelectItem>
-          {megaMenuBrands.map((option) => (
+          {brands.map((option) => (
             <SelectItem key={option.name} value={option.name}>
               {option.name}
             </SelectItem>
@@ -95,7 +108,7 @@ export function HeaderSearch() {
         className="h-full shrink-0 rounded-none rounded-r-[calc(var(--radius)-1px)]"
       >
         <SearchIcon />
-        {headerMast.searchButtonLabel}
+        <span className="sr-only sm:not-sr-only">{headerMast.searchButtonLabel}</span>
       </Button>
     </form>
   );

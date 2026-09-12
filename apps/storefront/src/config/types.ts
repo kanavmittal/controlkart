@@ -151,12 +151,6 @@ export interface HeroSlide {
   image: string;
 }
 
-/** Small two-line flag badge overlaid on a tile, e.g. "New" / "Arrivals". */
-export interface TileFlag {
-  top: string;
-  bottom: string;
-}
-
 export interface PromoTile {
   title: string;
   caption: string;
@@ -165,7 +159,6 @@ export interface PromoTile {
   /** Either `image` or `video` (or both — video plays over the poster image). */
   image?: string;
   video?: string;
-  flag?: TileFlag;
 }
 
 /** One cell in the `PopularCategories` mosaic grid. */
@@ -175,7 +168,6 @@ export interface PopularCategoryTile {
   image: string;
   /** Mosaic layout hint — spans two grid cells when true. */
   wide?: boolean;
-  flag?: TileFlag;
 }
 
 /** One chip in the `AlsoPopular` row, or one tile in `SimpleCollections`. */
@@ -196,7 +188,7 @@ export interface CountdownBannerConfig {
 }
 
 export interface VideoBackgroundConfig {
-  video: string;
+  image: string;
   heading: string;
   caption: string;
   ctaLabel: string;
@@ -219,13 +211,6 @@ export interface MediaWithTextConfig {
   href: string;
 }
 
-/** One brand tab on the home `DealsTabs` section — products are resolved
- * live from `handles` at render time (T45). */
-export interface DealsTab {
-  brandLabel: string;
-  handles: string[];
-}
-
 /** One of the three compact-row columns on the home page — products are
  * resolved live from `handles` at render time (T55). */
 export interface ProductListColumnConfig {
@@ -241,13 +226,4 @@ export interface FeaturedCollectionConfig {
   heading: string;
   handles: string[];
   promoTile: PromoTile;
-}
-
-/** One entry of `config/brands.ts`, rendered by `ShopByBrand` (T48) and
- * `/brands` (T58). `name` must match the `product.metadata.brand` string
- * values used by the backend so brand links (`/products?q=<brand>`) hit. */
-export interface BrandConfig {
-  name: string;
-  logo: string;
-  href: string;
 }

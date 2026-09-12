@@ -17,7 +17,7 @@ import { QuickViewButton } from "@/components/product/quick-view-button"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import { SectionHeading } from "@/components/shared/section-heading"
 import { pdpContent } from "@/config/site"
-import { BASE_URL, STORE_NAME } from "@/lib/config"
+import { SEO_BASE_URL as BASE_URL, STORE_NAME } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 
 type Props = { params: Promise<{ handle: string }> }
@@ -98,7 +98,7 @@ export default async function ProductPage({ params }: Props) {
   const prices = variants
     .map((v) => v.calculated_price?.calculated_amount)
     .filter((p): p is number => typeof p === "number")
-  const inStock = variants.some((v) => (v.inventory_quantity ?? 0) > 0)
+  const inStock = variants.some((v) => (v.inventory_quantity ?? 0) > 0 || v.manage_inventory === false || v.allow_backorder === true)
   const imageUrls = productImageUrls(product)
 
   const productJsonLd = {
@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c") }}
       />
 
       <Breadcrumbs crumbs={crumbs} />

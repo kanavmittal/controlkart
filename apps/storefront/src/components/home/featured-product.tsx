@@ -1,5 +1,7 @@
 "use client"
 
+import { ProductBadges, deriveProductBadges } from "@/components/shared/product-badges"
+
 import { useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -153,6 +155,7 @@ function FeaturedProductContent({
             <h2 className="mb-3 text-[24px] font-medium leading-[1.3] text-[var(--color-athens-dark)]">
               {product.title}
             </h2>
+            <ProductBadges badges={deriveProductBadges(product)} className="mt-3" />
 
             <div className="mb-5 flex items-center gap-3">
               <StockPill availableQuantity={totalStock} canBackorder={canBackorder} />

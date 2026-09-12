@@ -3,22 +3,14 @@
 // Modeled on the clone's `src/data/sections.ts` (layout/section content) +
 // `src/data/products.ts` (product-bearing sections), adapted for
 // ControlKart: instead of baking in clone product snapshots, product-bearing
-// sections (`dealsTabs`, `featuredProductHandle`, `productListColumns`,
+// sections (`dealProductHandles`, `featuredProductHandle`, `productListColumns`,
 // `featuredCollection`, `homeComparisonHandles`) reference Medusa product
 // **handles** that the rendering component resolves live via
 // `lib/data/products.ts`.
 //
-// All imagery under `/marketing/home`, `/marketing/videos`, `/marketing/brands`
-// is copied verbatim from the clone (`my-clone/public/images` + `/videos`) as
-// a PLACEHOLDER — real ControlKart photography/video is a follow-up content
-// task. Every category `href` below points at a plausible ControlKart
-// industrial-automation category handle; only the handles already present in
-// `apps/medusa/src/scripts/seed.ts` (plcs, hmis, timers-counters,
-// energy-meters, vfds, power-supplies, protection-devices, plc-accessories,
-// panel-mounted-plcs, wall-mounted-plcs) are backend-confirmed — the rest are
-// marked `// TODO(content): confirm handle`. Product handles are ALL
-// placeholders (`// TODO(content): real product handles`) — the seeded demo
-// catalog only has 3 real products today.
+// Category photography is sourced from Selec; provenance is recorded in
+// public/marketing/selec/sources.json. Product handles below are unchanged.
+// Additional product families use catalog searches until Medusa categories exist.
 //
 // Interfaces live in `./types` (extended by this task — see NOTE(T5) there).
 
@@ -31,7 +23,6 @@ import type {
   VideoBackgroundConfig,
   SlidingPanel,
   MediaWithTextConfig,
-  DealsTab,
   ProductListColumnConfig,
   FeaturedCollectionConfig,
 } from "./types";
@@ -47,16 +38,16 @@ export const heroSlides: HeroSlide[] = [
       "PLCs, HMIs, VFDs and protection devices from trusted brands — built for Indian industrial and OEM applications.",
     ctaLabel: "Shop PLCs & Automation",
     href: "/categories/plcs",
-    image: "/marketing/home/athens-v2-slide1a.jpg",
+    image: "/marketing/selec/automation-hero.jpg",
   },
   {
     heading: "Everything for the control panel builder",
     caption:
-      "Contactors, terminal blocks, enclosures and wiring accessories — stocked and ready to ship pan-India.",
+      "Selec meters, timers, power supplies and monitoring relays for industrial control panels.",
     ctaLabel: "Shop Panel Building",
     // TODO(content): confirm handle
-    href: "/categories/panel-building-accessories",
-    image: "/marketing/home/260283.jpg",
+    href: "/categories",
+    image: "/marketing/selec/panel-hero.jpg",
   },
 ];
 
@@ -71,7 +62,7 @@ export const promoTiles: PromoTile[] = [
       "Digital and analog timers for delay, cyclic, and star-delta starter control across your production line.",
     ctaLabel: "Shop now",
     href: "/categories/timers-counters",
-    image: "/marketing/home/athens-mosaic-05.jpg",
+    image: "/marketing/selec/timers-counters.jpg",
   },
   {
     title: "VFDs & Drives",
@@ -79,17 +70,15 @@ export const promoTiles: PromoTile[] = [
       "Variable frequency drives for energy-efficient motor control — new stock just landed.",
     ctaLabel: "Shop now",
     href: "/categories/vfds",
-    image: "/marketing/home/athens-hero-02a.jpg",
-    video: "/marketing/videos/promo-tile-battery-screwdrivers.mp4",
-    flag: { top: "New", bottom: "Arrivals" },
+    image: "/marketing/selec/vfds.jpg",
   },
   {
     title: "Protection Devices",
     caption:
-      "MCBs, MCCBs and overload relays from top brands to keep your panels safe and compliant.",
+      "Selec voltage, phase and current monitoring relays for dependable panel protection.",
     ctaLabel: "Shop now",
     href: "/categories/protection-devices",
-    image: "/marketing/home/athens-mosaic-03.jpg",
+    image: "/marketing/selec/protection-devices.jpg",
   },
 ];
 
@@ -101,34 +90,33 @@ export const popularCategories: PopularCategoryTile[] = [
   {
     title: "PLCs",
     href: "/categories/plcs",
-    image: "/marketing/home/rotary_01.jpg",
+    image: "/marketing/selec/plcs.jpg",
     wide: true,
-    flag: { top: "Up to", bottom: "20% Off!" },
   },
   {
     title: "Protection Devices",
     href: "/categories/protection-devices",
-    image: "/marketing/home/athens-mosaic-03.jpg",
+    image: "/marketing/selec/protection-devices.jpg",
   },
   {
     title: "HMIs",
     href: "/categories/hmis",
-    image: "/marketing/home/athens-mosaic-06.jpg",
+    image: "/marketing/selec/hmis.jpg",
   },
   {
     title: "Energy Meters",
     href: "/categories/energy-meters",
-    image: "/marketing/home/lf_01.jpg",
+    image: "/marketing/selec/energy-meters.jpg",
   },
   {
     title: "Power Supplies",
     href: "/categories/power-supplies",
-    image: "/marketing/home/athens-mosaic-04a.jpg",
+    image: "/marketing/selec/power-supplies.jpg",
   },
   {
     title: "VFDs & Drives",
     href: "/categories/vfds",
-    image: "/marketing/home/athens-mosaic-02d.jpg",
+    image: "/marketing/selec/vfds.jpg",
     wide: true,
   },
 ];
@@ -141,85 +129,77 @@ export const alsoPopular: CategoryChip[] = [
   {
     title: "PLC Accessories",
     href: "/categories/plc-accessories",
-    image: "/marketing/home/collections-hero_bs.jpg",
+    image: "/marketing/selec/plc-accessories.jpg",
   },
   {
     title: "Timers & Counters",
     href: "/categories/timers-counters",
-    image: "/marketing/home/collections-hero_cs.jpg",
+    image: "/marketing/selec/timers-counters.jpg",
   },
   {
     title: "Panel-mounted PLCs",
-    href: "/categories/panel-mounted-plcs",
-    image: "/marketing/home/collections-hero_cd.webp",
+    href: "/products?q=MiBRX",
+    image: "/marketing/selec/panel-mounted-plcs.jpg",
   },
   {
-    title: "Wall-mounted PLCs",
-    href: "/categories/wall-mounted-plcs",
-    image: "/marketing/home/collections-hero_cl.jpg",
+    title: "PLC Displays",
+    href: "/products?q=MiBRX%20DSP",
+    image: "/marketing/selec/plc-displays.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Contactors & Relays",
-    href: "/categories/contactors-relays",
-    image: "/marketing/home/collections-hero_ct.jpg",
+    title: "Relay Modules",
+    href: "/products?q=relay",
+    image: "/marketing/selec/relay-modules.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Circuit Breakers",
-    href: "/categories/circuit-breakers",
-    image: "/marketing/home/collections-hero_pp.jpg",
+    title: "Earth Leakage Relays",
+    href: "/products?q=earth%20leakage",
+    image: "/marketing/selec/earth-leakage.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Motor Starters",
-    href: "/categories/motor-starters",
-    image: "/marketing/home/collections-hero_hm.jpg",
+    title: "Motor Protection",
+    href: "/products?q=motor%20protection",
+    image: "/marketing/selec/motor-protection.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Industrial Sensors",
-    href: "/categories/industrial-sensors",
-    image: "/marketing/home/collections-hero_ht.jpg",
+    title: "Temperature Controllers",
+    href: "/products?q=temperature",
+    image: "/marketing/selec/temperature-controllers.jpg",
   },
   {
     title: "Energy Meters",
     href: "/categories/energy-meters",
-    image: "/marketing/home/collections-hero_os.jpg",
+    image: "/marketing/selec/energy-meters.jpg",
   },
   {
     title: "Power Supplies",
     href: "/categories/power-supplies",
-    image: "/marketing/home/collections-collection-hero.jpg",
+    image: "/marketing/selec/power-supplies.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Terminal Blocks",
-    href: "/categories/terminal-blocks",
-    image: "/marketing/home/collections-hero_pw.jpg",
+    title: "Communication Accessories",
+    href: "/products?q=converter",
+    image: "/marketing/selec/communication-accessories.jpg",
   },
   {
-    // TODO(content): confirm handle
     title: "Panel Meters",
-    href: "/categories/panel-meters",
-    image: "/marketing/home/collections-hero_rt.jpg",
+    href: "/products?q=meter",
+    image: "/marketing/selec/panel-meters.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Servo Drives & Motion Control",
-    href: "/categories/servo-drives-motion-control",
-    image: "/marketing/home/collections-hero_tk.webp",
+    title: "Fixed IO PLCs",
+    href: "/products?q=PLC",
+    image: "/marketing/selec/fixed-io-plcs.jpg",
   },
   {
     title: "Protection Devices",
     href: "/categories/protection-devices",
-    image: "/marketing/home/collections-hero_clearance.jpg",
+    image: "/marketing/selec/protection-devices.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Cable Glands & Accessories",
-    href: "/categories/cable-glands-accessories",
-    image: "/marketing/home/collections-hero_lbl.jpg",
+    title: "Current Transformers",
+    href: "/products?q=current%20transformer",
+    image: "/marketing/selec/current-transformers.jpg",
   },
 ];
 
@@ -234,7 +214,7 @@ export const countdownBanner: CountdownBannerConfig = {
   ctaLabel: "Shop deals",
   // TODO(content): confirm handle
   href: "/categories/protection-devices",
-  image: "/marketing/home/bf_banner2.jpg",
+  image: "/marketing/selec/panel-hero.jpg",
   // TODO(content): placeholder — set to the real campaign end date/time (IST) before launch.
   targetDate: "2026-09-06T23:59:59+05:30",
 };
@@ -260,7 +240,7 @@ export const videoBackground: VideoBackgroundConfig = {
     "From single-machine retrofits to plant-wide automation, ControlKart stocks the components your build depends on.",
   ctaLabel: "Shop PLCs & Automation",
   href: "/categories/plcs",
-  video: "/marketing/videos/video-background-craftsmen.mp4",
+  image: "/marketing/selec/automation-hero.jpg",
 };
 
 // ---------------------------------------------------------------------------
@@ -273,35 +253,35 @@ export const slidingPanels: SlidingPanel[] = [
     caption: "Touchscreen operator panels for clear, reliable machine control.",
     href: "/categories/hmis",
     ctaLabel: "Shop HMIs",
-    image: "/marketing/home/athens-mosaic-06.jpg",
+    image: "/marketing/selec/hmis.jpg",
   },
   {
     title: "Power Supplies",
     caption: "Regulated DIN-rail power supplies sized for every panel load.",
     href: "/categories/power-supplies",
     ctaLabel: "Shop Power Supplies",
-    image: "/marketing/home/athens-mosaic-04a.jpg",
+    image: "/marketing/selec/power-supplies.jpg",
   },
   {
     title: "Protection Devices",
-    caption: "MCBs, MCCBs and overload relays that keep your line running safely.",
+    caption: "Voltage, phase and current monitoring relays for industrial panels.",
     href: "/categories/protection-devices",
     ctaLabel: "Shop Protection",
-    image: "/marketing/home/athens-mosaic-03.jpg",
+    image: "/marketing/selec/protection-devices.jpg",
   },
   {
     title: "Timers & Counters",
     caption: "Precise timing and counting for sequencing and batch control.",
     href: "/categories/timers-counters",
     ctaLabel: "Shop Timers",
-    image: "/marketing/home/athens-mosaic-01a.jpg",
+    image: "/marketing/selec/timers-counters.jpg",
   },
   {
     title: "VFDs & Drives",
     caption: "Energy-efficient variable frequency drives for every motor size.",
     href: "/categories/vfds",
     ctaLabel: "Shop VFDs",
-    image: "/marketing/home/athens-mosaic-02d.jpg",
+    image: "/marketing/selec/vfds.jpg",
   },
 ];
 
@@ -311,44 +291,39 @@ export const slidingPanels: SlidingPanel[] = [
 
 export const simpleCollections: CategoryChip[] = [
   {
-    // TODO(content): confirm handle
     title: "Panel Meters",
-    href: "/categories/panel-meters",
-    image: "/marketing/home/athens_measure.jpg",
+    href: "/products?q=meter",
+    image: "/marketing/selec/panel-meters.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Terminal Blocks",
-    href: "/categories/terminal-blocks",
-    image: "/marketing/home/athens_clamp.jpg",
+    title: "Communication Accessories",
+    href: "/products?q=converter",
+    image: "/marketing/selec/communication-accessories.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Contactors & Relays",
-    href: "/categories/contactors-relays",
-    image: "/marketing/home/athens_hammer.jpg",
+    title: "Relay Modules",
+    href: "/products?q=relay",
+    image: "/marketing/selec/relay-modules.jpg",
   },
   {
     title: "PLC Accessories",
     href: "/categories/plc-accessories",
-    image: "/marketing/home/athens_toolset.jpg",
+    image: "/marketing/selec/plc-accessories.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Industrial Sensors",
-    href: "/categories/industrial-sensors",
-    image: "/marketing/home/athens_handtools.jpg",
+    title: "Temperature Controllers",
+    href: "/products?q=temperature",
+    image: "/marketing/selec/temperature-controllers.jpg",
   },
   {
-    // TODO(content): confirm handle
-    title: "Motor Starters",
-    href: "/categories/motor-starters",
-    image: "/marketing/home/athens_chainsaw.jpg",
+    title: "Motor Protection",
+    href: "/products?q=motor%20protection",
+    image: "/marketing/selec/motor-protection.jpg",
   },
   {
     title: "PLCs",
     href: "/categories/plcs",
-    image: "/marketing/home/collections-hero_rh.jpg",
+    image: "/marketing/selec/plcs.jpg",
   },
 ];
 
@@ -362,48 +337,18 @@ export const mediaWithText: MediaWithTextConfig = {
     "ControlKart stocks automation and control components from brands like Selec, so panel builders, OEMs and maintenance teams can source what they need without the wait. From single components to full BOMs, our team helps you find the right part for the job.",
   ctaLabel: "Learn more",
   href: "/pages/about-us",
-  image: "/marketing/home/about_us_cb03d732-5473-478d-a1f4-995a8e1f32bc.jpg",
+  image: "/marketing/selec/automation-hero.jpg",
 };
 
 // ---------------------------------------------------------------------------
 // Deals tabs (brand → product handles)
 // ---------------------------------------------------------------------------
 
-export const dealsTabs: DealsTab[] = [
-  {
-    brandLabel: "Selec",
-    handles: [
-      // Real seeded product — safe to keep.
-      "selec-mibrx-6m-modular-plc",
-      // TODO(content): real product handles
-      "selec-mibrx-dsp-ap-6m-adapter-plate",
-      "selec-mibrx-dsp-6m-lcd-display",
-      "selec-digital-timer-star-delta",
-      "selec-energy-meter-3-phase",
-    ],
-  },
-  {
-    // TODO(content): confirm brand + real product handles
-    brandLabel: "Siemens",
-    handles: [
-      "siemens-s7-1200-cpu-1214c",
-      "siemens-hmi-kp300-basic",
-      "siemens-sirius-mccb-100a",
-      "siemens-sitop-power-supply-24v",
-      "siemens-sinamics-vfd-2-2kw",
-    ],
-  },
-  {
-    // TODO(content): confirm brand + real product handles
-    brandLabel: "Schneider Electric",
-    handles: [
-      "schneider-easy-vfd-2-2kw",
-      "schneider-tesys-contactor-9a",
-      "schneider-acti9-mcb-32a",
-      "schneider-zelio-timer-relay",
-      "schneider-modicon-m221-plc",
-    ],
-  },
+// Curated product selection; tab names come from each product's backend brand.
+export const dealProductHandles = [
+  "selec-mibrx-6m-modular-plc",
+  "selec-mibrx-dsp-ap-6m-adapter-plate",
+  "selec-mibrx-dsp-6m-lcd-display",
 ];
 
 // ---------------------------------------------------------------------------
@@ -421,7 +366,7 @@ export const productListColumns: ProductListColumnConfig[] = [
   {
     banner: {
       title: "PLCs",
-      image: "/marketing/home/athens-mosaic-05.jpg",
+      image: "/marketing/selec/plcs.jpg",
       href: "/categories/plcs",
     },
     handles: [
@@ -437,7 +382,7 @@ export const productListColumns: ProductListColumnConfig[] = [
   {
     banner: {
       title: "VFDs & Drives",
-      image: "/marketing/home/athens-mosaic-03.jpg",
+      image: "/marketing/selec/vfds.jpg",
       href: "/categories/vfds",
     },
     // TODO(content): real product handles
@@ -452,7 +397,7 @@ export const productListColumns: ProductListColumnConfig[] = [
   {
     banner: {
       title: "Protection Devices",
-      image: "/marketing/home/product_list_woodwork.jpg",
+      image: "/marketing/selec/protection-devices.jpg",
       href: "/categories/protection-devices",
     },
     // TODO(content): real product handles
@@ -488,7 +433,7 @@ export const featuredCollection: FeaturedCollectionConfig = {
       "Compact and modular PLCs for machine control and plant automation, from brands built for industrial duty.",
     ctaLabel: "Shop now",
     href: "/categories/plcs",
-    image: "/marketing/home/collections-collection-hero.jpg",
+    image: "/marketing/selec/plcs.jpg",
   },
 };
 

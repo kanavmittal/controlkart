@@ -1,5 +1,7 @@
+import { listBrands } from "@/lib/data/brands";
 import Link from "next/link";
 import { PhoneIcon } from "lucide-react";
+import { SiteLogo } from "@/components/shared/site-logo";
 
 import { headerMast } from "@/config/site";
 import { HeaderSearch } from "./header-search";
@@ -26,31 +28,36 @@ interface SiteHeaderProps {
   categoryTree: MegaMenuCategory[];
 }
 
-export function SiteHeader({ categoryTree }: SiteHeaderProps) {
+export async function SiteHeader({ categoryTree }: SiteHeaderProps) {
+  const brands = await listBrands().catch(() => []);
   return (
     <header className="sticky top-0 z-40 bg-background">
       {/* Row 1 — Mast */}
       <div className="athens-container flex flex-wrap items-center gap-x-8 gap-y-3 py-3 min-[990px]:h-[95px] min-[990px]:flex-nowrap min-[990px]:py-0">
-        <MobileMenu categories={categoryTree} />
+        <MobileMenu categories={categoryTree} brands={brands} />
 
         <Link
           href="/"
           className="shrink-0 text-xl font-bold tracking-tight text-athens-dark"
         >
-          {headerMast.logoText}
+          <SiteLogo />
         </Link>
 
         <div className="hidden min-w-0 flex-1 min-[990px]:flex">
-          <HeaderSearch />
+          <HeaderSearch brands={brands} />
         </div>
 
-        <div className="hidden shrink-0 items-center gap-3 min-[1200px]:flex">
+        <div className="hidden shrink-0 items-center gap-3 min-[990px]:flex">
           <PhoneIcon className="h-[26px] w-[26px] text-athens-dark" aria-hidden />
           <div className="flex flex-col">
-            <span className="text-[15px] font-medium text-athens-dark">
+            <a
+              href="tel:+919873901927"
+              aria-label="Call ControlKart at +91 98739 01927"
+              className="text-[15px] font-medium text-athens-dark hover:underline"
+            >
               {headerMast.phone}
-            </span>
-            <span className="text-[13px] text-athens-body">
+            </a>
+            <span className="hidden text-[13px] text-athens-body min-[1200px]:inline">
               {headerMast.supportEmail}
             </span>
           </div>
@@ -62,7 +69,7 @@ export function SiteHeader({ categoryTree }: SiteHeaderProps) {
       </div>
 
       {/* Row 2 — Nav bar (mega menus) */}
-      <MegaMenu categoryTree={categoryTree} />
+      <MegaMenu categoryTree={categoryTree} brands={brands} />
     </header>
   );
 }

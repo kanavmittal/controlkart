@@ -1,5 +1,8 @@
+import { ProductBadges, deriveMarketingBadges } from "@/components/shared/product-badges"
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
+import { getCategoryImage } from "@/config/category-images"
 import { notFound } from "next/navigation"
 import type { HttpTypes } from "@medusajs/types"
 import { ChevronRight, Filter, LayoutGrid, PackageSearch } from "lucide-react"
@@ -275,7 +278,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       "@type": "ListItem",
       position: i + 1,
       name: c.name,
-      item: c.item,
+      item: new URL(c.item, "https://controlkart.com").href,
     })),
   }
 
@@ -294,7 +297,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     <div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }}
       />
 
       <Breadcrumbs crumbs={visualCrumbs} />
@@ -304,6 +307,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             request — the sr-only heading keeps the page's h1 for SEO and
             screen readers; breadcrumbs above carry the visible context. */}
         <h1 className="sr-only">{category.name}</h1>
+        <ProductBadges badges={deriveMarketingBadges(category.metadata)} />
 
         {children.length > 0 && (
           <section className="mt-[30px]">
@@ -315,13 +319,25 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   href={`/categories/${child.handle}`}
                   className="group w-[152px] shrink-0"
                 >
-                  {/* category_children are fetched with id/name/handle only
-                      (see CATEGORY_TREE_FIELDS) — no per-child image, so the
-                      card art is a neutral athens-band placeholder. */}
-                  <span className="block h-[69px] overflow-hidden rounded-[5px] bg-[var(--color-athens-band)] shadow-[inset_0_0_0_1px_var(--color-athens-line)]" />
+                  <span className="relative block h-[90px] overflow-hidden rounded-[5px] bg-[#f5f6f7]">
+                    {getCategoryImage(child.handle, category.handle) ? (
+                      <Image
+                        src={getCategoryImage(child.handle, category.handle)!}
+                        alt=""
+                        fill
+                        sizes="152px"
+                        className="object-contain p-2"
+                      />
+                    ) : (
+                      <span className="flex h-full items-center justify-center text-xl" aria-hidden>
+                        {child.name.charAt(0)}
+                      </span>
+                    )}
+                  </span>
                   <span className="mt-2 block truncate text-center text-[14px] text-[var(--color-athens-body)] group-hover:text-[var(--color-athens-dark)] group-hover:underline">
                     {child.name}
                   </span>
+                  <ProductBadges badges={deriveMarketingBadges(child.metadata)} className="mt-2 justify-center" />
                 </Link>
               ))}
             </div>

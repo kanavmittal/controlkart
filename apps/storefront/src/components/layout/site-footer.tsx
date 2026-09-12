@@ -1,5 +1,6 @@
 import type { ComponentType, SVGProps } from "react"
 import Link from "next/link"
+import { SiteLogo } from "@/components/shared/site-logo"
 
 import { footer } from "@/config/site"
 import { Facebook, Instagram, Linkedin, XSocial, Youtube } from "@/components/shared/icons"
@@ -35,7 +36,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 gap-5 text-[13px] leading-[20.8px] text-white/65 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link href="/" className="mb-4 inline-block text-xl font-bold tracking-tight text-white">
-              {footer.logoText}
+              <SiteLogo />
             </Link>
             <p>
               {footer.address.map((line) => (

@@ -59,11 +59,8 @@ function CompactProductRow({ product }: { product: HttpTypes.StoreProduct }) {
   )
   const priceFrom = variants.length > 1 && distinctCalculatedAmounts.size > 1
 
-  // Reuse the shared sale/new/sold-out deriver, filtered to sale only — this
-  // row has no room for the full badge set.
-  const saleBadges = deriveProductBadges(product).filter(
-    (badge) => badge.variant === "sale"
-  )
+  // Keep labels beside the title so custom text does not obscure the thumbnail.
+  const badges = deriveProductBadges(product)
 
   const href = `/products/${product.handle}`
 
@@ -79,9 +76,9 @@ function CompactProductRow({ product }: { product: HttpTypes.StoreProduct }) {
             className="object-cover"
           />
         ) : null}
-        <ProductBadges badges={saleBadges} className="absolute top-1 left-1" />
       </span>
       <span className="flex min-w-0 flex-col gap-1 pt-0.5">
+        <ProductBadges badges={badges} />
         <span className="line-clamp-2 text-[14px] leading-[18px] text-[var(--color-athens-dark)] group-hover:underline">
           {product.title}
         </span>
@@ -118,7 +115,7 @@ export function ProductLists({ columns }: ProductListsProps) {
                   alt={column.banner.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover"
+                  className="object-contain bg-[#f5f6f7] pb-12 p-3"
                 />
               ) : null}
               <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.8)_100%)]" />

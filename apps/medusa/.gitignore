@@ -2,7 +2,8 @@
 .env
 .DS_Store
 /uploads
-/static
+/static/*
+!/static/brands/
 /node_modules
 yarn-error.log
 

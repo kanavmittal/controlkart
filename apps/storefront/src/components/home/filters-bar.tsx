@@ -7,7 +7,7 @@
  * decorative — its native `<select>`s aren't wired to anything, and the
  * third ("Power source") has zero options and is permanently disabled.
  * ControlKart has a real data source for two of the three: Brand
- * (`@/config/brands`) and Category (the top-level list, passed in via the
+ * (fetched from Medusa) and Category (the top-level list, passed in via the
  * `categories` prop — T57 supplies `listTopLevelCategories()`'s result, see
  * `StoreCategory` in `@/lib/data/categories`). There's no ControlKart
  * equivalent of "power source" (no such config or facet), so per plan that
@@ -43,18 +43,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { brands } from "@/config/brands";
+import type { StoreBrand } from "@/lib/data/brands";
 import type { StoreCategory } from "@/lib/data/categories";
 
 const ALL_BRANDS = "All Brands";
 const ALL_CATEGORIES = "All Categories";
 
 export interface FiltersBarProps {
+  brands: StoreBrand[];
   /** Top-level categories only (T57 passes `listTopLevelCategories()`). */
   categories: StoreCategory[];
 }
 
-export function FiltersBar({ categories }: FiltersBarProps) {
+export function FiltersBar({ categories, brands }: FiltersBarProps) {
   const router = useRouter();
   const [brand, setBrand] = React.useState(ALL_BRANDS);
   const [categoryHandle, setCategoryHandle] = React.useState(ALL_CATEGORIES);
@@ -65,13 +66,10 @@ export function FiltersBar({ categories }: FiltersBarProps) {
     const hasBrand = brand !== ALL_BRANDS;
     const hasCategory = categoryHandle !== ALL_CATEGORIES;
 
-    if (hasCategory) {
-      router.push(`/categories/${categoryHandle}`);
-    } else if (hasBrand) {
-      router.push(`/products?q=${encodeURIComponent(brand)}`);
-    } else {
-      router.push("/products");
-    }
+    const params = new URLSearchParams();
+    if (hasBrand) params.set("vendor", brand);
+    if (hasCategory) params.set("category", categoryHandle);
+    router.push(params.size ? `/products?${params}` : "/products");
   };
 
   return (

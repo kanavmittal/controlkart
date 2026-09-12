@@ -26,7 +26,7 @@ import { mediaWithText } from "@/config/home"
 
 export function MediaWithText() {
   return (
-    <section className="athens-container my-[60px]">
+    <section className="athens-container my-10 md:my-[60px]">
       <div className="grid min-h-[429px] grid-cols-1 overflow-hidden rounded-[5px] bg-white p-3 shadow-[inset_0_0_0_1px_var(--color-athens-line)] min-[750px]:grid-cols-2">
         <div className="relative order-1 h-[240px] overflow-hidden rounded-[5px] min-[750px]:order-2 min-[750px]:h-auto min-[750px]:min-h-[403px]">
           <Image

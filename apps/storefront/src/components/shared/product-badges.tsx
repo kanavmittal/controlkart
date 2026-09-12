@@ -2,14 +2,28 @@ import type { HttpTypes } from "@medusajs/types"
 
 import { cn } from "@/lib/utils"
 
-export type ProductBadgeVariant = "sale" | "new" | "sold-out"
+export type ProductBadgeVariant = "sale" | "new" | "custom" | "sold-out"
 
 export interface ProductBadge {
   variant: ProductBadgeVariant
   label: string
 }
 
-const NEW_WINDOW_MS = 30 * 24 * 60 * 60 * 1000
+/** Merchant-authored text only; malformed external metadata is ignored. */
+export function deriveMarketingBadges(metadata?: Record<string, unknown> | null): ProductBadge[] {
+  if (!Array.isArray(metadata?.storefront_badges)) return []
+  const badges: ProductBadge[] = []
+  for (const value of metadata.storefront_badges) {
+    if (!value || typeof value !== "object") continue
+    const { label, tone } = value
+    if (typeof label !== "string" || !label.trim() || label.trim().length > 40) continue
+    if (tone !== "sale" && tone !== "new" && tone !== "custom") continue
+    if (badges.some((badge) => badge.label.toLowerCase() === label.trim().toLowerCase())) continue
+    badges.push({ label: label.trim(), variant: tone })
+    if (badges.length === 3) break
+  }
+  return badges
+}
 
 /** Largest discount percent across variants with a valid calculated <
  *  original price, or `null` when no variant is on sale / price fields are
@@ -38,13 +52,6 @@ function maxDiscountPercent(product: HttpTypes.StoreProduct): number | null {
   return maxPercent
 }
 
-function isNewProduct(product: HttpTypes.StoreProduct): boolean {
-  if (!product.created_at) return false
-  const created = new Date(product.created_at).getTime()
-  if (Number.isNaN(created)) return false
-  return Date.now() - created <= NEW_WINDOW_MS
-}
-
 /** True when no variant is currently purchasable (mirrors the static
  *  `manage_inventory === false || allow_backorder === true ||
  *  inventory_quantity > 0` rule from `use-product-live.ts`, evaluated
@@ -66,15 +73,11 @@ function isProductSoldOut(product: HttpTypes.StoreProduct): boolean {
  *  corresponding badge rather than throwing. No ratings badge (omitted by
  *  decision). */
 export function deriveProductBadges(product: HttpTypes.StoreProduct): ProductBadge[] {
-  const badges: ProductBadge[] = []
+  const badges = deriveMarketingBadges(product.metadata)
 
   const discountPercent = maxDiscountPercent(product)
-  if (discountPercent !== null) {
+  if (product.metadata?.show_sale_badge !== false && discountPercent !== null && !badges.some((badge) => badge.label === `-${discountPercent}%`)) {
     badges.push({ variant: "sale", label: `-${discountPercent}%` })
-  }
-
-  if (isNewProduct(product)) {
-    badges.push({ variant: "new", label: "New" })
   }
 
   if (isProductSoldOut(product)) {
@@ -87,6 +90,7 @@ export function deriveProductBadges(product: HttpTypes.StoreProduct): ProductBad
 const badgeStyles: Record<ProductBadgeVariant, string> = {
   sale: "bg-[var(--color-athens-sale-badge)] text-white",
   new: "bg-[var(--color-athens-blue-light)] text-white",
+  custom: "bg-[var(--color-athens-dark)] text-white",
   "sold-out": "bg-[var(--color-athens-dark)] text-white",
 }
 
@@ -96,18 +100,18 @@ export function ProductBadges({ badges, className }: { badges: ProductBadge[]; c
   if (badges.length === 0) return null
 
   return (
-    <div className={cn("flex flex-wrap items-start gap-[5px]", className)}>
+    <span className={cn("flex flex-wrap items-start gap-[5px]", className)}>
       {badges.map((badge) => (
         <span
-          key={badge.variant}
+          key={`${badge.variant}-${badge.label}`}
           className={cn(
-            "inline-flex items-center rounded-[var(--radius-badge)] px-[7px] py-[2px] text-[12px] leading-[12px] font-medium uppercase",
+            "inline-flex max-w-full break-words items-center rounded-[var(--radius-badge)] px-[7px] py-[2px] text-[12px] leading-[12px] font-medium uppercase",
             badgeStyles[badge.variant]
           )}
         >
           {badge.label}
         </span>
       ))}
-    </div>
+    </span>
   )
 }

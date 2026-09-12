@@ -1,3 +1,5 @@
+import { listBrands } from "@/lib/data/brands"
+import { BrandCover } from "@/components/shared/brand-cover"
 import type { Metadata } from "next"
 import { HttpTypes } from "@medusajs/types"
 import { listProducts, listProductsInCategories } from "@/lib/data/products"
@@ -15,9 +17,9 @@ import { ProductsBrowser } from "./products-browser"
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: "All Products - Selec Industrial Automation Components",
+  title: "All Products - Industrial Automation Components",
   description:
-    "Browse Selec PLCs, IO modules, displays and industrial automation accessories. Live stock, GST-inclusive pricing, pan-India shipping.",
+    "Browse PLCs, IO modules, displays and industrial automation accessories. Live stock, GST-inclusive pricing, pan-India shipping.",
   alternates: { canonical: "/products" },
 }
 
@@ -39,6 +41,7 @@ type Props = {
 
 export default async function ProductsPage({ searchParams }: Props) {
   const sp = await searchParams
+  const brand = sp.vendor ? (await listBrands().catch(() => [])).find((item) => item.name.toLowerCase() === sp.vendor!.trim().toLowerCase()) : undefined
   const selected = parseSpecParam(sp.specs)
   const hasFilters = Object.values(selected).some((v) => v.length > 0)
   const sort = sp.sort
@@ -70,7 +73,14 @@ export default async function ProductsPage({ searchParams }: Props) {
     sortable = fres.sortable ?? []
     productIds = fres.product_ids ?? []
   } else {
-    products = (await listProducts({ limit: 100 })).products
+    const first = await listProducts({ limit: 100 })
+    products = first.products
+    // A brand filter must include matches beyond the first catalog page.
+    if (sp.vendor) {
+      for (let offset = 100; offset < first.count; offset += 100) {
+        products.push(...(await listProducts({ limit: 100, offset })).products)
+      }
+    }
   }
 
   const byId = new Map(products.map((p) => [p.id, p]))
@@ -84,6 +94,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   return (
     <>
       <Breadcrumbs crumbs={[{ label: "Products" }]} />
+      {brand && <BrandCover brand={brand} />}
       <ProductsBrowser
         products={visibleProducts}
         categories={tree.map((t) => ({

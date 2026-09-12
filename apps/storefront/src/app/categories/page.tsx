@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { ProductBadges, deriveMarketingBadges } from "@/components/shared/product-badges"
 import Image from "next/image"
 import Link from "next/link"
 import { LayoutGrid } from "lucide-react"
@@ -12,6 +13,7 @@ import {
   EmptyDescription,
 } from "@/components/ui/empty"
 import { listTopLevelCategories } from "@/lib/data/categories"
+import { getCategoryImage } from "@/config/category-images"
 import { cn } from "@/lib/utils"
 
 export const revalidate = 300
@@ -36,8 +38,8 @@ export const metadata: Metadata = {
  * No backend field carries a category image today, so `metadata?.image`
  * (set-able from the admin's free-form category metadata, same convention
  * as `product.metadata.*`) is an opportunistic enhancement — categories
- * without one fall back to an `athens-band` tile with the category's
- * initial.
+ * without one use official Selec family photography, or their initial
+ * when a family is not mapped.
  *
  * Fetch resilience: unlike the dynamic-param siblings (which simply have
  * nothing to prerender when the backend is down), this is a STATIC route —
@@ -72,13 +74,14 @@ export default async function CategoriesIndexPage() {
               const image =
                 typeof category.metadata?.image === "string"
                   ? category.metadata.image
-                  : null
+                  : getCategoryImage(category.handle)
               const href = `/categories/${category.handle}`
 
               return (
                 <div key={category.id}>
                   <Link
                     href={href}
+                    aria-label={category.name}
                     className={cn(
                       "group block overflow-hidden rounded-[var(--radius)] border border-border bg-white p-3 transition-colors",
                       "hover:border-athens-dark"
@@ -91,7 +94,7 @@ export default async function CategoriesIndexPage() {
                           alt=""
                           fill
                           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                          className="object-cover"
+                          className="object-contain bg-[#f5f6f7] p-3"
                         />
                       ) : (
                         <div
@@ -101,6 +104,7 @@ export default async function CategoriesIndexPage() {
                           {category.name.charAt(0).toUpperCase()}
                         </div>
                       )}
+                      <ProductBadges badges={deriveMarketingBadges(category.metadata)} className="absolute left-2 right-2 top-2" />
                     </div>
                   </Link>
                   <p className="mt-3 text-center text-sm text-athens-body">

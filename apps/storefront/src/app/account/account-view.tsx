@@ -138,11 +138,11 @@ export function AccountView() {
             {/* Brand panel (desktop only) */}
             <div className="relative hidden min-h-[560px] overflow-hidden rounded-2xl lg:sticky lg:top-10 lg:block">
               <Image
-                src="/marketing/home/athens_toolset.jpg"
-                alt="Professional tools from ControlKart"
+                src="/marketing/selec/plcs.jpg"
+                alt="Selec MiBRX modular PLCs from ControlKart"
                 fill
                 priority
-                className="object-cover"
+                className="object-contain bg-[#f5f6f7] p-6 pb-44"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
               <div

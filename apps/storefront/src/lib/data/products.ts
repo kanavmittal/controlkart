@@ -7,6 +7,7 @@ const PRODUCT_FIELDS =
 
 export async function listProducts(params: {
   category_id?: string
+  collection_id?: string
   q?: string
   limit?: number
   offset?: number
@@ -21,6 +22,7 @@ export async function listProducts(params: {
       limit: params.limit ?? 24,
       offset: params.offset ?? 0,
       category_id: params.category_id,
+      collection_id: params.collection_id,
       q: params.q,
     },
     tags: ["products"],

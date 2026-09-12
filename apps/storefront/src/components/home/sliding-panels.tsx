@@ -43,6 +43,7 @@
  * `@/config/types` — `{ title, caption, ctaLabel, href, image }`).
  */
 
+import { ProductBadges, type ProductBadge } from "@/components/shared/product-badges"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -51,7 +52,7 @@ import { Button } from "@/components/ui/button"
 import { slidingPanels } from "@/config/home"
 import { cn } from "@/lib/utils"
 
-export function SlidingPanels() {
+export function SlidingPanels({ badges }: { badges: Record<string, ProductBadge[]> }) {
   const [expandedIndex, setExpandedIndex] = useState(0)
 
   return (
@@ -86,7 +87,7 @@ export function SlidingPanels() {
                 alt={panel.title}
                 fill
                 sizes="(max-width: 749px) 100vw, 1400px"
-                className="object-cover"
+                className="bg-[#f5f6f7] object-contain pb-[170px] pt-6 px-5"
               />
 
               {/* Collapsed state: dark overlay + vertical title */}
@@ -107,12 +108,13 @@ export function SlidingPanels() {
               <div
                 aria-hidden={!expanded}
                 className={cn(
-                  "absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.15)_60%)]",
+                  "absolute inset-0 bg-[linear-gradient(180deg,rgba(13,28,48,0)_35%,rgba(13,28,48,0.96)_78%)]",
                   "transition-opacity duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] delay-100",
                   expanded ? "opacity-100" : "pointer-events-none opacity-0"
                 )}
               >
-                <div className="absolute inset-y-0 left-0 flex max-w-[460px] flex-col items-start justify-center p-[50px] max-[749px]:p-6">
+                <div className="absolute bottom-0 left-0 flex max-w-[460px] flex-col items-start justify-center p-[30px] max-[749px]:p-6">
+                  <ProductBadges badges={badges[panel.href] ?? []} className="mb-3" />
                   <h2 className="mb-3 text-[32px] leading-tight font-medium text-white">
                     {panel.title}
                   </h2>

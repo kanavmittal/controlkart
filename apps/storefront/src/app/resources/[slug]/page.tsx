@@ -3,7 +3,7 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getPostBySlug, listPosts } from "@/lib/data/content"
 import { formatDate } from "@/lib/format"
-import { BASE_URL, STORE_NAME } from "@/lib/config"
+import { SEO_BASE_URL as BASE_URL, STORE_NAME } from "@/lib/config"
 import { Breadcrumbs } from "@/components/shared/breadcrumbs"
 import type { ContentPostDTO } from "@/lib/data/types"
 
@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       type: "article",
       publishedTime: post.published_at ?? undefined,
+      images: [post.cover_image || "/social-image"],
     },
   }
 }
@@ -81,7 +82,7 @@ export default async function PostPage({ params }: Props) {
     <main>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
       />
       <Breadcrumbs
         crumbs={[{ label: "Resources", href: "/resources" }, { label: post.title }]}
