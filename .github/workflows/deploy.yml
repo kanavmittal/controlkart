@@ -103,6 +103,8 @@ jobs:
       - name: Trigger Dokploy deploy (medusa)
         if: ${{ vars.DOKPLOY_DEPLOY_ENABLED == 'true' }}
         env:
+          HEALTHCHECK_URL: https://api.controlkart.com/health
+          CATALOG_CHECK_URL: https://api.controlkart.com/store/products?limit=1
           APPLICATION_ID: ${{ env.MEDUSA_APP_ID }}
           DOCKER_IMAGE: ghcr.io/kanavmittal/controlkart-medusa:${{ github.sha }}
           DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
@@ -143,6 +145,7 @@ jobs:
       - name: Trigger Dokploy deploy (storefront)
         if: ${{ vars.DOKPLOY_DEPLOY_ENABLED == 'true' }}
         env:
+          HEALTHCHECK_URL: https://controlkart.com/health
           APPLICATION_ID: ${{ env.STOREFRONT_APP_ID }}
           DOCKER_IMAGE: ghcr.io/kanavmittal/controlkart-storefront:${{ github.sha }}
           DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
