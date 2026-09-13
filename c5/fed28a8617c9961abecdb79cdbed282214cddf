@@ -1,0 +1,37 @@
+patches/README.md
+  s_69340527fcf666::t_7d490210c4e643 1-16
+.github/workflows/deploy.yml
+  s_69340527fcf666::t_b564378ff58494 62,71
+apps/medusa/Dockerfile
+  s_69340527fcf666::t_e20af403b3f5c1 16
+apps/medusa/src/utils/__tests__/orm-compatibility.unit.spec.ts
+  s_69340527fcf666::t_7b18d911c327ba 1-274
+apps/storefront/Dockerfile
+  s_69340527fcf666::t_876dc8f993d317 16
+package.json
+  s_69340527fcf666::t_c67537e7c170c0 29-33
+patches/@medusajs__order@2.15.3.patch
+  s_69340527fcf666::t_9ad2a7ed8d35bf 1-24
+patches/@medusajs__product@2.15.3.patch
+  s_69340527fcf666::t_1512c8e3825c36 1-20
+patches/@medusajs__utils@2.15.3.patch
+  s_69340527fcf666::t_b57fbe24a8fb1a 1-140
+pnpm-lock.yaml
+  s_69340527fcf666::t_d081b01cc025be 16-23,10418,10611,10744,10809,10843,10879,11024,11074
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c5fed28a8617c9961abecdb79cdbed282214cddf",
+  "prompts": {},
+  "sessions": {
+    "s_69340527fcf666": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a097a7-aa7d-7ec0-8abc-a6035b08091f",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Kanav Mittal <33971670+kanavmittal@users.noreply.github.com>"
+    }
+  }
+}
