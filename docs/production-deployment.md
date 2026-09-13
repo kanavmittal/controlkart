@@ -33,6 +33,9 @@ rolling back an image; an image rollback does not undo a database migration.
 Verify completed Dokploy deployments, container health, public HTTPS, storefront
 catalog/cart, unauthenticated admin API rejection, and an authorized email test.
 Rollback by selecting the previous known-good commit image and redeploying.
+The GitHub deployment step polls its own deployment record, checks public health,
+and exercises the backend product endpoint before reporting success. Image
+rollback still requires checking the actual running image and application flows.
 
 ## Security decisions
 
@@ -59,3 +62,32 @@ external availability checks for initial monitoring.
 Keep Redis and Meilisearch authenticated and private. Backups must use a separate
 private destination, never the public media bucket. Verify restore procedures,
 retention, alert delivery, and access restrictions before declaring recovery complete.
+
+## Recovery configuration
+
+The recovered services use one backend process in shared worker mode, a separate
+storefront, password-protected Redis with AOF persistence, and a persistent private
+Meilisearch instance. Public traffic enters through Traefik on HTTPS. The `www`
+hostname permanently redirects to the root domain. Authentication routes have a
+separate rate limit; HTTPS responses carry HSTS and anti-framing headers.
+
+SSH uses the recovery key stored outside the repository; password login is disabled.
+The persistent IPv4/IPv6 firewall also filters Docker ingress. Database, Redis,
+search, Swarm ports, and the raw Dokploy port are not publicly reachable.
+Docker log rotation is configured at the daemon level for new containers.
+
+The application and Dokploy alerts use a domain-restricted sending-only Resend
+key. GitHub uses a separate Dokploy API key. Rotate a runtime key by updating its
+consumers and verifying delivery/deployment before revoking the previous key.
+Do not revoke runtime credentials merely because the setup token is being rotated.
+
+The MikroORM security update requires the Medusa compatibility backports documented
+in [patches/README.md](../patches/README.md). A successful health endpoint alone
+does not prove the catalog works; exercise product, region, category and cart APIs.
+
+An encrypted PlanetScale recovery archive was downloaded outside this repository.
+Its archive listing, checksum, and authenticated decryption were verified. This
+is not a complete restore rehearsal. Recurring off-server backup configuration
+still requires a private destination and credentials; public media credentials
+must never be used for database backups. Cloudflare Access is not configured with
+the current DNS-only token. Enable MFA on administrative accounts separately.
