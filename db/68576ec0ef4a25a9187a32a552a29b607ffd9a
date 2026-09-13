@@ -1,0 +1,19 @@
+docs/production-deployment.md
+  s_69340527fcf666::t_14f61a89b1eb72 36-38,65-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "db68576ec0ef4a25a9187a32a552a29b607ffd9a",
+  "prompts": {},
+  "sessions": {
+    "s_69340527fcf666": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a097a7-aa7d-7ec0-8abc-a6035b08091f",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Kanav Mittal <33971670+kanavmittal@users.noreply.github.com>"
+    }
+  }
+}
