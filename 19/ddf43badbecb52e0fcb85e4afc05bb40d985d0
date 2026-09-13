@@ -1,0 +1,23 @@
+.github/workflows/deploy.yml
+  s_69340527fcf666::t_9162bf96a12612 106-107,148
+scripts/deploy-dokploy.sh
+  s_69340527fcf666::t_9162bf96a12612 8,28-55
+pnpm-lock.yaml
+  s_69340527fcf666::t_623eae57a3b0c8 17-19,10743,10862
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "19ddf43badbecb52e0fcb85e4afc05bb40d985d0",
+  "prompts": {},
+  "sessions": {
+    "s_69340527fcf666": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a097a7-aa7d-7ec0-8abc-a6035b08091f",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Kanav Mittal <33971670+kanavmittal@users.noreply.github.com>"
+    }
+  }
+}
