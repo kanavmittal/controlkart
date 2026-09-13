@@ -1,0 +1,20 @@
+diff --git a/dist/repositories/product-category.js b/dist/repositories/product-category.js
+index 3a128209c30b7b186c731e361fdab83e4171e0ed..b6f44effa2a1cfb6e2685c753974bd4d03d4b342 100644
+--- a/dist/repositories/product-category.js
++++ b/dist/repositories/product-category.js
+@@ -45,6 +45,7 @@ class ProductCategoryRepository extends utils_1.DALUtils.MikroOrmBaseTreeReposit
+     async find(findOptions = { where: {} }, transformOptions = {}, context = {}) {
+         const manager = super.getActiveManager(context);
+         const findOptions_ = this.buildFindOptions(findOptions, transformOptions);
++        utils_1.DALUtils.pruneFindOptionsAgainstMetadata(manager.getDriver().getMetadata().get(_models_1.ProductCategory.name), findOptions_.options);
+         const productCategories = await manager.find(_models_1.ProductCategory.name, findOptions_.where, { ...findOptions_.options } // TODO
+         );
+         if (!transformOptions.includeDescendantsTree &&
+@@ -148,6 +149,7 @@ class ProductCategoryRepository extends utils_1.DALUtils.MikroOrmBaseTreeReposit
+     async findAndCount(findOptions = { where: {} }, transformOptions = {}, context = {}) {
+         const manager = super.getActiveManager(context);
+         const findOptions_ = this.buildFindOptions(findOptions, transformOptions);
++        utils_1.DALUtils.pruneFindOptionsAgainstMetadata(manager.getDriver().getMetadata().get(_models_1.ProductCategory.name), findOptions_.options);
+         const [productCategories, count] = (await manager.findAndCount(_models_1.ProductCategory.name, findOptions_.where, findOptions_.options));
+         if (!transformOptions.includeDescendantsTree &&
+             !transformOptions.includeAncestorsTree) {

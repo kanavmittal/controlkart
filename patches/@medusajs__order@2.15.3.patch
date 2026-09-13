@@ -1,0 +1,24 @@
+diff --git a/dist/utils/base-repository-find.js b/dist/utils/base-repository-find.js
+index 70182a736775c625efa3bc56c6c4fb06a84422e3..b4453d282abd96c388fa648cdefbdf1d2c8d0e73 100644
+--- a/dist/utils/base-repository-find.js
++++ b/dist/utils/base-repository-find.js
+@@ -51,6 +51,9 @@ function setFindMethods(klass, entity) {
+         const config = (0, _1.mapRepositoryToOrderModel)(findOptions_, isRelatedEntity);
+         config.options ??= {};
+         config.options.populate ??= [];
++        (0, utils_1.pruneFindOptionsAgainstMetadata)(manager.getDriver().getMetadata().get(entity.name), config.options);
++        config.options ??= {};
++        config.options.populate ??= [];
+         const strategy = findOptions_.options.strategy ?? core_1.LoadStrategy.JOINED;
+         let orderAlias = "o0";
+         if (isRelatedEntity) {
+@@ -149,6 +152,9 @@ function setFindMethods(klass, entity) {
+         }
+         const isRelatedEntity = entity.name !== _models_1.Order.name;
+         const config = (0, _1.mapRepositoryToOrderModel)(findOptions_, isRelatedEntity);
++        config.options ??= {};
++        config.options.populate ??= [];
++        (0, utils_1.pruneFindOptionsAgainstMetadata)(manager.getDriver().getMetadata().get(entity.name), config.options);
+         let orderAlias = "o0";
+         if (isRelatedEntity) {
+             if (entity === _models_1.OrderClaim) {

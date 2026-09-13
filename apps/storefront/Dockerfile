@@ -13,6 +13,7 @@ RUN corepack enable
 WORKDIR /repo
 
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc ./
+COPY patches ./patches
 COPY apps/storefront/package.json apps/storefront/package.json
 RUN pnpm install --filter "@controlkart/storefront..." --frozen-lockfile
 

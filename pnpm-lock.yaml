@@ -13,6 +13,14 @@ overrides:
   '@mikro-orm/migrations': 6.6.14
   '@mikro-orm/postgresql': 6.6.14
 
+patchedDependencies:
+  '@medusajs/product@2.15.3':
+    hash: 3800982b4b22a133af884c8c031b8e7f2a92f7233ac8d5a37a215037ca6ba5c9
+    path: patches/@medusajs__product@2.15.3.patch
+  '@medusajs/utils@2.15.3':
+    hash: 33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f
+    path: patches/@medusajs__utils@2.15.3.patch
+
 importers:
 
   .: {}
@@ -10407,7 +10415,7 @@ snapshots:
     dependencies:
       '@medusajs/deps': 2.15.3(@types/node@20.19.43)
       '@medusajs/telemetry': 2.15.3
-      '@medusajs/utils': 2.15.3(@types/node@20.19.43)(express@4.22.2)
+      '@medusajs/utils': 2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)
       '@types/express': 4.17.25
       chalk: 4.1.2
       configstore: 5.0.1
@@ -10600,7 +10608,7 @@ snapshots:
       '@medusajs/orchestration': 2.15.3(@types/node@20.19.43)(express@4.22.2)
       '@medusajs/telemetry': 2.15.3
       '@medusajs/types': 2.15.3(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))
-      '@medusajs/utils': 2.15.3(@types/node@20.19.43)(express@4.22.2)
+      '@medusajs/utils': 2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)
       '@medusajs/workflows-sdk': 2.15.3(@types/node@20.19.43)(express@4.22.2)
       '@types/express': 4.17.25
       chokidar: 4.0.3
@@ -10733,7 +10741,7 @@ snapshots:
       '@medusajs/payment': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))(@types/node@20.19.43)
       '@medusajs/payment-stripe': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
       '@medusajs/pricing': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
-      '@medusajs/product': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
+      '@medusajs/product': 2.15.3(patch_hash=3800982b4b22a133af884c8c031b8e7f2a92f7233ac8d5a37a215037ca6ba5c9)(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
       '@medusajs/promotion': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
       '@medusajs/rbac': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
       '@medusajs/region': 2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))
@@ -10798,7 +10806,7 @@ snapshots:
     dependencies:
       '@medusajs/deps': 2.15.3(@types/node@20.19.43)
       '@medusajs/orchestration': 2.15.3(@types/node@20.19.43)(express@4.22.2)
-      '@medusajs/utils': 2.15.3(@types/node@20.19.43)(express@4.22.2)
+      '@medusajs/utils': 2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)
     transitivePeerDependencies:
       - '@types/node'
       - better-sqlite3
@@ -10832,7 +10840,7 @@ snapshots:
   '@medusajs/orchestration@2.15.3(@types/node@20.19.43)(express@4.22.2)':
     dependencies:
       '@medusajs/deps': 2.15.3(@types/node@20.19.43)
-      '@medusajs/utils': 2.15.3(@types/node@20.19.43)(express@4.22.2)
+      '@medusajs/utils': 2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)
       ulid: 2.4.0
     transitivePeerDependencies:
       - '@types/node'
@@ -10868,7 +10876,7 @@ snapshots:
     dependencies:
       '@medusajs/framework': 2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0)
 
-  '@medusajs/product@2.15.3(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))':
+  '@medusajs/product@2.15.3(patch_hash=3800982b4b22a133af884c8c031b8e7f2a92f7233ac8d5a37a215037ca6ba5c9)(@medusajs/framework@2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0))':
     dependencies:
       '@medusajs/framework': 2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0)
 
@@ -11013,7 +11021,7 @@ snapshots:
       '@medusajs/framework': 2.15.3(@medusajs/cli@2.15.3(@types/node@20.19.43))(@types/node@20.19.43)(ioredis@5.11.1)(vite@5.4.21(@types/node@20.19.43)(lightningcss@1.32.0))(zod@4.2.0)
       jsonwebtoken: 9.0.3
 
-  '@medusajs/utils@2.15.3(@types/node@20.19.43)(express@4.22.2)':
+  '@medusajs/utils@2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)':
     dependencies:
       '@graphql-codegen/core': 4.0.2(graphql@16.14.2)
       '@graphql-codegen/typescript': 4.1.6(graphql@16.14.2)
@@ -11063,7 +11071,7 @@ snapshots:
       '@medusajs/deps': 2.15.3(@types/node@20.19.43)
       '@medusajs/modules-sdk': 2.15.3(@types/node@20.19.43)(express@4.22.2)
       '@medusajs/orchestration': 2.15.3(@types/node@20.19.43)(express@4.22.2)
-      '@medusajs/utils': 2.15.3(@types/node@20.19.43)(express@4.22.2)
+      '@medusajs/utils': 2.15.3(patch_hash=33e4a03351d72ebf0b4b969807cbf36092fd9cc53ba898c635a3c4f6c474627f)(@types/node@20.19.43)(express@4.22.2)
       ulid: 2.4.0
     transitivePeerDependencies:
       - '@types/node'

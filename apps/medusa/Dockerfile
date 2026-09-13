@@ -13,6 +13,7 @@ WORKDIR /repo
 # .npmrc carries `shamefully-hoist=true` — required so the admin (Rollup) build can
 # resolve @medusajs/dashboard; without it the build fails.
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json .npmrc ./
+COPY patches ./patches
 COPY apps/medusa/package.json apps/medusa/package.json
 RUN pnpm install --filter "@controlkart/medusa..." --frozen-lockfile
 

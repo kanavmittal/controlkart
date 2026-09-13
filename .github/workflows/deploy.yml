@@ -59,6 +59,7 @@ jobs:
             medusa:
               - 'apps/medusa/**'
               - 'pnpm-lock.yaml'
+              - 'patches/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - '.npmrc'
@@ -67,6 +68,7 @@ jobs:
             storefront:
               - 'apps/storefront/**'
               - 'pnpm-lock.yaml'
+              - 'patches/**'
               - 'pnpm-workspace.yaml'
               - 'package.json'
               - '.npmrc'
